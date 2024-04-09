@@ -1,0 +1,297 @@
+[
+  {
+    "Hosting": "34SP.com",
+    "regex": "34sp.com",
+    "DNS": "ns(?:\\d+)?\\.34sp\\.com"
+  },
+  {
+    "Hosting": "ALL-INKL",
+    "regex": "all-inkl",
+    "DNS": "\\.kasserver\\.com"
+  },
+  {
+    "Hosting": "Acquia Cloud Site Factory",
+    "regex": "acquia cloud site factory",
+    "DNS": null
+  },
+  {
+    "Hosting": "Aruba.it",
+    "regex": "aruba.it",
+    "DNS": "\\.technorail\\.com"
+  },
+  {
+    "Hosting": "Bluehost",
+    "regex": "bluehost",
+    "DNS": "\\.bluehost\\.com"
+  },
+  {
+    "Hosting": "Contabo",
+    "regex": "contabo",
+    "DNS": "\\.contabo\\.net"
+  },
+  {
+    "Hosting": "DomainFactory",
+    "regex": "domainfactory",
+    "DNS": "ns(?:\\d+)?\\.namespace4you\\.de"
+  },
+  {
+    "Hosting": "Doteasy",
+    "regex": "doteasy",
+    "DNS": null
+  },
+  {
+    "Hosting": "DreamHost",
+    "regex": "dreamhost",
+    "DNS": "ns\\d+\\.dreamhost\\.com"
+  },
+  {
+    "Hosting": "Drupal Multisite",
+    "regex": "drupal multisite",
+    "DNS": null
+  },
+  {
+    "Hosting": "Elementor Cloud",
+    "regex": "elementor cloud",
+    "DNS": null
+  },
+  {
+    "Hosting": "FastComet",
+    "regex": "fastcomet",
+    "DNS": "\\.fcomet\\.com"
+  },
+  {
+    "Hosting": "Flywheel",
+    "regex": "flywheel",
+    "DNS": null
+  },
+  {
+    "Hosting": "GoDaddy",
+    "regex": "godaddy",
+    "DNS": "\\.domaincontrol\\.com"
+  },
+  {
+    "Hosting": "GuideIT",
+    "regex": "guideit",
+    "DNS": null
+  },
+  {
+    "Hosting": "Helhost",
+    "regex": "helhost",
+    "DNS": "\\.helhost\\.com"
+  },
+  {
+    "Hosting": "Hetzner",
+    "regex": "hetzner",
+    "DNS": "\\.hetzner\\.com"
+  },
+  {
+    "Hosting": "HostEurope",
+    "regex": "hosteurope",
+    "DNS": "\\.hosteurope\\.com"
+  },
+  {
+    "Hosting": "Hostens",
+    "regex": "hostens",
+    "DNS": "\\.hostens\\.com"
+  },
+  {
+    "Hosting": "Hostgator",
+    "regex": "hostgator",
+    "DNS": "\\.hostgator\\.com"
+  },
+  {
+    "Hosting": "Hosting Ukraine",
+    "regex": "hosting ukraine",
+    "DNS": "ns\\d+\\.ukraine\\.com\\.ua"
+  },
+  {
+    "Hosting": "Hostinger",
+    "regex": "hostinger",
+    "DNS": "\\.(?:dns-parking|hostinger)\\.com"
+  },
+  {
+    "Hosting": "Hostiq",
+    "regex": "hostiq",
+    "DNS": "\\.hostiq\\.ua"
+  },
+  {
+    "Hosting": "Hostpoint",
+    "regex": "hostpoint",
+    "DNS": "\\.hostpoint\\.ch"
+  },
+  {
+    "Hosting": "IONOS",
+    "regex": "ionos",
+    "DNS": "ns1\\d+\\.ui-dns\\.(?:de|org|biz|com)"
+  },
+  {
+    "Hosting": "Infomaniak",
+    "regex": "infomaniak",
+    "DNS": "\\.infomaniak\\.ch"
+  },
+  {
+    "Hosting": "idCloudHost",
+    "regex": "idcloudhost",
+    "DNS": "ns\\d+\\.cloudhost\\.id"
+  },
+  {
+    "Hosting": "Kinsta",
+    "regex": "kinsta",
+    "DNS": null
+  },
+  {
+    "Hosting": "Leaseweb",
+    "regex": "leaseweb",
+    "DNS": "\\.leaseweb\\.nl"
+  },
+  {
+    "Hosting": "Liquid Web",
+    "regex": "liquid web",
+    "DNS": "\\.liquidweb\\.com"
+  },
+  {
+    "Hosting": "Mittwald",
+    "regex": "mittwald",
+    "DNS": "ns\\d+\\.agenturserver\\.(?:de|co|it)"
+  },
+  {
+    "Hosting": "Motherhost",
+    "regex": "motherhost",
+    "DNS": null
+  },
+  {
+    "Hosting": "Nestify",
+    "regex": "nestify",
+    "DNS": null
+  },
+  {
+    "Hosting": "Newspack by Automattic",
+    "regex": "newspack by automattic",
+    "DNS": null
+  },
+  {
+    "Hosting": "Nexcess",
+    "regex": "nexcess",
+    "DNS": null
+  },
+  {
+    "Hosting": "Niagahoster",
+    "regex": "niagahoster",
+    "DNS": null
+  },
+  {
+    "Hosting": "OVHcloud",
+    "regex": "ovhcloud",
+    "DNS": "\\d+\\.ovh\\.net"
+  },
+  {
+    "Hosting": "One.com",
+    "regex": "one.com",
+    "DNS": "ns\\d+\\.one\\.com"
+  },
+  {
+    "Hosting": "Pagely",
+    "regex": "pagely",
+    "DNS": null
+  },
+  {
+    "Hosting": "PythonAnywhere",
+    "regex": "pythonanywhere",
+    "DNS": null
+  },
+  {
+    "Hosting": "REG.RU",
+    "regex": "reg.ru",
+    "DNS": "(?:\\.hosting)?\\.reg\\.ru"
+  },
+  {
+    "Hosting": "Saba.Host",
+    "regex": "saba.host",
+    "DNS": "\\.saba\\.host"
+  },
+  {
+    "Hosting": "Sakura Internet",
+    "regex": "sakura internet",
+    "DNS": "tech\\.sakura\\.ad\\.jp"
+  },
+  {
+    "Hosting": "Seravo",
+    "regex": "seravo",
+    "DNS": null
+  },
+  {
+    "Hosting": "SiteGround",
+    "regex": "siteground",
+    "DNS": "\\.siteground\\.net"
+  },
+  {
+    "Hosting": "Strato",
+    "regex": "strato",
+    "DNS": "\\.strato-rz\\.de"
+  },
+  {
+    "Hosting": "Strattic",
+    "regex": "strattic",
+    "DNS": null
+  },
+  {
+    "Hosting": "Tangled Network",
+    "regex": "tangled network",
+    "DNS": "\\.tanglednetwork\\.com"
+  },
+  {
+    "Hosting": "UKFast",
+    "regex": "ukfast",
+    "DNS": "\\.ukfast\\.net"
+  },
+  {
+    "Hosting": "VentraIP",
+    "regex": "ventraip",
+    "DNS": "\\.(?:nameserver|hostingplatform)\\.net\\.au"
+  },
+  {
+    "Hosting": "WP Engine",
+    "regex": "wp engine",
+    "DNS": null
+  },
+  {
+    "Hosting": "WebHostUK",
+    "regex": "webhostuk",
+    "DNS": "ns2\\d\\.dnshostcentral\\.com"
+  },
+  {
+    "Hosting": "WordPress Multisite",
+    "regex": "wordpress multisite",
+    "DNS": null
+  },
+  {
+    "Hosting": "Wix",
+    "regex": "wix",
+    "DNS":"\\.wixdns\\.net"
+  },
+  {
+    "Hosting": "CloudFlare",
+    "regex": "cloudflare",
+    "DNS":"\\.cloudflare\\.com"
+  },
+  {
+    "Hosting": "Domain Parking",
+    "regex": "parking",
+    "DNS": "\\parking\\.*"
+  },
+  {
+    "Hosting": "World4You",
+    "regex": "world4you",
+    "DNS": "ns\\d+\\.world4you\\.at"
+  },
+  {
+    "Hosting": "Xserver",
+    "regex": "xserver",
+    "DNS": "\\.xserver\\.jp"
+  },
+  {
+    "Hosting": "YalinHost",
+    "regex": "yalinhost",
+    "DNS": "\\.yalinhost\\.com"
+  }
+]
