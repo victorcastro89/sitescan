@@ -2,11 +2,9 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const dns = require('dns').promises;
 const shodanClient = require('shodan-client');
-const { PassThrough } = require('stream');
-
 const Wappalyzer = require('wappalyzer');
 const { PromisePool } = require('@supercharge/promise-pool'); // A utility for controlled concurrency
-const got = require('got');
+
 const { format } = require('fast-csv');
 const axios = require('axios');
 
@@ -21,68 +19,6 @@ const shodanApiKey = 'WNaGOt15ToOoY4gbKd4fXzKs4ZKY6ppa'; // Your Shodan API key
 const resolver = new dns.Resolver({timeout:3000});
 const NSVPN = '172.20.192.11'
 resolver.setServers(['1.1.1.1','8.8.8.8']);
-const passThrough = new PassThrough();
-const MAX_CONTENT_LENGTH = 1024; // Max content length in bytes
-const MAX_RETRIES = 3; // Max number of retries
-const RETRY_DELAY = 1000; // Delay between retries in milliseconds
-let retries = 0;
-
-function makeRequestWithRetry(url) {
-    return new Promise((resolve, reject) => {
-      const requestStream = got.stream(url,{ headers: {
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'Accept-Encoding': 'gzip, deflate', // Note: Handling of encoding should be managed if set manually
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Connection': 'keep-alive',
-        'Upgrade-Insecure-Requests': '1',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-    }});
-      const passThrough = new PassThrough();
-  
-      let totalLength = 0;
-      let statusCode = null;
-  
-      requestStream.on('response', response => {
-          console.log('Status Code:', response.statusCode);
-          statusCode = response.statusCode; // Capture the status code
-      });
-  
-      requestStream.on('data', chunk => {
-          totalLength += chunk.length;
-          if (totalLength > MAX_CONTENT_LENGTH) {
-              console.log('Max content length reached, destroying stream...');
-              requestStream.destroy();
-          } else {
-              passThrough.write(chunk);
-          }
-      });
-  
-      requestStream.on('end', () => {
-          console.log('Request ended');
-          passThrough.end();
-          resolve(statusCode); // Resolve the promise with the status code
-      });
-  
-      requestStream.on('error', (error) => {
-          // Check specifically for timeout errors
-          if ((error.code === 'ETIMEDOUT' || error.message.includes('timeout')) && retries < MAX_RETRIES) {
-              console.log(`Timeout detected on ${url} Retrying... Attempt ${retries + 1} of ${MAX_RETRIES}`);
-              retries++;
-              setTimeout(() => makeRequestWithRetry(url).then(resolve).catch(reject), RETRY_DELAY);
-          } else {
-              console.log('Error ${url}:', error.message);
-              if (retries >= MAX_RETRIES) {
-                  console.log('Max retries reached.');
-                  reject(error); // Reject the promise if max retries reached or if error is not timeout
-              }
-          }
-      });
-   
-      // If you want to use the data for something, you can pipe it from passThrough
-      // For example, to stdout, or simply ignore this part if not needed
-      // passThrough.pipe(process.stdout);
-    });
-  }
 require('events').EventEmitter.defaultMaxListeners = 50;
 const options = {
     debug: false,
@@ -140,41 +76,13 @@ try {
   console.error(err);
   // Handle error (e.g., file not found, parsing error)
 }
-const RipeFechInstance = got.extend({
-    timeout: 3000, // Set the timeout for all requests
-    retry: {
-      limit: 3, // Define the maximum number of retries
-      methods: ['GET', 'POST', 'PUT', 'HEAD', 'DELETE', 'OPTIONS', 'TRACE'],
-      statusCodes: [408, 413, 429, 500, 502, 503, 504],
-      errorCodes: ['ETIMEDOUT', 'ECONNRESET', 'EADDRINUSE', 'ECONNREFUSED', 'EPIPE', 'ENOTFOUND', 'ENETUNREACH', 'EAI_AGAIN'],
-      calculateDelay: ({ attemptCount, retryOptions, error, computedValue }) => {
-        if (error.name === 'TimeoutError') {
-          // Exponential backoff strategy: delay is a power of 2 based on the attemptCount
-          const delay = Math.pow(2, attemptCount) * 500; // delay in milliseconds
-          console.log(`Retrying in ${delay} ms`);
-          return delay;
-        }
-  
-        // If the error is not a timeout, use the default delay calculation
-        return computedValue;
-      },
-    },
-    hooks: {
-      beforeRetry: [
-        (options, error, retryCount) => {
-          console.log(`Attempt ${retryCount}: Retrying request to ${options.url.href}`);
-        },
-      ],
-    },
-  });
-
 
 axios.interceptors.response.use(undefined, function axiosRetryInterceptor(err) {
     var config = err.config;
 
     // If config does not exist or the retry option is not set, reject
     if (!config || !config.retry) return Promise.reject(err);
-    if(err){console.error(err.code ); console.error(err.message );}
+    if(err){console.error(err.code ); console.error(err.message )}
     // Directly reject errors with status code 301 to 404 (inclusive)
     if (err.code === 'ECONNABORTED' || err.message.includes('timeout') || ( err.config.url?.includes("ripe.net")  ) ){
         
@@ -268,7 +176,7 @@ async function fetchRipeStatData(ip) {
     await ripeStatSemaphore.acquire(); // Acquire a lock from the semaphore
     try {
         const url = `https://stat.ripe.net/data/whois/data.json?resource=${ip}`;
-        const response = await  RipeFechInstance(url);
+        const response = await axios.get(url, {   timeout: 10000,retry:2 });
         const data = response.data;
         const records = data.data.records;
         let organization = [];
@@ -306,35 +214,32 @@ async function fetchRipeStatData(ip) {
     }
 }
 async function checkIfOnline(domain) {
-    let isOnline = false;
     try {
-        // await  axios.get(domain, {
-        //     // Request configurations
-        //     timeout: 10000, // Set timeout to 2 seconds
-        //     maxRedirects: 5,
-        //     responseType: 'stream', // Receive the response as a stream to avoid downloading the entire body
-        //     maxContentLength: 512, // Maximum content length in bytes to download
-        //     maxBodyLength: 512, // Maximum body length (bytes) to be sent
-        //     retry: 3 ,
-        //     headers: {
-        //         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        //         'Accept-Encoding': 'gzip, deflate', // Note: Handling of encoding should be managed if set manually
-        //         'Accept-Language': 'en-US,en;q=0.9',
-        //         'Connection': 'keep-alive',
-        //         'Upgrade-Insecure-Requests': '1',
-        //         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
-        //     },
+        await axios.get(domain, {
+            // Request configurations
+            timeout: 10000, // Set timeout to 2 seconds
+            maxRedirects: 5,
+            responseType: 'stream', // Receive the response as a stream to avoid downloading the entire body
+            maxContentLength: 512, // Maximum content length in bytes to download
+            maxBodyLength: 512, // Maximum body length (bytes) to be sent
+            retry: 3 ,
+            headers: {
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                'Accept-Encoding': 'gzip, deflate', // Note: Handling of encoding should be managed if set manually
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36',
+            },
            
-        //     validateStatus: function (status) {
-        //         return (status >= 200 && status < 300) || // Accept usual success status codes
-        //                (status >= 300 && status < 400); // Accept redirect status codes as well
-        //     }
-        // });
-       const status = await makeRequestWithRetry(url);
-        isOnline=  (status >= 200 && status < 300) || (status >= 300 && status < 400); // Accept redirect status codes as well
-                       
-    
-        return isOnline?  { status: 'Online', sslEnabled: domain.startsWith('https') } :  { status: 'Offline', sslEnabled: false };
+            validateStatus: function (status) {
+                return (status >= 200 && status < 300) || // Accept usual success status codes
+                       (status >= 300 && status < 400); // Accept redirect status codes as well
+            }
+        });
+
+        // If the request is successful or redirects, it implies the site is online
+        return { status: 'Online', sslEnabled: domain.startsWith('https') };
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response && error.response.status >= 300 && error.response.status < 400) {
@@ -342,12 +247,12 @@ async function checkIfOnline(domain) {
                 return { status: 'Redirect', sslEnabled: domain.startsWith('https'), location: error.response.headers.location };
             } else {
                 // For other errors, consider the site offline
-                return { status: 'Offline', sslEnabled: false };
+                return { status: 'Offline', sslEnabled: domain.startsWith('https') };
             }
         } else {
             // For non-axios errors, log them and consider the site offline
             console.error(`Error checking online status for ${domain}`);
-            return { status: 'Offline', sslEnabled: false};
+            return { status: 'Offline', sslEnabled: domain.startsWith('https') };
         }
     }
 }
@@ -553,7 +458,7 @@ async function processDomains() {
 
         await pool
         .for(domains)
-        .withConcurrency(1)
+        .withConcurrency(10)
         .process(task);
         const writableStream = fs.createWriteStream('complete_records.csv');
 
