@@ -18,7 +18,7 @@ const outputFile = 'complete_records.json'; // Output file name
 const shodanApiKey = 'WNaGOt15ToOoY4gbKd4fXzKs4ZKY6ppa'; // Your Shodan API key
 const resolver = new dns.Resolver({timeout:3000});
 const NSVPN = '172.20.192.11'
-resolver.setServers(['1.1.1.1','8.8.8.8']);
+resolver.setServers([NSVPN ,'1.1.1.1','8.8.8.8']);
 require('events').EventEmitter.defaultMaxListeners = 50;
 const options = {
     debug: false,
@@ -222,7 +222,7 @@ async function checkIfOnline(domain) {
             responseType: 'stream', // Receive the response as a stream to avoid downloading the entire body
             maxContentLength: 512, // Maximum content length in bytes to download
             maxBodyLength: 512, // Maximum body length (bytes) to be sent
-            retry: 3 ,
+            retry: 2 ,
             headers: {
                 'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
                 'Accept-Encoding': 'gzip, deflate', // Note: Handling of encoding should be managed if set manually
