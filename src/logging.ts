@@ -41,4 +41,4 @@ import chalk from 'chalk';
   };
 }
 
-module.exports = { Log };
+export { Log };

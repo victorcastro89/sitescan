@@ -1,7 +1,7 @@
 const fs = require('fs');
 const csv = require('csv-parser');
 const dns = require('dns').promises;
-const shodanClient = require('shodan-client');
+
 const Wappalyzer = require('wappalyzer');
 const { PromisePool } = require('@supercharge/promise-pool'); // A utility for controlled concurrency
 
