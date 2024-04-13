@@ -11,15 +11,6 @@ import fs from 'fs';
 import pg from 'pg'
 const { Pool,Client } = pg
 import PQueue from 'p-queue';
-import cluster from 'cluster';
-import { cpus } from 'os';
-//const numCPUs = cpus().length;
-const numCPUs =2;
-const allDomains: string[] = [];
-import { ResponseTimeTracker } from './stats.ts';
-console.log(`Total number of workers: ${numCPUs}`);
-const tracker = ResponseTimeTracker.getInstance();
-import { once } from 'events';
 
 
 import { getAverageCompletedPerSecond, getAverageCompletedPerMinute,getTotalRuntimeFormatted, getCounts, incrementCompleted } from './stats.ts';
@@ -35,14 +26,9 @@ function logCurrentRequestCounts() {
 
     console.log(`Average Completed Requests/Second: ${averageCompletedPerSecond.toFixed(2)}`);
     console.log(`Average Completed Requests/Minute: ${averageCompletedPerMinute.toFixed(2)}`);
- 
-    Log.info(`Average HTTP: ${tracker.getAverageResponseTime('Http')} ms, Min HTTP: ${tracker.getMinTime('Http')} ms, Max HTTP: ${tracker.getMaxTime('Http')} ms`);
-    Log.info(`Average HTTPS: ${tracker.getAverageResponseTime('Https')} ms, Min HTTPS: ${tracker.getMinTime('Https')} ms, Max HTTPS: ${tracker.getMaxTime('Https')} ms`);
-    Log.info(`Average RIPE: ${tracker.getAverageResponseTime('RipeStats')} ms, Min RIPE: ${tracker.getMinTime('RipeStats')} ms, Max RIPE: ${tracker.getMaxTime('RipeStats')} ms`);
-
     console.log(`Total Runtime: ${totalRuntime}`);
 
-    console.log("\n");
+
 }
 
 setInterval(logCurrentRequestCounts, 1000);  // Log the counts every second to monitor
@@ -105,13 +91,10 @@ function transformResults(results:{
 // Main processing function
 
 //100p 2min 17sec 186 1.30
-//40p 3m 4s 144  0.7/sec 63online
-//10p 2m 27sec 151c 1.03/sec 104online 
-//20p 3m 2s 268 1.47/sec 190online RIPE5
-//20- 3m 295 1.57/ssec 210 oline ripe 5
-//20 3min  148 0.79/sec 90 online ripe 2
+
+//10p 2m 27sec 151c 1.03/sec 104online
 async function processDomains() {
-    const queue = new PQueue({ concurrency: 2}); // Adjust concurrency based on your system and network capabilities
+    const queue = new PQueue({ concurrency: 50}); // Adjust concurrency based on your system and network capabilities
 
     fs.createReadStream('domains.csv')
         .pipe(csv({headers:false}))
@@ -129,74 +112,5 @@ async function processDomains() {
             console.log('All domains have been processed.');
         });
 }
-//2cc 1m2s 850 2393 / 34 25
 
-//processDomains();
-
-
-if (cluster.isMaster) {
-    console.log(`Master ${process.pid} is running`);
-
-    let readyWorkers = 0;
-    const workers = [];
-
-    // Fork workers first
-    for (let i = 0; i < numCPUs; i++) {
-        const worker = cluster.fork();
-        workers.push(worker);
-
-        worker.on('message', message => {
-            if (message === 'READY') {
-                readyWorkers++;
-                console.log(`Worker ${worker.process.pid} is ready`);
-                if (readyWorkers === numCPUs) {
-                    distributeDomains();  // Call distribute only when all workers are ready
-                }
-            }
-        });
-    }
-
-    function distributeDomains() {
-        console.log('All workers are ready, processing CSV file to distribute domains.');
-        fs.createReadStream('domains.csv')
-            .pipe(csv({ headers: false }))
-            .on('data', (data) => {
-                const domain = data[Object.keys(data)[0]];
-                if (typeof domain === 'string') {
-                    allDomains.push(domain);
-                }
-            })
-            .on('end', () => {
-                console.log('CSV file successfully processed');
-                const batchSize = Math.ceil(allDomains.length / numCPUs);
-                let index = 0;
-                workers.forEach(worker => {
-                    const domainsBatch = allDomains.slice(index, index + batchSize);
-                    index += batchSize;
-                    console.log(`Master ${process.pid} sending batch of domains to worker ${worker.process.pid}`);
-                    worker.send(domainsBatch);
-                });
-            });
-    }
-
-    cluster.on('exit', (worker, code, signal) => {
-        console.log(`Worker ${worker.process.pid} died`);
-    });
-
-} else {
-    // Signal readiness to receive messages
-    process.send('READY');
-
-    process.on('message', (domainsBatch: string[]) => {
-        console.log(`Worker ${process.pid} received batch of domains: ${domainsBatch.length} domains`);
-        const queue = new PQueue({ concurrency: 20 });
-
-        domainsBatch.forEach(domain => {
-            console.log(`Processing domain: ${domain}`);
-            queue.add(async () => {
-                const results = await getDomainInfo(domain);
-                await saveResults(transformResults(results));
-            });
-        });
-    });
-}
+processDomains();

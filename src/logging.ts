@@ -4,7 +4,6 @@ import chalk from 'chalk';
     // eslint-disable-next-line no-console
     console.log(
       chalk.blue(`
-[${new Date().toLocaleString()}]
 [Log]:`),
       typeof args === 'string' ? chalk.blueBright(args) : args,
     );
