@@ -1,0 +1,9 @@
+BITBUCKET_HOST=https://stash.newfold.com
+BITBUCKET_PROJECT_KEY=LATAMD
+BITBUCKET_USER=vfaria   
+BITBUCKET_PASSWORD=!Hovcf2024
+DB_HOST=mysql-victorcastro89-a777.a.aivencloud.com
+DB_USER=avnadmin
+DB_PASSWORD=AVNS_VUzFLNI7fF3b8065POC
+DB_DATABASE=dev_metrics
+DB_PORT=22812
