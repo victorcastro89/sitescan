@@ -1,35 +1,20 @@
-version: '3.8'
+version: '3.8'  # Use a version appropriate for your Docker Compose features
 
 services:
-  # app:
-  #   build: .
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - app-network
-
-  db:
-    image: postgres:14  
-    environment:
-      POSTGRES_DB: postgres      
-      POSTGRES_USER: docker
-      POSTGRES_PASSWORD: docker
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+  scanner:
+    image: victorfaria/sitescan  # Use the same image as your Docker run command
+    container_name: scanner
+    environment:  # Define environment variables from the command
+      PT: "10"
+      CPU: "2"
+      RL: "3"
+    env_file:  # Include additional environment variables from a file
+      - .env
     networks:
-      - app-network
+      - default  # Uses the default network unless specified otherwise
+    volumes:
+      - ./domains.csv:/app/domains.csv  # Mounts domains.csv from the current directory to /app/domains.csv in the container
 
 networks:
-  app-network:
+  default:
     driver: bridge
-
-volumes:
-  postgres-data:

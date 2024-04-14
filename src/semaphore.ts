@@ -56,11 +56,11 @@ type WaitingPromise = {
    * ! Returns a function to release the lock, it is critical that this function is called when the task is finished with the resource.
    */
   acquire = (): Promise<Lock> => {
-    if (this.debugLogging) {
-      console.log(
-        `Lock requested for the ${this.label} resource - ${this.running} active, ${this.waiting.length} waiting`,
-      )
-    }
+    // if (this.debugLogging) {
+    //   console.log(
+    //     `Lock requested for the ${this.label} resource - ${this.running} active, ${this.waiting.length} waiting`,
+    //   )
+    // }
 
     if (this.running < this.max) {
       this.running++
@@ -68,9 +68,10 @@ type WaitingPromise = {
     }
 
     if (this.debugLogging) {
+      if(this.waiting.length>0)
       console.log(
         `Max active locks hit for the ${this.label} resource - there are ${this.running} tasks running and ${this.waiting.length} waiting.`,
-      )
+      );
     }
 
     return new Promise<Lock>((resolve, reject) => {

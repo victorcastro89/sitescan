@@ -1,7 +1,9 @@
+import {  maxRipeConnections } from './config.ts';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {Semaphore} from './semaphore.ts'; 
-const ripeStatSemaphore = new Semaphore("RIPEStat",6);
+
+
 
 import { incrementActive, decrementActive, incrementCompleted,incrementError,incrementSuccessful } from './stats.ts';
 
@@ -13,6 +15,8 @@ const httpAgent = new http.Agent({ keepAlive: true, maxSockets: Infinity });
 const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: Infinity });
 import { ResponseTimeTracker } from './stats.ts';
 import { Log } from './logging.ts';
+
+const ripeStatSemaphore = new Semaphore("RIPEStat",maxRipeConnections );
 const tracker = ResponseTimeTracker.getInstance();
 
 const AxiosInstance = axios.create({
@@ -57,7 +61,7 @@ async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: 
         const timeTakenMs = Date.now() - startTime;
         if (retries > 0 && shouldRetry(error as AxiosError)) {
             console.log(`Retrying ${url}... Remaining retries: ${retries}`);
-            var backoff = Math.pow(2, retries) * 250; 
+            var backoff = Math.pow(2, retries) * 500; 
             await new Promise(resolve => setTimeout(resolve, backoff));
             return fetchWithRetry(url, config, retries - 1);
         }

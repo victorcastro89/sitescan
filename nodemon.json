@@ -1,0 +1,9 @@
+{
+  "watch": ["src/", "dist/"],
+  "ext": "ts,js",
+  "ignore": ["src/**/*.spec.ts"],
+  "execMap": {
+    "ts": "ts-node"
+  },
+  "exec": "node --loader ts-node/esm src/app.ts"
+}
