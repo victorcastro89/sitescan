@@ -770,5 +770,19 @@
     ],
     "name": "Fundraising & donations",
     "priority": 9
+  },
+  "112": {
+    "groups": [
+      19
+    ],
+    "name": "Hostgator Default Page",
+    "priority": 1
+  },
+  "113": {
+    "groups": [
+      19
+    ],
+    "name": "Wordpress Default Title",
+    "priority": 1
   }
 }

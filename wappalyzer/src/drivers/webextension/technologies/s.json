@@ -3579,7 +3579,9 @@
       "high"
     ],
     "probe": {
-      "/layouts/System/VisitorIdentification.aspx": ""
+      "/layouts/System/VisitorIdentification.aspx": {
+        "match": "\\.sc_Contact\\s*\\{[^\\}]*\\}"
+      }
     },
     "saas": true,
     "website": "https://www.sitecore.com/"

@@ -1,0 +1,1659 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+    
+
+
+<link rel="preload" as="font" type="font/woff" crossorigin="anonymous" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.woff" /> 
+<link rel="preload" as="font" type="font/woff" crossorigin="anonymous" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.woff" /> 
+<link rel="preload" as="font" type="font/woff" crossorigin="anonymous" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.woff" />
+<link rel="preload" as="font" type="font/woff" crossorigin="anonymous" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.woff" /> 
+
+    
+<style>
+    @font-face {
+        font-family: 'BentonSansCond';
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.eot);
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.eot?#iefix) format("embedded-opentype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.woff) format("woff"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.ttf) format("truetype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-regular.svg#BentonSansCondRegular) format("svg");
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap
+    }
+
+    @font-face {
+        font-family: 'BentonSansCond';
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.eot);
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.eot?#iefix) format("embedded-opentype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.woff) format("woff"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.ttf) format("truetype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-cond-bold.svg#BentonSansCondBold) format("svg");
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap
+    }
+
+    @font-face {
+        font-family: 'BentonSans';
+        font-style: normal;
+        font-weight: 400;
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.eot);
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.eot?#iefix) format("embedded-opentype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.woff) format("woff"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.ttf) format("truetype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-regular.svg#BentonSansRegular) format("svg")
+    }
+
+    @font-face {
+        font-family: 'BentonSans';
+        font-style: normal;
+        font-weight: 700;
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.eot);
+        src: url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.eot?#iefix) format("embedded-opentype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.woff) format("woff"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.ttf) format("truetype"),url(https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/fonts/benton-sans-bold.svg#BentonSansRegular) format("svg")
+    }
+
+    html {
+        font-size: 100%;
+        font-family: sans-serif;
+        -ms-text-size-adjust: 100%;
+        -webkit-text-size-adjust: 100%
+    }
+
+    body {
+        margin: 0
+    }
+
+    header {
+        display: block
+    }
+
+    a {
+        background-color: transparent
+    }
+
+    svg:not(:root) {
+        overflow: hidden
+    }
+
+    input {
+        line-height: normal;
+        color: inherit;
+        font: inherit;
+        margin: 0
+    }
+
+        input::-moz-focus-inner {
+            border: 0;
+            padding: 0
+        }
+
+
+    html * {
+        box-sizing: border-box
+    }
+
+    body {
+        color: #333;
+        font-family: BentonSans,"Helvetica Neue",Helvetica,sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5
+    }
+
+    .rvt-container {
+        max-width: 100%;
+        padding-right: 1.5rem;
+        padding-left: 1.5rem
+    }
+
+    .rvt-container--center {
+        margin-right: auto !important;
+        margin-left: auto !important
+    }
+
+    .rvt-container--junior {
+        max-width: 1140px
+    }
+
+    a {
+        color: #006298
+    }
+
+    .rvt-header-global {
+        background-color: #fff;
+        position: relative;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        border-top: .25rem solid #900;
+        border-bottom: 1px solid #eaeaea;
+        z-index: 5000;
+    }
+
+    .rvt-header-global__skip-link {
+        position: fixed;
+        top: -6rem;
+        padding: .5rem;
+        z-index: 9999;
+    }
+
+    .rvt-header-global__inner {
+        position: relative
+    }
+
+    .rvt-lockup {
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        font-family: 'BentonSansCond',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif;
+        text-decoration: none;
+        color: #333;
+        -ms-flex-negative: 0;
+        flex-shrink: 0
+    }
+
+    .rvt-lockup__tab {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #900;
+        color: #fff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 2.125rem
+    }
+
+    .rvt-lockup__trident {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        width: 1.1875rem;
+        height: 1.4375rem
+    }
+
+    .rvt-container--junior {
+        max-width: 1240px
+    }
+    .rvt-header-global {background-color: #ffffff;position: relative;padding-top: 1rem;padding-bottom: 1rem;border-top: 0.25rem solid #990000;border-bottom: 1px solid #eaeaea;}.rvt-header-global__skip-link {position: fixed;top: -6rem;padding: 0.5rem;z-index: 999;}.rvt-header-global__skip-link:focus {top: 0;background-color: #ffffff;}.rvt-header-global__inner {position: relative;}.rvt-header-global__menu-toggle, .rvt-header-global__search-toggle, .rvt-header-global__more-toggle {background: none;border: 0.125rem solid #dddddd;display: -webkit-inline-box;display: -ms-inline-flexbox;display: inline-flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;font-size: 0.875rem;height: 2rem;border-radius: 0.25rem;padding: 0;}.rvt-header-global__menu-toggle:focus, .rvt-header-global__search-toggle:focus, .rvt-header-global__more-toggle:focus {outline: 0.125rem solid #006298;outline-offset: 0.125rem;}.rvt-header-global__menu-toggle svg,.rvt-header-global__search-toggle svg,.rvt-header-global__more-toggle svg {width: 0.9rem;height: 0.9rem;}.rvt-header-global__menu-toggle[aria-expanded="true"], .rvt-header-global__search-toggle[aria-expanded="true"] {background-color: #006298;color: #ffffff;border-color: #006298;}.rvt-header-global__menu-toggle {position: absolute;right: 3.125rem;width: 2.5rem;height: 2rem;}.rvt-header-global__menu-toggle span {font-size: 0.75rem;display: none;}.rvt-header-global__search-toggle {position: absolute;width: 2.5rem;height: 2rem;right: 0;top: 0;}.rvt-header-global__menu-toggle:hover, .rvt-header-global__search-toggle:hover, .rvt-header-global__more-toggle:hover {background-color: #006298;border-color: #006298;color: #ffffff;}.rvt-header-global__menu-list {list-style-type: none;padding: 0;}.rvt-header-global__menu-item a {color: #333333;text-decoration: none;font-size: 0.875rem;}.rvt-header-global__menu-item > ul {list-style: none;margin: 0;padding: 0;background-color: #ffffff;}.rvt-header-global__search-box {position: relative;margin-top: 1rem;background-color: #fafafa;padding: 1rem 1.5rem;border-top: 1px solid #eaeaea;/** * This makes the mobile menu flush to the sides of small screens. Use * this code to make it break out of the rivet container on small screens. */left: -1.5rem;width: calc(100% + 3rem);/** * This overrides the padding on the header wrapper when the * mobile menu is open. */margin-bottom: -1rem;}.rvt-header-global__search-box input[type="text"] {background-color: #ffffff;}.rvt-header-global__search-box[aria-hidden="true"] {display: none;}@media screen and (min-width: 30em) {.rvt-header-global__menu-toggle {width: auto;padding: 0 0.5rem;}.rvt-header-global__menu-toggle span {display: inline-block;}}@media screen and (min-width: 67.5em) {.rvt-header-global {border-bottom: none;padding-top: 1rem;}.rvt-header-global__inner {display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;position: relative;-ms-flex-wrap: wrap;flex-wrap: wrap;}.rvt-header-global__more-toggle {border: none;font-size: 0.875rem;padding-right: 0.5rem;padding-left: 0.5rem;}.rvt-header-global__search-toggle {position: relative;top: auto;right: auto;border-color: transparent;margin-left: 0.25rem;}.rvt-header-global__search-box {position: absolute;top: 2.5rem;left: auto;right: 0;margin: 0;padding: 1rem;-webkit-box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);background-color: #ffffff;z-index: 999;}}.rvt-header-local {background-color: #ffffff;position: relative;padding-top: 1rem;padding-bottom: 1rem;border-bottom: 1px solid #eaeaea;/**   * Mobile menu toggle   */}.rvt-header-local__menu-toggle {position: absolute;top: 0.65rem;right: 1.5rem;width: 2rem;height: 2rem;border-radius: 999rem;background: none;border: 0.125rem solid #dddddd;display: -webkit-inline-box;display: -ms-inline-flexbox;display: inline-flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;-ms-flex-negative: 0;flex-shrink: 0;padding: 0;}.rvt-header-local__menu-toggle svg {width: 1rem;height: 1rem;}.rvt-header-local__menu-toggle:hover {background-color: #006298;border-color: #006298;color: #ffffff;}.rvt-header-local__menu-toggle[aria-expanded="true"] {background-color: #006298;color: #ffffff;border-color: #006298;}.rvt-header-local__menu-toggle[aria-expanded="true"] svg {-webkit-transform: rotate(180deg);transform: rotate(180deg);}.rvt-header-local__title {font-size: 1.125rem;font-weight: 700;line-height: 1.1;display: block;padding-right: 4rem;}.rvt-header-local__title a {color: #333333;text-decoration: none;}.rvt-header-local__title a:hover,.rvt-header-local__title a:focus {text-decoration: underline;}@media screen and (min-width: 67.5em) {.rvt-header-local {padding-top: 1rem;padding-bottom: 0;-webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);box-shadow: 0 4px 6px rgba(0, 0, 0, 0.06);border-bottom: none;border-top: 1px solid #eaeaea;}.rvt-header-local__title {font-size: 1.25rem;padding-right: 2rem;padding-bottom: 1rem;}}.rvt-lockup {display: -webkit-inline-box;display: -ms-inline-flexbox;display: inline-flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center;font-family: 'BentonSansCond', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;text-decoration: none;color: #333333;-ms-flex-negative: 0;flex-shrink: 0;}.rvt-lockup__title {font-size: 0.875rem;text-transform: uppercase;line-height: 1.1;font-weight: 700;}.rvt-lockup__subtitle {text-transform: uppercase;line-height: 1.1;font-size: 0.75rem;}.rvt-lockup__tab {-webkit-box-align: center;-ms-flex-align: center;align-items: center;background-color: #990000;color: #ffffff;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-negative: 0;flex-shrink: 0;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;width: 1.75rem;height: 2.125rem;}.rvt-lockup__trident {-ms-flex-negative: 0;flex-shrink: 0;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;width: 1.1875rem;height: 1.4375rem;}.rvt-lockup__body {margin-left: 0.5rem;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: vertical;-webkit-box-direction: normal;-ms-flex-direction: column;flex-direction: column;}@media screen and (min-width: 46.25em) {.rvt-lockup__title {font-size: 1.25rem;}.rvt-lockup__subtitle {font-size: 0.875rem;}.rvt-lockup__tab {width: 2.25rem;height: 2.75rem;}.rvt-lockup__trident {width: 1.5rem;height: 1.875rem;}.rvt-lockup__body {margin-left: 1rem;}}.rvt-nav-menu {position: relative;background-color: #ffffff;display: none;margin-top: 1rem;/**   * This makes the mobile menu flush to the sides of small screens. Use   * this code to make it break out of the rivet container on small screens.   */left: -1.5rem;width: calc(100% + 3rem);/**   * This overrides the padding on the header wrapper when the   * mobile menu is open.   */margin-bottom: -1rem;/**   * Child menu toggle styles   */}.rvt-nav-menu__list {-ms-flex-preferred-size: 100%;flex-basis: 100%;padding-left: 0;list-style-type: none;}.rvt-nav-menu__list[hidden] {display: none;}.rvt-nav-menu__item {-webkit-box-align: center;-ms-flex-align: center;align-items: center;border-top: 1px solid #eaeaea;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-top: 0;background-color: #fafafa;-ms-flex-negative: 0;flex-shrink: 0;}.rvt-nav-menu__item--current {-webkit-box-shadow: inset 0.5rem 0 0 0 #006298;box-shadow: inset 0.5rem 0 0 0 #006298;}.rvt-nav-menu__item--more {display: none;}.rvt-nav-menu__link {-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;padding: 0.825rem 1.5rem;font-size: 0.875rem;text-decoration: none;color: #333333;}.rvt-nav-menu__link:focus, .rvt-nav-menu__link:hover {text-decoration: underline;color: #006298;}.rvt-nav-menu__toggle {-webkit-box-align: center;-ms-flex-align: center;align-items: center;background: transparent;border-left: 1px solid #dddddd;border-top: none;border-right: none;border-bottom: none;display: -webkit-box;display: -ms-flexbox;display: flex;height: 100%;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;padding-top: 1rem;padding-right: 2rem;padding-bottom: 1rem;padding-left: 1.5rem;-ms-flex-negative: 0;flex-shrink: 0;}.rvt-nav-menu__toggle svg {width: 1rem;height: 1rem;}.rvt-nav-menu__toggle:focus {outline: 0.125rem solid #006298;outline-offset: 0.125rem;}.rvt-nav-menu__toggle[aria-expanded="true"] svg {-webkit-transform: rotate(180deg);transform: rotate(180deg);}.rvt-nav-menu__link:focus, .rvt-nav-menu__icon:focus {z-index: 1;}.rvt-nav-menu__list--child-menu[aria-hidden="true"] {display: none;}.rvt-nav-menu__list--child-menu .rvt-nav-menu__item {background-color: #eeeeee;border-color: #dddddd;text-indent: 2rem;}.rvt-nav-menu__item--mega {border-top: none;}.rvt-nav-menu__heading {display: none;font-size: 0.875rem;font-weight: 700;padding: 1rem 1.5rem;}@media screen and (min-width: 67.5em) {.rvt-nav-menu {display: block;position: relative;left: auto;width: auto;margin-top: 0;margin-bottom: 0;margin-left: auto;/** * This is a two column dropdown menu used for the Departments * menu in the main nav. *//** * Main child menu toggle styles *//** * Styles for main global menu when it is behind a toggle * on deeper section pages. *//** * TODO: This duplicates a lot of styles from the * normal main nav dropdown menus. Need to refactor this * so that it can be used here and for all other child menus. */}.rvt-nav-menu--left-aligned {margin-left: 0;padding-bottom: 1rem;}.rvt-nav-menu > .rvt-nav-menu__list {display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-orient: horizontal;-webkit-box-direction: normal;-ms-flex-direction: row;flex-direction: row;-ms-flex-wrap: wrap;flex-wrap: wrap;}.rvt-nav-menu__item {background-color: transparent;border-top: none;position: relative;padding: 0;margin-left: 0;}.rvt-nav-menu__item--current {-webkit-box-shadow: none;box-shadow: none;position: relative;}.rvt-nav-menu__item--current::after {background-color: #006298;bottom: -1rem;content: "";display: block;height: 0.25rem;left: 0;position: absolute;width: 100%;}.rvt-nav-menu > .rvt-nav-menu__list > .rvt-nav-menu__item:not(:first-child) {margin-left: 0.825rem;}.rvt-nav-menu__item .rvt-nav-menu__link {padding: 0;text-indent: 0 !important;}.rvt-nav-menu__item--more {display: -webkit-box;display: -ms-flexbox;display: flex;border-left: 1px solid #dddddd;padding-left: 1rem;}.rvt-nav-menu__list--child-menu {position: absolute;top: 2.5rem;left: 0;width: 16rem;margin: 0;padding: 0.5rem 0;-webkit-box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);background-color: #ffffff;z-index: 999;}.rvt-nav-menu__heading {font-weight: 700;display: block;padding-left: 1rem;padding-top: 1rem;padding-bottom: 0;text-indent: 0;width: 100%;}.rvt-nav-menu__list--child-menu-mega {width: 48rem;display: -webkit-box;display: -ms-flexbox;display: flex;padding: 0;}.rvt-nav-menu__list--child-menu-mega > .rvt-nav-menu__item--mega {display: block;-ms-flex-negative: 1;flex-shrink: 1;}.rvt-nav-menu__list--child-menu-mega > .rvt-nav-menu__item--mega .rvt-nav-menu__link--mega {padding: 0.25rem 1rem;margin-top: 0.28125rem;}.rvt-nav-menu__list--child-menu-mega .rvt-nav-menu__item--mega:first-child {width: 33%;-ms-flex-preferred-size: 33%;flex-basis: 33%;padding-right: 1rem;border-right: 1px solid #eaeaea;}.rvt-nav-menu__list--child-menu-mega .rvt-nav-menu__item--mega:last-child {-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;}.rvt-nav-menu__list--child-menu-mega .rvt-nav-menu__item--mega:last-child > .rvt-nav-menu__list {-webkit-columns: 2;columns: 2;}.rvt-nav-menu__item--mega > .rvt-nav-menu__list--child-menu {position: relative;-webkit-box-shadow: none;box-shadow: none;top: 0;left: auto;width: auto;}.rvt-nav-menu__list--child-right {left: auto;right: 0;}.rvt-nav-menu__list--child-menu .rvt-nav-menu__item {background-color: transparent;}.rvt-nav-menu__list--child-menu .rvt-nav-menu__item a {padding: 0.5rem 1rem;text-decoration: none;color: #333333;display: block;}.rvt-nav-menu__list--child-menu .rvt-nav-menu__item a:hover {background-color: #006298;color: #ffffff;text-decoration: none;}.rvt-nav-menu__list--child-menu .rvt-nav-menu__link {background-color: transparent;}.rvt-nav-menu__toggle {padding: 0;height: 1.2375rem;width: 1.2375rem;margin-left: 0.25rem;border-radius: 999rem;color: #333333;border-left: none;}.rvt-nav-menu__toggle:hover {background-color: #006298;color: #ffffff;}.rvt-nav-menu__toggle svg {width: 0.9rem;}.rvt-nav-menu__secondary-toggle {background: none;border: none;display: -webkit-inline-box;display: -ms-inline-flexbox;display: inline-flex;font-size: 0.875rem;-webkit-box-align: center;-ms-flex-align: center;align-items: center;padding: 0.25rem 0.5rem;border-radius: 0.25rem;}.rvt-nav-menu__secondary-toggle:focus {outline: 0.125rem solid #006298;outline-offset: 0.125rem;}.rvt-nav-menu__secondary-toggle:hover {background-color: #006298;color: #ffffff;}.rvt-nav-menu__secondary-menu {position: absolute;top: 2rem;right: 0;width: 16rem;margin: 0;padding: 0.5rem 0;-webkit-box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);box-shadow: 0 1px 3px 2px rgba(0, 0, 0, 0.07);background-color: #ffffff;z-index: 999;}.rvt-nav-menu__secondary-menu[aria-hidden="true"] {display: none;}.rvt-nav-menu__secondary-menu .rvt-nav-menu__item {background-color: transparent;}.rvt-nav-menu__secondary-menu .rvt-nav-menu__item a {padding: 0.5rem 1rem;text-decoration: none;font-size: 0.875rem;display: block;width: 100%;color: #333333;}.rvt-nav-menu__secondary-menu .rvt-nav-menu__item a:hover {background-color: #006298;color: #ffffff;text-decoration: none;}.rvt-nav-menu__secondary-menu .rvt-nav-menu__link {background-color: transparent;}}.rvt-footer-module-1__info {background-color: #fafafa;}.rvt-footer-module-1__contact {-webkit-box-align: center;-ms-flex-align: center;align-items: center;background-color: #990000;color: #ffffff;display: -webkit-box;display: -ms-flexbox;display: flex;position: relative;}.rvt-footer-module-1__contact a {color: #ffffff;font-weight: bold;text-decoration: none;}.rvt-footer-module-1__contact a:hover,.rvt-footer-module-1__contact a:focus {text-decoration: underline;}.rvt-footer-module-1__info, .rvt-footer-module-1__contact {position: relative;left: -1.5rem;width: calc(100% + 3rem);padding: 2rem 1.5rem;}.rvt-footer-module-1__address {font-style: normal;}.rvt-footer-module-1__inline-field {display: block;}.rvt-footer-module-1__inline-field--emphasis {display: block;font-weight: bold;}.rvt-footer-module-1__envelope {margin-right: 1rem;}@media only screen and (min-width: 67.5em) {.rvt-footer-module-1 {position: relative;}.rvt-footer-module-1::before {background-color: #fafafa;content: '';height: 100%;position: absolute;left: 0;top: 0;width: 60%;z-index: -1;}.rvt-footer-module-1::after {background-color: #990000;content: '';height: 100%;right: 0;position: absolute;top: 0;width: 40%;z-index: -2;}.rvt-footer-module-1__info {position: relative;width: 70%;}.rvt-footer-module-1__info, .rvt-footer-module-1__contact {left: auto;padding-left: 0;}.rvt-footer-module-1__contact {padding-left: 1.5rem;width: 30%;}.rvt-footer-module-1__inline-field {display: inline-block;line-height: 1.2;padding: 0 0.5rem;}.rvt-footer-module-1__inline-field:first-child {padding-left: 0;}.rvt-footer-module-1__inline-field + .rvt-footer-module-1__inline-field,.rvt-footer-module-1__address + .rvt-footer-module-1__inline-field {border-left: 2px solid #333333;}.rvt-footer-module-1__address,.rvt-footer-module-1__address + .rvt-footer-module-1__inline-field {display: inline-block;}.rvt-footer-module-1__marker {vertical-align: text-top;}}.rvt-footer-module-2 {background-color: #7a1705;color: #ffffff;padding: 2rem 0;}.rvt-footer-module-2 address {font-style: normal;}.rvt-footer-module-2 a {color: #ffffff;text-decoration: none;}.rvt-footer-module-2 a:hover,.rvt-footer-module-2 a:focus {text-decoration: underline;}.rvt-footer-module-2__topics {-webkit-columns: 2;columns: 2;list-style-type: none;padding-left: 0;}.rvt-footer-module-2__topics li {margin-top: 0;margin-bottom: 0.5rem;}.rvt-footer-module-2__contact-title {font-weight: bold;margin-bottom: 0;}.rvt-footer-module-2__social-icon {display: inline-block;margin-right: 0.5rem;}.rvt-footer-module-2__column {margin-bottom: 4rem;}.rvt-footer-module-2__column:last-child {margin-bottom: 0;}/** * Custom subscribe from */.iusm-footer-subscribe .rvt-input-group__input {background-color: #ffffff;border-color: #ffffff;}.iusm-button--subtle {background-color: #eaeaea;border-color: #eaeaea;color: #333333;}.iusm-button--subtle:hover {background-color: #cccccc;border-color: #cccccc;color: #333333;}@media only screen and (min-width: 67.5em) {.rvt-footer-module-2 {padding-top: 2.5rem;padding-bottom: 2.5rem;}}.rvt-sidenav__list {-ms-flex-preferred-size: 100%;flex-basis: 100%;list-style-type: none;padding-left: 0;}.rvt-sidenav__list[hidden], .rvt-sidenav__list[aria-hidden='true'] {display: none;}.rvt-sidenav__item {-webkit-box-align: center;-ms-flex-align: center;align-items: center;border-top: 1px solid #eeeeee;display: -webkit-box;display: -ms-flexbox;display: flex;-ms-flex-wrap: wrap;flex-wrap: wrap;margin-top: 0;}.rvt-sidenav__link {color: #333333;-webkit-box-flex: 1;-ms-flex-positive: 1;flex-grow: 1;padding: 0.8125rem;text-decoration: none;font-size: 0.875rem;width: 80%;-ms-flex-preferred-size: 80%;flex-basis: 80%;line-height: 1.3;}.rvt-sidenav__link[aria-current] {-webkit-box-shadow: inset 0.25rem 0 0 #006298;box-shadow: inset 0.25rem 0 0 #006298;}.rvt-sidenav__link:focus, .rvt-sidenav__link:hover {color: #006298;text-decoration: underline;}.rvt-sidenav__icon {-webkit-box-align: center;-ms-flex-align: center;align-items: center;background: transparent;border: none;-webkit-box-pack: center;-ms-flex-pack: center;justify-content: center;-ms-flex-negative: 0;flex-shrink: 0;height: 2.8125rem;width: 20%;-ms-flex-preferred-size: 20%;flex-basis: 20%;}.rvt-sidenav__icon svg {vertical-align: middle;width: 0.9rem;height: 0.9rem;}.rvt-sidenav__icon[aria-expanded="true"] {-webkit-transform: rotate(180deg);transform: rotate(180deg);}.rvt-sidenav__icon:focus {outline: 0.125rem solid #006298;outline-offset: 0.125rem;}.rvt-sidenav__icon:focus, .rvt-sidenav__icon:hover {background: #006298;color: #ffffff;}.rvt-sidenav__link:focus, .rvt-sidenav__icon:focus {z-index: 1;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__link {padding-left: 1.25rem;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item {border-color: #eaeaea;}.rvt-sidenav__item > .rvt-sidenav__list {background-color: #fafafa;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__link {padding-left: 2.5rem;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item {border-color: #dddddd;}.rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list {background-color: #eeeeee;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__link {padding-left: 3.75rem;}.rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item {border-color: #cccccc;}.rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list > .rvt-sidenav__item > .rvt-sidenav__list {background-color: #dddddd;}.rvt-container--junior {max-width: 1240px;}
+
+    /*@media only screen and (min-width: 1675px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 600px;
+        }
+    }
+
+    @media only screen and (min-width: 1400px) and (max-width: 1674px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 500px;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) and (max-width: 1399px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 430px;
+        }
+    }
+
+    @media only screen and (min-width: 1024px) and (max-width: 1199px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 365px;
+        }
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 275px;
+        }
+    }
+
+    @media only screen and (min-width: 635px) and (max-width: 767px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 225px;
+        }
+    }
+
+    @media only screen and (min-width: 500px) and (max-width: 634px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 175px;
+        }
+    }
+
+    @media only screen and (min-width: 481px) and (max-width: 499px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 170px;
+        }
+    }
+
+    @media only screen and (min-width: 400px) and (max-width: 480px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 170px;
+        }
+    }
+
+    @media only screen and (max-width: 399px) {
+        .iu-project-website-layouts-default .iu-feature-hero-imageherooverlay .default-layout-responsive-image {
+            min-height: 110px;
+        }
+    }*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @charset "UTF-8";
+</style>
+
+
+
+    <link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.foundation.theming.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.foundation.theming.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.pagecontent.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.pagecontent.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.cta.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.cta.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.hero.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.hero.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.identity.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.identity.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.navigation.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.navigation.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.subscription.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.feature.subscription.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.project.common.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.project.common.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	<link rel="preload" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.project.website.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" as="style"  media="screen" onload="this.onload=null;this.rel='stylesheet'"><noscript><link rel="stylesheet" href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Styles/iu.project.website.min.css?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab" media="screen"></noscript>
+	
+
+
+
+    <title>Indiana University School of Medicine</title>
+
+
+    <meta name="description" content="A national leader in medical research and education, with more than 60 academic departments and specialty divisions across nine campuses statewide." />
+
+
+    <meta name="google-site-verification" content="gCVci-uey8Evvbxi0_eIFNKHrEPsXhkZ5RsLIjt8uHY" />
+    <meta name="College-University-Structured-Data" content="{   &quot;@context&quot;: &quot;http://schema.org&quot;,   &quot;@type&quot;: &quot;CollegeOrUniversity&quot;,   &quot;url&quot;: &quot;https://medicine.iu.edu/&quot;,   &quot;name&quot;: &quot;Indiana University School of Medicine&quot;,   &quot;logo&quot;: &quot;https://medicine.iu.edu/wp-content/uploads/2018/09/Comm-Ext-IU-Som-201-lockup.jpg&quot;,   &quot;sameAs&quot;: [ &quot;https://en.wikipedia.org/wiki/Indiana_University_School_of_Medicine&quot;,   &quot;https://www.facebook.com/IUMedicine/&quot;,   &quot;https://twitter.com/iumedschool&quot;,   &quot;https://www.linkedin.com/school/indiana-university-school-of-medicine/&quot;,   &quot;https://www.instagram.com/iumedschool/&quot;]   }  " />
+
+    <link rel="canonical" href="https://medicine.iu.edu/" />
+
+    
+<meta name="VIcurrentDateTime" content="638488271088596519" />
+<script type="text/javascript" src="/layouts/system/VisitorIdentification.js"></script>
+
+
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push(
+{'gtm.start': new Date().getTime(),event:'gtm.js'}
+);var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-WJFT899');</script>
+<!-- End Google Tag Manager -->
+<!--Rivet PolyFill-->
+<script>!function(a,b){"function"==typeof define&&define.amd?define([],function(){return a.svg4everybody=b()}):"object"==typeof module&&module.exports?module.exports=b():a.svg4everybody=b()}(this,function(){function a(a,b,c){if(c){var d=document.createDocumentFragment(),e=!b.hasAttribute("viewBox")&&c.getAttribute("viewBox");e&&b.setAttribute("viewBox",e);for(var f=c.cloneNode(!0);f.childNodes.length;)d.appendChild(f.firstChild);a.appendChild(d)}}function b(b){b.onreadystatechange=function(){if(4===b.readyState){var c=b._cachedDocument;c||(c=b._cachedDocument=document.implementation.createHTMLDocument(""),c.body.innerHTML=b.responseText,b._cachedTarget={}),b._embeds.splice(0).map(function(d){var e=b._cachedTarget[d.id];e||(e=b._cachedTarget[d.id]=c.getElementById(d.id)),a(d.parent,d.svg,e)})}},b.onreadystatechange()}function c(c){function e(){for(var c=0;c<o.length;){var h=o[c],i=h.parentNode,j=d(i),k=h.getAttribute("xlink:href")||h.getAttribute("href");if(!k&&g.attributeName&&(k=h.getAttribute(g.attributeName)),j&&k){if(f)if(!g.validate||g.validate(k,j,h)){i.removeChild(h);var l=k.split("#"),q=l.shift(),r=l.join("#");if(q.length){var s=m[q];s||(s=m[q]=new XMLHttpRequest,s.open("GET",q),s.send(),s._embeds=[]),s._embeds.push({parent:i,svg:j,id:r}),b(s)}else a(i,j,document.getElementById(r))}else++c,++p}else++c}(!o.length||o.length-p>0)&&n(e,67)}var f,g=Object(c),h=/\bTrident\/[567]\b|\bMSIE (?:9|10)\.0\b/,i=/\bAppleWebKit\/(\d+)\b/,j=/\bEdge\/12\.(\d+)\b/,k=/\bEdge\/.(\d+)\b/,l=window.top!==window.self;f="polyfill"in g?g.polyfill:h.test(navigator.userAgent)||(navigator.userAgent.match(j)||[])[1]<10547||(navigator.userAgent.match(i)||[])[1]<537||k.test(navigator.userAgent)&&l;var m={},n=window.requestAnimationFrame||setTimeout,o=document.getElementsByTagName("use"),p=0;f&&e()}function d(a){for(var b=a;"svg"!==b.nodeName.toLowerCase()&&(b=b.parentNode););return b}return c});</script>
+<script>svg4everybody();</script>
+
+
+
+    
+
+    <link rel="preload" href="/FrontEnd/Rivet-Updates/rivet-next-components.css" media="all" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="/FrontEnd/Rivet-Updates/rivet-next-components.css" media="all" />
+    </noscript>
+
+    <link rel="preload" href="/FrontEnd/Rivet-Updates/datepicker/rivet-datepicker.css" media="all" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="/FrontEnd/Rivet-Updates/datepicker/rivet-datepicker.css" media="all" />
+    </noscript>
+
+
+        <meta name="og:id" content="92302C6E-9AFF-496F-9C96-F9952B50ABB7" />
+            <meta name="displayName" content="Home" />
+
+    
+
+    <style>
+        .rvt-container--junior {
+            max-width: 1240px !important;
+        }
+    </style>
+
+</head>
+<body class=" iu-project-website-layouts-default">
+    <script  src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Head/iu.foundation.theming.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	
+    
+    
+    
+
+
+
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe title="Google Tag Manager" src="https://www.googletagmanager.com/ns.html?id=GTM-WJFT899"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+
+
+
+
+<header>
+    <div class="rvt-header-global">
+        <a class="rvt-header-global__skip-link" href="#main-content" aria-label="Skip to main content">Skip to main content</a>
+            
+        
+        <div class="rvt-container rvt-container--center rvt-container--junior">
+            <div class="rvt-header-global__inner">
+                
+<a href="/" class="rvt-lockup" >    <div class="rvt-lockup__tab">
+        <svg class="rvt-lockup__trident" viewBox="0 0 28 34" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Indiana University School of Medicine</title>
+      <path d="M-3.34344e-05 4.70897H8.83308V7.174H7.1897V21.1426H10.6134V2.72321H8.83308V0.121224H18.214V2.65476H16.2283V21.1426H19.7889V7.174H18.214V4.64047H27.0471V7.174H25.0614V23.6761L21.7746 26.8944H16.2967V30.455H18.214V33.8787H8.76463V30.592H10.6819V26.8259H5.20403L1.91726 23.6077V7.174H-3.34344e-05V4.70897Z" fill="white"></path>
+    </svg>
+    </div>
+    <div class="rvt-lockup__body">
+        <span class="rvt-font-cond rvt-lockup__title">Indiana University</span>
+        <span class="rvt-font-cond rvt-lockup__subtitle">School of Medicine</span>
+    </div>
+</a>
+
+
+<button class="rvt-header-global__menu-toggle rvt-hide-lg-up" aria-expanded="false" data-toggle="global-nav" aria-label="Mobile Menu Toggle">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+        <g fill="currentColor">
+            <path d="M15,3H1A1,1,0,0,1,1,1H15a1,1,0,0,1,0,2Z"></path>
+            <path d="M15,9H1A1,1,0,0,1,1,7H15a1,1,0,0,1,0,2Z"></path>
+            <path d="M15,15H1a1,1,0,0,1,0-2H15a1,1,0,0,1,0,2Z"></path>
+        </g>
+    </svg><span class="rvt-m-left-xs">Menu</span>
+</button>
+
+
+                
+
+
+
+    <nav class="rvt-nav-menu " aria-label="Main menu" id="global-nav">
+        <ul class="rvt-nav-menu__list">
+                <li class="rvt-nav-menu__item ">
+                    <a href="/expertise" class="rvt-nav-menu__link" currentaria="" >Expertise</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-1" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu " id="primary-menu-toggle-1" aria-hidden="true">
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/alzheimers" class="rvt-nav-menu__link" >Alzheimer&#39;s Disease</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/indiana-health" class="rvt-nav-menu__link" >Indiana Health</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/precision-health" class="rvt-nav-menu__link" >Precision Health Initiative</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/musculoskeletal-health" class="rvt-nav-menu__link" >Musculoskeletal Health</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/traumatic-brain-injury" class="rvt-nav-menu__link" >Traumatic Brain Injury</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/global-health" class="rvt-nav-menu__link" >Global Health</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/expertise/lgbtq-health" class="rvt-nav-menu__link" >LGBTQ+ Health</a>
+                                </li>
+                        </ul>
+                </li>
+                <li class="rvt-nav-menu__item ">
+                    <a href="/education" class="rvt-nav-menu__link" currentaria="" >Education</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-2" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu " id="primary-menu-toggle-2" aria-hidden="true">
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/md" class="rvt-nav-menu__link" >MD Program</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/gme" class="rvt-nav-menu__link" >Graduate Medical Education</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/graduate-degrees" class="rvt-nav-menu__link" >Graduate Degrees</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/dual-degrees" class="rvt-nav-menu__link" >Dual Degrees</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/undergraduate-health-professions" class="rvt-nav-menu__link" >Health Professions Programs</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/continuing-education" class="rvt-nav-menu__link" >Continuing Education</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/point-of-care-ultrasound" class="rvt-nav-menu__link" >Point of Care Ultrasound</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/medical-library" class="rvt-nav-menu__link" >Medical Library</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/mental-health-services" class="rvt-nav-menu__link" >Mental Health Services</a>
+                                </li>
+                        </ul>
+                </li>
+                <li class="rvt-nav-menu__item ">
+                    <a href="/research" class="rvt-nav-menu__link" currentaria="" >Research</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-3" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu " id="primary-menu-toggle-3" aria-hidden="true">
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/research-centers" class="rvt-nav-menu__link" >Centers</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/institutes" class="rvt-nav-menu__link" >Institutes</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/research/clinical" class="rvt-nav-menu__link" >Clinical Research</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/department-programs" class="rvt-nav-menu__link" >Department Programs</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/faculty-labs" class="rvt-nav-menu__link" >Faculty Labs</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/research/support" class="rvt-nav-menu__link" >Investigator Support</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/service-cores" class="rvt-nav-menu__link" >Service Cores</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/research/training-programs" class="rvt-nav-menu__link" >Training Programs</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/research/watanabe-prize" class="rvt-nav-menu__link" >Watanabe Prize</a>
+                                </li>
+                        </ul>
+                </li>
+                <li class="rvt-nav-menu__item ">
+                    <a href="/campuses" class="rvt-nav-menu__link" currentaria="" >Campuses</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-4" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu " id="primary-menu-toggle-4" aria-hidden="true">
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/bloomington" class="rvt-nav-menu__link" >Bloomington</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/evansville" class="rvt-nav-menu__link" >Evansville</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/fort-wayne" class="rvt-nav-menu__link" >Fort Wayne</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/indianapolis" class="rvt-nav-menu__link" >Indianapolis</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/muncie" class="rvt-nav-menu__link" >Muncie</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/gary" class="rvt-nav-menu__link" >Northwest - Gary</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/south-bend" class="rvt-nav-menu__link" >South Bend</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/terre-haute" class="rvt-nav-menu__link" >Terre Haute</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/west-lafayette" class="rvt-nav-menu__link" >West Lafayette</a>
+                                </li>
+                        </ul>
+                </li>
+                <li class="rvt-nav-menu__item ">
+                    <a href="/departments" class="rvt-nav-menu__link" currentaria="" >Departments</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-5" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul id="primary-menu-toggle-5" class="rvt-nav-menu__list rvt-nav-menu__list--child-menu rvt-nav-menu__list--child-menu-mega  rvt-nav-menu__list--child-right" aria-hidden="true">
+
+                                <li class="rvt-nav-menu__item rvt-nav-menu__item--mega">
+                                    <div class="rvt-nav-menu__heading">Basic Science</div>
+                                    <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu">
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/anatomy-cell-biology-physiology" class="rvt-nav-menu__link" >Anatomy, Cell Biology and Physiology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/biochemistry-molecular-biology" class="rvt-nav-menu__link" >Biochemistry and Molecular Biology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/biostatistics" class="rvt-nav-menu__link" >Biostatistics and Health Data Science</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/microbiology-immunology" class="rvt-nav-menu__link" >Microbiology and Immunology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/pharmacology-toxicology" class="rvt-nav-menu__link" >Pharmacology and Toxicology</a>
+                                            </li>
+                                    </ul>
+                                </li>
+                                <li class="rvt-nav-menu__item rvt-nav-menu__item--mega">
+                                    <div class="rvt-nav-menu__heading">Clinical Science</div>
+                                    <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu">
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/anesthesia" class="rvt-nav-menu__link" >Anesthesia</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/dermatology" class="rvt-nav-menu__link" >Dermatology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/emergency-medicine" class="rvt-nav-menu__link" >Emergency Medicine</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/family-medicine" class="rvt-nav-menu__link" >Family Medicine</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/genetics" class="rvt-nav-menu__link" >Medical and Molecular Genetics</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/internal-medicine" class="rvt-nav-menu__link" >Internal Medicine</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/neurological-surgery" class="rvt-nav-menu__link" >Neurological Surgery</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/neurology" class="rvt-nav-menu__link" >Neurology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/obgyn" class="rvt-nav-menu__link" >Obstetrics and Gynecology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/ophthalmology" class="rvt-nav-menu__link" >Ophthalmology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/orthopaedic-surgery" class="rvt-nav-menu__link" >Orthopaedic Surgery</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/otolaryngology" class="rvt-nav-menu__link" >Otolaryngology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/pathology" class="rvt-nav-menu__link" >Pathology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/pediatrics" class="rvt-nav-menu__link" >Pediatrics</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/physiatry" class="rvt-nav-menu__link" >Physical Medicine and Rehabilitation</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/psychiatry" class="rvt-nav-menu__link" >Psychiatry</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/radiation-oncology" class="rvt-nav-menu__link" >Radiation Oncology</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/radiology" class="rvt-nav-menu__link" >Radiology and Imaging Sciences</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/surgery" class="rvt-nav-menu__link" >Surgery</a>
+                                            </li>
+                                            <li class="rvt-nav-menu__item rvt-nav-menu__item-account-outline">
+                                                <a href="/urology" class="rvt-nav-menu__link" >Urology</a>
+                                            </li>
+                                    </ul>
+                                </li>
+                        </ul>
+                </li>
+                <li class="rvt-nav-menu__item ">
+                    <a href="/news" class="rvt-nav-menu__link" currentaria="" >News</a>
+
+                        <button class="rvt-nav-menu__toggle" data-dropdown-toggle="primary-menu-toggle-6" aria-expanded="false" aria-label="Dropdown Menu Button" aria-haspopup="true">
+                            <?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M8,12.46a2,2,0,0,1-1.52-.7L1.24,5.65a1,1,0,1,1,1.52-1.3L8,10.46l5.24-6.11a1,1,0,0,1,1.52,1.3L9.52,11.76A2,2,0,0,1,8,12.46Z"></path>
+</svg>
+                        </button>
+                        <ul class="rvt-nav-menu__list rvt-nav-menu__list--child-menu " id="primary-menu-toggle-6" aria-hidden="true">
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/blogs" class="rvt-nav-menu__link" >Blog</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/communications" class="rvt-nav-menu__link" >Communications Office</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/events" class="rvt-nav-menu__link" >Events</a>
+                                </li>
+                                <li class="rvt-nav-menu__item">
+                                    <a href="/news" class="rvt-nav-menu__link" >News</a>
+                                </li>
+                        </ul>
+                </li>
+
+            <!-- Start More items menu -->
+
+
+                <li class="rvt-nav-menu__item rvt-nav-menu__item--more">
+                    <button href="#" class="rvt-header-global__more-toggle" data-dropdown-toggle="primary-menu-toggle-7" aria-haspopup="true" aria-label="More button dropdown" aria-expanded="false">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<g fill="currentColor">
+		<circle cx="8" cy="8" r="2"></circle>
+		<circle cx="14" cy="8" r="2"></circle>
+		<circle cx="2" cy="8" r="2"></circle>
+	</g>
+</svg>
+                        <span class="rvt-m-left-xs">More</span>
+                    </button>
+                    <ul id="primary-menu-toggle-7" class="rvt-nav-menu__list rvt-nav-menu__list--child-menu rvt-nav-menu__list--child-right" aria-hidden="true">
+                            <li class="rvt-nav-menu__item">
+                                <a href="/about" class="rvt-nav-menu__link" >About</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/executive-leadership" class="rvt-nav-menu__link" title="Leadership and Administration" >Leadership</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/faculty" class="rvt-nav-menu__link" title="Faculty Affairs" >Faculty</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/staff" class="rvt-nav-menu__link" >Staff</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/give" class="rvt-nav-menu__link" >Give</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/inclusion" class="rvt-nav-menu__link" title="Inclusion" >Inclusion</a>
+                            </li>
+                            <li class="rvt-nav-menu__item">
+                                <a href="/careers" class="rvt-nav-menu__link" >Careers</a>
+                            </li>
+                    </ul>
+                </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/about" class="rvt-nav-menu__link" >About</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/executive-leadership" class="rvt-nav-menu__link" title="Leadership and Administration" >Leadership</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/faculty" class="rvt-nav-menu__link" title="Faculty Affairs" >Faculty</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/staff" class="rvt-nav-menu__link" >Staff</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/give" class="rvt-nav-menu__link" >Give</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/inclusion" class="rvt-nav-menu__link" title="Inclusion" >Inclusion</a>
+                    </li>
+                    <li class="rvt-nav-menu__item rvt-hide-lg-up">
+                        <a href="/careers" class="rvt-nav-menu__link" >Careers</a>
+                    </li>
+
+            <!-- End More items menu -->
+
+        </ul>
+    </nav>
+
+
+
+
+<!-- Start search toggle and pop-up -->
+<button class="rvt-header-global__search-toggle" data-toggle="search-box" aria-expanded="false" aria-haspopup="true" aria-label="Search box pop up">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+	<path fill="currentColor" d="M15.71,14.29,10.89,9.47a6,6,0,1,0-1.42,1.42l4.82,4.82a1,1,0,0,0,1.42,0A1,1,0,0,0,15.71,14.29ZM6,10a4,4,0,1,1,4-4A4,4,0,0,1,6,10Z"></path>
+</svg><span class="rvt-sr-only"><span class="rvt-sr-only">Toggle Search Box</span>
+</button>
+
+<div id="search-box" class="rvt-header-global__search-box rvt-width-xl-lg-up" aria-hidden="true">
+    <form role="search" data-url="/search">
+        <label for="search" class="rvt-sr-only">Search</label>
+        <div class="rvt-input-group">
+            <input class="rvt-input-group__input" type="text" id="search-navigation">
+            <div class="rvt-input-group__append">
+                <button class="rvt-button" id="search-navigation-button">Search</button>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- End search toggle and pop-up -->
+
+
+            </div>
+        </div>
+    </div> 
+
+</header>
+
+
+<main role="main" id="main-content" class=" rvt-p-bottom-sm">
+        <span class="rvt-display-none">A national leader in medical research and education, with more than 60 academic departments and specialty divisions across nine campuses statewide.</span>
+
+    
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+
+
+<div class="iu-feature-hero-imageherooverlay xdefault-layout-margin-bottom">
+
+    <div class="overlay">
+        <div class="default-layout-margin-expanded skeleton_wrapper" style="aspect-ratio: 1900/693">
+            <img src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;h=693&amp;w=1900&amp;la=en&amp;hash=CD7A4CBE7325910B8AA71D98707081E2" class="default-layout-responsive-image rvt-display-block" srcset="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=10&amp;la=en&amp;hash=BFF1868C9906730D826825A5E9E91177 10w,https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=1262&amp;la=en&amp;hash=748E31B01E59FA23D22B9D991B78B06D 1262w,https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=1402&amp;la=en&amp;hash=2DF663ED58918D29D2C7FC221466D22B 1402w,https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=1902&amp;la=en&amp;hash=AC27EA5C4ED42F75A19940D30EDAB870 1902w" sizes="(max-width: 740px),(min-width: 1080px) and (max-width: 1259px),(min-width: 1260px) and (max-width: 1399px),(min-width: 1400px)" alt="a diverse group of medical students in white coats smile and talk while walking down the hallway" />
+            <div class="image-skeleton-loading skeleton" style="aspect-ratio: 1900/643"></div>
+        </div>
+
+        <div class="overlay-content overlay-white-and-black-theme rvt-p-all-md rvt-p-bottom-none ">
+                <h1>PREPARING HEALERS. TRANSFORMING HEALTH. </h1>
+                            <p>We believe collaboration is what sparks creativity and innovation in health care. </p>
+
+                <div>
+                            <span class="cta-link rvt-m-right-lg">
+                                <span class="svg-rounded">
+                                    <svg class="default-layout-svg-icon">
+                                        <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                    </svg>
+                                </span>
+
+                                <a href="/education" class="default-layout-bold-link" >EDUCATION PROGRAMS</a>
+                            </span>
+                            <span class="cta-link rvt-m-right-lg">
+                                <span class="svg-rounded">
+                                    <svg class="default-layout-svg-icon">
+                                        <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                    </svg>
+                                </span>
+
+                                <a href="/research" class="default-layout-bold-link" >RESEARCH</a>
+                            </span>
+                </div>
+        </div>
+    </div>
+
+    <div class="collapsed">
+        <div class="default-layout-margin-expanded skeleton_wrapper" style="aspect-ratio: 1900/693">
+            <img data-src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;h=693&amp;w=1900&amp;la=en&amp;hash=CD7A4CBE7325910B8AA71D98707081E2" class="default-layout-responsive-image lazy" data-srcset="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=482&amp;la=en&amp;hash=2F727C37D9D9E3FD45FFE8BD2AD7DA89 482w,https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/home-1/student-header.jpg?rev=71da488b83144bfd82984cd1d267bfdb&amp;w=742&amp;la=en&amp;hash=9D8035DCA7A8E173379CE7B90BB2074D 742w" data-sizes="(max-width: 480px), (min-width: 481px) amd (max-width: 740px)" alt="a diverse group of medical students in white coats smile and talk while walking down the hallway" />
+            <div class="image-skeleton-loading skeleton" style="aspect-ratio: 1900/643"></div>
+        </div>
+
+        <div class="rvt-p-top-sm )">
+                <h1>PREPARING HEALERS. TRANSFORMING HEALTH. </h1>
+                            <p>We believe collaboration is what sparks creativity and innovation in health care. </p>
+
+                <div class="cta-blue-and-white-theme">
+                        <p>
+                            <span class="svg-rounded">
+                                <svg class="default-layout-svg-icon">
+                                    <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                </svg>
+                            </span>
+
+                            <a href="/education" class="default-layout-bold-link" >EDUCATION PROGRAMS</a>
+                        </p>
+                        <p>
+                            <span class="svg-rounded">
+                                <svg class="default-layout-svg-icon">
+                                    <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                </svg>
+                            </span>
+
+                            <a href="/research" class="default-layout-bold-link" >RESEARCH</a>
+                        </p>
+                </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--junior">
+
+    
+
+
+
+<div class="iu-project-common-3-column ">
+
+    
+
+        <div class="rvt-grid">
+            <div class="rvt-grid__item-4-md-up">
+                
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+
+    <div class="richtext-content">
+        <h2 align="center"><img alt="Research Icon" style="width:60px; margin: 0 auto;" src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/icon-medical-research-red_x87182.svg?w=60&amp;rev=686722cfcbf14079a815e6af7d55eea5&amp;hash=03E613F2C5E8B0F466E6908B94465350"></h2>
+<h3 align="center"><strong><a href="/research">Research</a></strong></h3>
+Funding for biomedical research tightens nationwide, yet IU School of Medicine continues to attract new funding in critical areas of medicine.
+    </div>
+
+
+
+</div>
+
+            </div>
+            <div class="rvt-grid__item-4-md-up">
+                
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+
+    <div class="richtext-content">
+        <h2 align="center"><img alt="Education Icon" style="width:60px; margin: 0 auto;" src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/iconeducationredx87182.svg?w=60&amp;rev=cce4585a49994363980fa8a6ebec5758&amp;hash=1C2B34C0A3524D79A29CF822F318060C"></h2>
+<h3 align="center"><a href="/education">Education</a></h3>
+IU School of Medicine offers a robust learning and teaching environment to prepare the next generation of healers and transform health.
+    </div>
+
+
+
+</div>
+
+            </div>
+            <div class="rvt-grid__item-4-md-up">
+                
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+
+    <div class="richtext-content">
+        <h2 align="center"><img alt="Clinical Care Icon" style="width:60px; margin: 0 auto;" src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/iconclinicalcareredx87182.svg?w=60&amp;rev=2c7a89fbabbd4b9e8e3d574a82a05a70&amp;hash=2D4425826994FEC4DD62066346AB469F"></h2>
+<h3 align="center"><a href="/patient-care">Patient Care</a></h3>
+IU School of Medicine faculty provide expert primary and specialty care for patients in Indiana.
+    </div>
+
+
+
+</div>
+
+            </div>
+        </div>
+
+    
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--junior">
+
+    
+
+
+
+<div class="iu-project-common-2-column-8-4 ">
+
+    <div class="rvt-grid">
+        <div class="rvt-grid__item-8-md-up">
+            
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+            <h2 class="">
+                Integrated Medical Education
+            </h2>
+
+    <div class="richtext-content">
+        <p>IU School of Medicine is the largest medical school in the United States. Comprised of five basic science departments and 20 clinical departments, IU School of Medicine offers exceptional training for students wishing to pursue a medical degree. With the Class of 2020, the school implemented a new medical education curriculum that better reflects the modern U.S. health care environment and delivery models, readying students to practice medicine in a team-based, interdisciplinary setting.</p>
+<ul>
+    <li>Statewide medical education centers on six core competencies.</li>
+    <li>Access to diverse patient populations reflects true state of care today.</li>
+    <li>Updates align innovations in medical science and education.</li>
+    <li>Global outreach, clinical education programs foster active learning.</li>
+    <li>Collaborative teaching and learning forges interprofessional bonds.</li>
+    <li>Academic advising and career counseling support and guide students.<br /><br /></li></ul>
+    </div>
+
+        <p>
+<a href="/md/curriculum" class="default-layout-optional-link-block cta-blue-and-white-theme" >                <span class="svg-rounded">
+                    <svg class="default-layout-svg-icon default-layout-color-blue">
+                        <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                    </svg>
+                </span>
+IU SCHOOL OF MEDICINE MD CURRICULUM</a>        </p>
+
+
+</div>
+
+        </div>
+        <div class="rvt-grid__item-4-md-up">
+            
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+            <h2 class="">
+                Education Programs 
+            </h2>
+
+    <div class="richtext-content">
+        <p>Ready to take the next step in your medical education? Explore IU School of Medicine education programs and find requirements, curriculum and application information.</p>
+    </div>
+
+
+
+</div>
+
+
+
+
+<div class="iu-feature-cta-list default-layout-margin-bottom ">
+
+
+        <div class="no-grid">
+
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/md" class="default-layout-bold-link default-layout-color-blue" >MD</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/gme" class="default-layout-bold-link default-layout-color-blue" >RESIDENCY PROGRAMS</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/graduate-degrees" class="default-layout-bold-link default-layout-color-blue" > GRADUATE DEGREES</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/continuing-education" class="default-layout-bold-link default-layout-color-blue" >CONTINUING MEDICAL EDUCATION</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/undergraduate-health-professions" class="default-layout-bold-link default-layout-color-blue" >UNDERGRAD HEALTH PROFESSIONS </a>
+    </span>
+</p>
+                    
+            
+        </div>
+
+</div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+
+
+
+<div class="iu-feature-cta-two-columns default-layout-margin-bottom default-layout-margin-expanded cta-white-and-red-theme">
+    <div class="rvt-grid">
+        <div class="rvt-grid__item-6-md-up image-column rvt-grid__item-push-6-md">
+            <img data-src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/20160404_iusm_er_008.jpg?rev=4e71a2385768487899c2fb8cb6630b0b&amp;h=487&amp;w=960&amp;la=en&amp;hash=1061110DBFDBC974AE8101070485B746" class="xdefault-layout-responsive-image lazy" alt="Image. Advancing Medical Research" maxwidth="725" />
+        </div>
+        <div class="rvt-grid__item-6-md-up text-column rvt-grid__item-pull-6-md">
+            <div class="text-column-inner">
+                    <h2>Advancing Medical Research</h2>
+
+                <p>IU School of Medicine physicians and scientists were awarded approximately $460 million in research grants and awards in federal fiscal year 2022 to study the underlying causes of disease, the development of new therapeutics and how to improve the delivery of care. Funding to IU School of Medicine specifically from the National Institutes of Health&mdash;the gold standard in medical research&mdash;totaled almost $215 million in federal fiscal year 2022. This marks the third year in a row the school has surpassed $200 million.</p>
+
+                    <p>
+<a href="/research" class="default-layout-optional-link-inline" >                            <span class="svg-rounded">
+                                <svg class="default-layout-svg-icon default-layout-color-blue">
+                                    <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                </svg>
+                            </span>
+IU SCHOOL OF MEDICINE RESEARCH</a>                    </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--junior">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+
+
+
+<div class="iu-feature-pagecontent-horizontalteaser default-layout-margin-bottom">
+
+    <div class="rvt-grid">
+        <div class="rvt-grid__item-4-md-up ">
+            <img data-src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/project/iu/uploads/diversity/facultyphysiciansdiscusscasex36460.jpg?rev=8984f3005ca04f1f94d675c17dc06b08&amp;h=240&amp;w=360&amp;la=en&amp;hash=6CFCFF555E82F3A393999F6AEFCC98CB" class="default-layout-responsive-image lazy" alt="Faculty Physicians Discuss Case" maxwidth="490" />
+        </div>
+
+        <div class="rvt-grid__item-8-md-up ">
+                <h2>Committed to Diversity and Inclusion</h2>
+            
+<p>IU School of Medicine is committed to advancing culturally competent medical education, clinical care and research. Focused, systematic and sustained programs are offered, aligned with three foundational pillars: representational diversity, inclusive working and learning environment, and cultural competence.</p>
+<a href="https://medicine.iu.edu/about/diversity" class="default-layout-optional-link-block cta-blue-and-white-theme" >                    <span class="svg-rounded">
+                        <svg class="default-layout-svg-icon">
+                            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                        </svg>
+                    </span>
+DIVERSITY</a>        </div>
+    </div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+
+
+
+<div class="iu-feature-cta-two-columns default-layout-margin-bottom default-layout-margin-expanded cta-white-and-red-theme">
+    <div class="rvt-grid">
+        <div class="rvt-grid__item-6-md-up image-column ">
+            <img data-src="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/communications/home-page/20160411_iusmshoot2_er_071.jpg?rev=b959f1cccedb4a7da185f52deb7e5292&amp;h=527&amp;w=960&amp;la=en&amp;hash=F5846F15F4635573CF473C0B85E02F81" class="xdefault-layout-responsive-image lazy" alt="Image.  Collaboration Transforms Patient Care" maxwidth="725" />
+        </div>
+        <div class="rvt-grid__item-6-md-up text-column ">
+            <div class="text-column-inner">
+                    <h2>Collaboration Transforms Patient Care</h2>
+
+                <p>With nine campuses located throughout the state of Indiana, IU School of Medicine provides students and faculty with access to a large and diverse patient population. Due to the strong collaborative partnerships between the school and statewide teaching hospitals and other clinical facilities, individuals seeking health care services from IU School of Medicine faculty receive the highest quality care that reflects advances in medical research.</p>
+
+                    <p>
+<a href="/patient-care" class="default-layout-optional-link-inline" >                            <span class="svg-rounded">
+                                <svg class="default-layout-svg-icon default-layout-color-blue">
+                                    <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                                </svg>
+                            </span>
+PATIENT CARE</a>                    </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--junior">
+
+    
+
+
+
+<div class="iu-project-common-2-column-6-6 ">
+
+    <div class="rvt-grid">
+        <div class="rvt-grid__item-6-md-up">
+            
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+            <h2 class="">
+                Campuses
+            </h2>
+
+    <div class="richtext-content">
+        <p><span style="background-color: rgb(255, 255, 255); color: rgb(51, 51, 51);">Each IU School of Medicine campus offers a high-quality medical education with an integrated curriculum, access to leading medical research and clinical resources, and a rich campus life.</span></p>
+    </div>
+
+
+
+</div>
+
+        </div>
+        <div class="rvt-grid__item-6-md-up">
+            
+
+
+
+<div class="iu-feature-cta-list default-layout-margin-bottom cta-blue-and-white-theme">
+
+
+        <div class="rvt-grid">
+
+            <div class="two-cols">
+                
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/bloomington" class="default-layout-bold-link default-layout-color-blue" >Bloomington</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/evansville" class="default-layout-bold-link default-layout-color-blue" >Evansville</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/fort-wayne" class="default-layout-bold-link default-layout-color-blue" >Fort Wayne</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/gary" class="default-layout-bold-link default-layout-color-blue" >Northwest - Gary</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/indianapolis" class="default-layout-bold-link default-layout-color-blue" >Indianapolis</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/muncie" class="default-layout-bold-link default-layout-color-blue" >Muncie</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/south-bend" class="default-layout-bold-link default-layout-color-blue" >South Bend</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/terre-haute" class="default-layout-bold-link default-layout-color-blue" >Terre Haute</a>
+    </span>
+</p>
+                    
+<p class="iu-feature-cta-list-item height-container">
+    <span class="svg-rounded">
+        <svg class="default-layout-svg-icon default-layout-color-blue">
+            <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+        </svg>
+    </span>
+
+    <span class="link">
+        <a href="/west-lafayette" class="default-layout-bold-link default-layout-color-blue" >West Lafayette</a>
+    </span>
+</p>
+                    
+            </div>
+
+        </div>
+
+</div>
+
+        </div>
+    </div>
+
+</div>
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center red">
+
+    
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--junior">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom cta-white-and-red-theme section-content_img-responsive">
+
+
+            <h2 class="">
+                A Supportive Professional Environment for Learning and Working
+            </h2>
+
+    <div class="richtext-content">
+        <p>Attracting and fostering the professional growth of the best physician and scientist educators is a core strength of IU School of Medicine. The school&rsquo;s working and learning environment enables all to reach their full potential, giving the world&rsquo;s most celebrated experts in critical areas of medicine a distinctive career with high-impact research and teaching opportunities.&nbsp;</p>
+    </div>
+
+        <p>
+<a href="/careers" class="default-layout-optional-link-block cta-blue-and-white-theme" >                <span class="svg-rounded">
+                    <svg class="default-layout-svg-icon default-layout-color-blue">
+                        <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                    </svg>
+                </span>
+CAREERS</a>        </p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+<div class="iu-project-common-section rvt-container rvt-container--center rvt-container--sophomore">
+
+    
+
+
+
+<div class="iu-project-common-1-column ">
+
+    
+<div class="iu-feature-pagecontent-richtext default-layout-margin-bottom  section-content_img-responsive">
+
+
+            <h2 class="">
+                Blogs: Inside the Medical School
+            </h2>
+
+    <div class="richtext-content">
+        <p>Experience what it&rsquo;s like to be part of the IU School of Medicine team. Want to know how medical students spend their days or what&rsquo;s inspiring the focus of IU School of Medicine research faculty? Find out in these blogs by the people currently working and learning at IU School of Medicine.</p>
+    </div>
+
+        <p>
+<a href="https://medicine.iu.edu/blogs" class="default-layout-optional-link-block cta-blue-and-white-theme" >                <span class="svg-rounded">
+                    <svg class="default-layout-svg-icon default-layout-color-blue">
+                        <use xlink:href="/FrontEnd/Images/rvt-icons.svg#rvt-icon-chevron-right"></use>
+                    </svg>
+                </span>
+VIEW ALL BLOGS</a>        </p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</main>
+
+<footer>
+    <div class="rvt-footer-module-1">
+        <div class="rvt-container rvt-container--center rvt-container--junior">
+            <div class="rvt-flex-lg-up">
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="rvt-footer-module-2">
+    <div class="rvt-container rvt-container--center rvt-container--junior">
+        <div class="rvt-grid">
+            <div class="rvt-grid__item-4-md-up">
+                
+<h3 class="rvt-text-bold rvt-m-bottom-md rvt-m-top-md rvt-m-top-none-md-up">
+    Popular Topics
+</h3>
+
+
+<ul class="rvt-footer-module-2__topics">
+        <li>
+<a href="/md/admissions" >MD Admissions</a>        </li>
+        <li>
+<a href="/gme/residency-programs" >Residency Programs</a>        </li>
+        <li>
+<a href="/graduate-degrees/phd" >PhD</a>        </li>
+        <li>
+<a href="https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/-/media/files/iusm-fact-sheet.pdf?rev=b8ac68158d3c4ae6aa33d05b0c4b9e2f" title="Fact Sheet" >Fact Sheet</a>        </li>
+        <li>
+<a href="/alumni" >Alumni</a>        </li>
+        <li>
+<a href="https://mednet.iu.edu/Pages/default.aspx" target="_blank" rel="noopener noreferrer" >MedNet</a>        </li>
+</ul>
+
+
+            </div>
+            <div class="rvt-grid__item-4-md-up rvt-flex rvt-column rvt-items-start">
+                
+<h3 class="rvt-text-bold rvt-m-bottom-md rvt-m-top-md rvt-m-top-none-md-up">
+    Contact
+</h3>
+
+<p class="rvt-footer-module-2__contact-title">Indiana University School of Medicine</p>
+
+<address>
+    340 West 10th Street<br>
+    Fairbanks Hall, Suite 6200<br>
+    Indianapolis, IN 46202-3082
+</address>
+
+<a class="mobile-padding" href="tel:317-274-8157">317-274-8157</a>
+
+<a href="mailto:iusm@iu.edu?subject=Contact Us" class="mobile-padding" >iusm@iu.edu</a>
+
+            </div>
+            <div class="rvt-grid__item-4-md-up">
+                
+<h3 class="rvt-text-bold rvt-m-bottom-md rvt-m-top-md rvt-m-top-none-md-up">
+    Connect with us!
+</h3>
+
+<a href="https://www.facebook.com/IUMedicine" class="rvt-footer-module-2__social-icon" rel="noopener noreferrer" target="_blank" aria-label="External Link to Facebook" ><svg width="40" height="40" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Facebook</title>
+  <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z"></path>
+  <path d="M24.8996 9.99982V13.1998H23.0996C23.0996 13.1998 21.4996 12.9998 21.4996 14.4998V16.9998H24.7996L24.3996 20.3998H21.4996V29.9998H17.6996V20.2998H15.0996V16.9998H17.7996V14.0998C17.7996 14.0998 17.4996 12.4998 18.8996 11.1998C20.2996 9.89982 22.1996 9.99982 22.1996 9.99982H24.8996Z" fill="#990000"></path>
+</svg>        <span class="rvt-sr-only">Facebook</span>
+</a><a href="https://www.instagram.com/iumedschool/" class="rvt-footer-module-2__social-icon" rel="noopener noreferrer" target="_blank" aria-label="External Link to Instagram" ><svg width="40" height="40" viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><title>Instagram</title>
+  <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z" fill="white"></path>
+  <path d="M24.3004 29.9999H15.6004C12.5004 29.9999 9.90039 27.4999 9.90039 24.2999V15.5999C9.90039 12.4999 12.4004 9.8999 15.6004 9.8999H24.3004C27.4004 9.8999 30.0004 12.3999 30.0004 15.5999V24.2999C30.0004 27.4999 27.5004 29.9999 24.3004 29.9999ZM24.3004 28.4999C25.4004 28.4999 26.5004 28.0999 27.2004 27.2999C27.9004 26.4999 28.4004 25.4999 28.4004 24.3999V15.6999C28.4004 14.5999 28.0004 13.4999 27.2004 12.7999C26.4004 11.9999 25.4004 11.5999 24.3004 11.5999H15.6004C14.5004 11.5999 13.4004 11.9999 12.7004 12.7999C11.9004 13.5999 11.5004 14.5999 11.5004 15.6999V24.3999C11.5004 25.4999 11.9004 26.5999 12.7004 27.2999C13.5004 27.9999 14.5004 28.4999 15.6004 28.4999H24.3004Z" fill="#990000"></path>
+  <path d="M25.4006 19.9C25.4006 22.9 23.0006 25.3 20.0006 25.3C17.0006 25.3 14.6006 22.9 14.6006 19.9C14.6006 16.9 17.0006 14.5 20.0006 14.5C23.0006 14.5 25.4006 17 25.4006 19.9ZM20.0006 16.4C18.1006 16.4 16.5006 18 16.5006 19.9C16.5006 21.8 18.1006 23.4 20.0006 23.4C21.9006 23.4 23.5006 21.8 23.5006 19.9C23.5006 18 21.9006 16.4 20.0006 16.4Z" fill="#990000"></path>
+  <path d="M25.5002 15.8002C26.2182 15.8002 26.8002 15.2182 26.8002 14.5002C26.8002 13.7822 26.2182 13.2002 25.5002 13.2002C24.7822 13.2002 24.2002 13.7822 24.2002 14.5002C24.2002 15.2182 24.7822 15.8002 25.5002 15.8002Z" fill="#990000"></path>
+</svg>        <span class="rvt-sr-only">Instagram</span>
+</a><a href="https://www.linkedin.com/edu/school?id=18346" class="rvt-footer-module-2__social-icon" rel="noopener noreferrer" target="_blank" aria-label="External Link to LinkedIn" ><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title>
+  <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z" fill="white"></path>
+  <path d="M11.3 16H15V28H11.3V16ZM13.2 10C14.4 10 15.4 11 15.4 12.2C15.4 13.4 14.4 14.4 13.2 14.4C12 14.4 11 13.4 11 12.2C11 11 12 10 13.2 10Z" fill="#990000"></path>
+  <path d="M17.3999 16.0002H20.9999V17.6002C21.4999 16.7002 22.6999 15.7002 24.4999 15.7002C28.2999 15.7002 28.9999 18.2002 28.9999 21.4002V28.0002H25.2999V22.2002C25.2999 20.8002 25.2999 19.0002 23.3999 19.0002C21.4999 19.0002 21.1999 20.5002 21.1999 22.1002V28.0002H17.4999V16.0002H17.3999Z" fill="#990000"></path>
+</svg>        <span class="rvt-sr-only">LinkedIn</span>
+</a><a href="https://twitter.com/iumedschool" class="rvt-footer-module-2__social-icon" rel="noopener noreferrer" target="_blank" aria-label="External Link to Twitter" ><svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg"><title>Twitter</title>
+  <path d="M20 40C31.0457 40 40 31.0457 40 20C40 8.9543 31.0457 0 20 0C8.9543 0 0 8.9543 0 20C0 31.0457 8.9543 40 20 40Z" fill="white"></path>
+  <path d="M30.0002 13.7998C29.3002 14.0998 28.5002 14.2998 27.6002 14.3998C28.4002 13.8998 29.1002 13.0998 29.4002 12.0998C28.6002 12.5998 27.7002 12.8998 26.8002 13.0998C26.1002 12.2998 25.0002 11.7998 23.8002 11.7998C21.5002 11.7998 19.7002 13.5998 19.7002 15.8998C19.7002 16.1998 19.7002 16.4998 19.8002 16.7998C16.4002 16.5998 13.4002 14.9998 11.3002 12.4998C10.9002 13.0998 10.7002 13.7998 10.7002 14.5998C10.7002 15.9998 11.4002 17.2998 12.5002 17.9998C11.8002 17.9998 11.2002 17.7998 10.6002 17.4998C10.6002 17.4998 10.6002 17.4998 10.6002 17.5998C10.6002 19.5998 12.0002 21.1998 13.9002 21.5998C13.6002 21.6998 13.2002 21.6998 12.8002 21.6998C12.5002 21.6998 12.3002 21.6998 12.0002 21.5998C12.5002 23.1998 14.0002 24.3998 15.8002 24.3998C14.4002 25.4998 12.6002 26.1998 10.7002 26.1998C10.4002 26.1998 10.0002 26.1998 9.7002 26.0998C11.5002 27.2998 13.7002 27.8998 16.0002 27.8998C23.5002 27.8998 27.7002 21.5998 27.7002 16.1998C27.7002 15.9998 27.7002 15.7998 27.7002 15.6998C28.8002 15.2998 29.4002 14.5998 30.0002 13.7998Z" fill="#990000"></path>
+</svg>        <span class="rvt-sr-only">Twitter</span>
+</a>
+                
+
+
+
+<div class="iu-feature-subscription-signup">
+
+        <h2>Subscribe to the Newsroom</h2>
+
+    <form class="newsletter-subscription-form ">
+        <label for="email">
+            Email address
+        </label>
+        
+        <div class="rvt-input-group">
+
+            <input class="email-input rvt-input-group__input" aria-label="Input Email Address Here." type="email" id="email+f8be3a05-943a-4fa0-b0e3-514683b17699" required aria-required="true">
+            <input type="hidden" id="goalid+f8be3a05-943a-4fa0-b0e3-514683b17699" value="{98E64A7E-2E6B-4CF9-875D-12349FE5F6D2}" />
+            <div class="rvt-input-group__append">
+                <button class="rvt-button iusm-button--subtle">
+                    Subscribe
+                </button>
+            </div>
+        </div>
+
+            <p class="rvt-p-top-sm hidden-message success-message">We&#39;ve added you to our mailing list!</p>
+            <p class="rvt-p-top-sm hidden-message failure-message">Sorry, there was a problem</p>
+    </form>
+
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="rvt-footer rvt-display-block">
+    <div class="rvt-container rvt-container--center rvt-container--junior">
+        <div class="rvt-flex-md-up rvt-items-center-md-up">
+            <div class="rvt-footer__trident">
+                <svg role="img" alt="" xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25"><title>Indiana University School of Medicine</title>
+	<polygon points="13.33 3.32 13.33 5.21 14.76 5.21 14.76 15.64 11.9 15.64 11.9 1.9 13.33 1.9 13.33 0 6.67 0 6.67 1.9 8.09 1.9 8.09 15.64 5.24 15.64 5.24 5.21 6.67 5.21 6.67 3.32 0 3.32 0 5.21 1.43 5.21 1.43 17.47 3.7 19.91 8.09 19.91 8.09 22.76 6.67 22.76 6.67 25.13 13.33 25.13 13.33 22.76 11.9 22.76 11.9 19.91 16.1 19.91 18.56 17.47 18.56 5.21 20 5.21 20 3.32 13.33 3.32" fill="#900"></polygon>
+</svg>
+            </div>
+            <ul class="rvt-footer__aux-links">
+                <li class="rvt-footer__aux-item">
+<a href="https://accessibility.iu.edu/assistance/" title="Accessibility Help" >Accessibility Help</a>                </li>
+
+                <li class="rvt-footer__aux-item">
+<a href="/about/policies-guidelines/privacy-policy" title="Privacy Policy" >Privacy Policy</a>                </li>
+
+                <li class="rvt-footer__aux-item">
+<a href="https://www.iu.edu/copyright/index.html" target="_blank" rel="noopener noreferrer" >Copyright</a>
+                    &copy; 2024  The Trustees of 
+
+<a href="https://www.iu.edu/" rel="noopener noreferrer" title="Indiana University" target="_blank" >Indiana University</a>                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</footer>
+
+<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.foundation.theming.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.feature.pagecontent.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.feature.cta.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.feature.navigation.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.feature.subscription.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	<script defer src='https://mc-42b990dd-5dae-4647-b81e-424724-cdn-endpoint.azureedge.net/FrontEnd/Scripts/Body/iu.project.website.min.js?rev=519f36810e92f775d3871fcb7ef052004cdb8729194f7c23d683f4269ed54a46ab'></script>
+	
+
+<script type="application/ld+json">{
+  "@context": "http://schema.org",
+  "@type": "CollegeOrUniversity",
+  "url": "https://medicine.iu.edu/",
+  "name": "Indiana University School of Medicine",
+  "logo": "https://medicine.iu.edu/-/media/IUSM-Ext-Lockup.png",
+  "sameAs": [ "https://en.wikipedia.org/wiki/Indiana_University_School_of_Medicine",
+  "https://www.facebook.com/IUMedicine/",
+  "https://twitter.com/iumedschool",
+  "https://www.linkedin.com/school/indiana-university-school-of-medicine/",
+  "https://www.instagram.com/iumedschool/"]}
+}</script>
+<script type="application/ld+json">
+ {"@context": "http://schema.org",
+  "@type": "WebSite",
+  "url": "https://medicine.iu.edu/",
+  "name": "Indiana University School of Medicine",
+  "potentialAction":{
+  "@type":"SearchAction",
+  "target":"https://medicine.iu.edu/search?s={search_term_string}",
+  "query-input":"required name=search_term_string"}
+  }</script>
+
+
+
+<!-- Start IUSM for expected Rivet 2.0 components -->
+<script src="/FrontEnd/Rivet-Updates/rivet-next-components.js"></script>
+<script src="/FrontEnd/Rivet-Updates/datepicker/rivet-datepicker.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@11.0.4/dist/lazyload.min.js"></script>
+<script>
+
+    RivetNext.toggle.init();
+    RivetNext.sidenav.init();
+
+    document.addEventListener('rvt:toggleHide', function (event) {
+        var preventEvent = false;
+
+        if (!preventEvent) {
+            // console.log( event.detail.elementId )
+        }
+        else {
+            event.preventDefault();
+            // console.log( 'nope, cancelled' )
+        }
+    });
+
+    jQuery(document).ready(function () {
+        var lazyLoad = new LazyLoad({
+            elements_selector: ".lazy"
+        });
+    });
+</script>
+
+
+<!-- End IUSM for expected Rivet 2.0 components -->
+
+
+
+
+
+
+</body>
+</html>

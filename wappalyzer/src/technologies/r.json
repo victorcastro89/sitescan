@@ -1456,6 +1456,27 @@
     "scriptSrc": "www\\.resengo\\.\\w+",
     "website": "https://wwc.resengo.com"
   },
+  "Reservado": {
+    "cats": [
+      112
+    ],
+    "description": "Reservado domain placeholder used by HostGator.",
+    "dom": {
+      "div.content-box.col-xs-12.col-md-6": {
+        "attributes": {
+          "class": "content-box col-xs-12 col-md-6"
+        },
+        "exists": "",
+        "text": "/Domínio Reservado!/i"
+      }
+    },
+    "html": "<title>Domínio Reservado - HostGator<\\/title>",
+    "icon": "Hostgator.svg",
+    "implies": [
+      "Hostgator"
+    ],
+    "website": "https://www.hostgator.com.br"
+  },
   "Reserve In-Store": {
     "cats": [
       100,

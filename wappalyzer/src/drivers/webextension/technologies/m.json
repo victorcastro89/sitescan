@@ -355,7 +355,9 @@
     },
     "oss": true,
     "probe": {
-      "/magento_version": ""
+      "/magento_version": {
+        "match": "\\bMagento\\b"
+      }
     },
     "scriptSrc": [
       "js/mage",

@@ -517,6 +517,18 @@
     "scriptSrc": "dedeajax",
     "website": "https://dedecms.com"
   },
+  "Default Wordpress Page": {
+    "cats": [
+      113
+    ],
+    "description": "Identifies custom WordPress sites with 'My WordPress' in the title.",
+    "html": "<title>[\\s\\S]*My WordPress[\\s\\S]*</title>",
+    "icon": "WordPress.svg",
+    "implies": [
+      "WordPress"
+    ],
+    "website": "https://wordpress.org"
+  },
   "Delacon": {
     "cats": [
       10
