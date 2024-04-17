@@ -3,7 +3,7 @@ import { cpus } from 'os';
 // Default values
 let numCPUs = cpus().length;
 let concurrency = 10;
-let ripeCon = null;
+let ripeCon = 300;
 // Function to parse command line arguments
 function parseCommandLineArguments() {
   const args = process.argv.slice(2);  // Skip the first two default entries

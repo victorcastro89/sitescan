@@ -3,7 +3,7 @@
   "ext": "ts,js",
   "ignore": ["src/**/*.spec.ts"],
   "execMap": {
-    "ts": "ts-node"
+    "ts": "node --loader ts-node/esm"
   },
-  "exec": "node --loader ts-node/esm src/app.ts"
+  "exec": "node --inspect --experimental-loader ts-node/esm src/app.ts"
 }

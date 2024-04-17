@@ -9,7 +9,7 @@
     "build:ci": "tsc && npm run build:dev",
     "build:watch": "swc src -w --out-dir dist/src",
     "migrate": "node --import tsx bin/run-migration.ts",
-    "start:dev": "nodemon --esm",
+    "start:dev": "NODE_OPTIONS='--trace-warnings --unhandled-rejections=strict' nodemon -V",
     "start": "node dist/src/app.js",
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
+    "bullmq": "^5.7.1",
     "chalk": "^5.3.0",
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",

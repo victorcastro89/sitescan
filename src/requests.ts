@@ -44,7 +44,7 @@ function shouldRetry(error: AxiosError): boolean {
 }
 
 // Function to perform HTTP request with retry logic// Function to perform HTTP request with retry logic
-async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: number = 3): Promise<{ response?: AxiosResponse|boolean; timeTakenMs?: number; }> {
+async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: number = 2): Promise<{ response?: AxiosResponse|boolean; timeTakenMs?: number; }> {
     incrementActive();
     const startTime = Date.now(); // Start timing
 
@@ -82,7 +82,7 @@ interface CheckDomainConfig extends AxiosRequestConfig {
 // Optimized checkDomain function with retry logic
   async function checkDomainStatusWithRetry(domain: string): Promise<{ domain: string; online: boolean; hasSSL: boolean }> {
     const axiosConfig: CheckDomainConfig = {
-        timeout: 35000, // milliseconds
+        timeout: 30000, // milliseconds
         responseType: 'stream',
         maxBodyLength:100,
         maxContentLength:100,
@@ -90,7 +90,7 @@ interface CheckDomainConfig extends AxiosRequestConfig {
     };
     const {response, timeTakenMs} = await fetchWithRetry(`http://${domain}`, axiosConfig);
     if(response && typeof timeTakenMs === 'number') {
-        if(timeTakenMs>20000) Log.error(`Domain ${domain} took ${timeTakenMs}ms to respond`);
+ 
         tracker.addResponseTime('Http', timeTakenMs);
     }
  
@@ -115,8 +115,11 @@ interface CheckDomainConfig extends AxiosRequestConfig {
 
     return { domain, online, hasSSL };
 }
-
-async function fetchRipeStatsData(ip:string): Promise<{ organization: string[]; orgAbuseEmail: string[] }> {
+export interface RipeData {
+    organization: string[]
+     orgAbuseEmail: string[] 
+}
+async function fetchRipeStatsData(ip:string): Promise<RipeData> {
     const lock = await ripeStatSemaphore.acquire(); // Acquire a lock from the semaphore
     const axiosConfig: AxiosRequestConfig = {
         timeout: 10000, // milliseconds

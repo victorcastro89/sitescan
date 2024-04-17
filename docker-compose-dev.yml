@@ -1,21 +1,11 @@
 version: '3.8'
 
 services:
-  # app:
-  #   build: .
-  #   volumes:
-  #     - .:/app
-  #   environment:
-  #     - NODE_ENV=development
-  #   depends_on:
-  #     - db
-  #   networks:
-  #     - app-network
-
+ 
   db:
-    image: postgres:14  
+    image: postgres:14
     environment:
-      POSTGRES_DB: postgres      
+      POSTGRES_DB: postgres
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
     volumes:
@@ -25,9 +15,20 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+
 networks:
   app-network:
     driver: bridge
 
 volumes:
   postgres-data:
+  redis-data:

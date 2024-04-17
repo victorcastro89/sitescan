@@ -23,15 +23,15 @@ const getTotalRuntimeSeconds = () => {
     return (Date.now() - startTime) / 1000;  // Convert milliseconds to seconds
 };
 
-const getAverageCompletedPerSecond = () => {
+const getAverageSuccessfuldPerSecond = () => {
     const runtimeSeconds = getTotalRuntimeSeconds();
-    return runtimeSeconds > 0 ? completedRequests / runtimeSeconds : 0;
+    return runtimeSeconds > 0 ? successfulRequests / runtimeSeconds : 0;
 };
 
 
-const getAverageCompletedPerMinute = () => {
+const getAverageSuccessfuldPerMinute = () => {
     const runtimeMinutes = getTotalRuntimeSeconds() / 60;
-    return runtimeMinutes > 0 ? completedRequests / runtimeMinutes : 0;
+    return runtimeMinutes > 0 ? successfulRequests / runtimeMinutes : 0;
 };
 
 const getTotalRuntimeFormatted = () => {
@@ -107,4 +107,4 @@ class ResponseTimeTracker {
 
 
 
-export { incrementActive, decrementActive, incrementCompleted, getCounts,incrementError,incrementSuccessful , getAverageCompletedPerSecond,getAverageCompletedPerMinute,getTotalRuntimeFormatted,ResponseTimeTracker};	
+export { incrementActive, decrementActive, incrementCompleted, getCounts,incrementError,incrementSuccessful , getAverageSuccessfuldPerSecond,getAverageSuccessfuldPerMinute,getTotalRuntimeFormatted,ResponseTimeTracker};	

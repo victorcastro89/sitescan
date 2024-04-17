@@ -2,7 +2,7 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "target": "ESNext",
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -11,6 +11,7 @@
     "outDir": "dist",
     "lib": [ "esnext" ],
     "baseUrl": "./",
+    "sourceMap": true
   },
   "exclude": [ "node_modules" ],
   "include": [
