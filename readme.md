@@ -1,7 +1,11 @@
+## .env Required Fields
 PG_HOST=db
 PG_DATABASE=postgres
 PG_USER=docker
 PG_PASSWORD=docker
+
+
+## Install Puppeteer for Wappalyzer
 
 sudo apt-get update
 sudo apt-get install -y wget --no-install-recommends \
@@ -10,3 +14,28 @@ sudo apt-get install -y wget --no-install-recommends \
 
 npm install -g yarn
 yarn add puppeteer
+
+
+## Docker Commands
+
+docker compose -f ./docker-compose-dev.yml up
+
+
+## Knex Commands
+
+npm install knex -g
+yarn run up
+yarn run down
+
+
+## Seed DB
+
+knex seed:make --knexfile knexfile.cjs --esm categories
+knex seed:run --knexfile knexfile.cjs --esm
+
+
+## Dev commands utils
+
+FLush Redis
+docker exec -it sitescan-redis-1 redis-cli
+flushall

@@ -27,7 +27,7 @@ function parseCommandLineArguments() {
   }
 
   if (numCPUs > 6) numCPUs = 6;  // Set max to 6 due to Ripestatics API rate limits
-  if(!ripeCon) ripeCon = Math.floor(numCPUs / 8) || 1;
+  if(!ripeCon) ripeCon = 5
 }
 
 // Run the argument parsing function

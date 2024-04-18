@@ -1,12 +1,12 @@
 import fs, { copyFileSync } from 'fs';
-import { ResolverResult } from './dns';
+import { ResolverResult } from './dnsfetch';
 import { SaveDomainStatus } from './db/query';
-let hostingPatterns;
+let hostingPatterns:any
 try {
   const data = fs.readFileSync('names.json', 'utf8');
   hostingPatterns = JSON.parse(data);
 } catch (err) {
-  throw new Error(err);
+  throw err;
 
 }
 
@@ -84,7 +84,7 @@ function dnsAndHttpToDbFormat(domain: string, { online, hasSSL, dnsRecords, ripe
   if (typeof online !== 'boolean') online = undefined;
   if (typeof hasSSL !== 'boolean') hasSSL = undefined;
 
-  let ns1, ns2, mx1, mx2, dnsA;
+  let ns1: string|undefined, ns2: string|undefined, mx1: string|undefined, mx2: string|undefined, dnsA;
   if (dnsRecords) {
     ns1 = dnsRecords.nsRecords?.[0];
     ns2 = dnsRecords.nsRecords?.[1];
@@ -100,9 +100,9 @@ function dnsAndHttpToDbFormat(domain: string, { online, hasSSL, dnsRecords, ripe
   const patterns = hostingPatterns || []; // Ensure hostingPatterns is defined or provide a default
 
   // Function to check DNS patterns
-  function checkPattern(pattern) {
+  function checkPattern(pattern: { DNS: string | RegExp; Hosting: string; }) {
     const dnsRegex = new RegExp(pattern.DNS, 'i');
-    if (dnsRegex.test(ns1) || dnsRegex.test(ns2) || dnsRegex.test(mx1) || dnsRegex.test(mx2)) {
+    if ((ns1 && dnsRegex.test(ns1)) || (ns2 && dnsRegex.test(ns2)) || (mx1 && dnsRegex.test(mx1)) || (mx2 && dnsRegex.test(mx2))) {
       hostingName = pattern.Hosting;
       return true; // Found a match, stop searching
     }
@@ -114,7 +114,7 @@ function dnsAndHttpToDbFormat(domain: string, { online, hasSSL, dnsRecords, ripe
     // If no match was found using ns1Record and ns2Record, try the broader search
     const concatenatedString = [ripeStatsData?.organization?.join(', '), ripeStatsData?.orgAbuseEmail?.join(', ')].join(', ');
 
-    if (!patterns.some(pattern => {
+    if (!patterns.some((pattern: { DNS: string | RegExp; }) => {
       const dnsRegex = new RegExp(pattern.DNS, 'i');
       return dnsRegex.test(concatenatedString);
     })) {

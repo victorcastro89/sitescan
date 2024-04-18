@@ -1,19 +1,36 @@
-version: '3.8'  # Use a version appropriate for your Docker Compose features
+version: '3'  # Use a version appropriate for your Docker Compose features
 
 services:
   scanner:
     image: victorfaria/sitescan  # Use the same image as your Docker run command
     container_name: scanner
+    depends_on: [redis]
     environment:  # Define environment variables from the command
-      PT: "10"
-      CPU: "2"
-      RL: "3"
+      RL: 6
+      RIPE_CONCURRENCY: 6
+      WAPPALIZER_CONCURRENCY: 16
+      HTTP_CONCURRENCY: 16
+      NSLOOKUP_CONCURRENCY: 50
+      DB_CONCURRENCY: 1
+      MAX_SOCKETS: 500
+     
+    
     env_file:  # Include additional environment variables from a file
       - .env
     networks:
       - default  # Uses the default network unless specified otherwise
     volumes:
       - ./domains.csv:/app/domains.csv  # Mounts domains.csv from the current directory to /app/domains.csv in the container
+  
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - default
+    volumes:
+      - /redis-data:/data
+    command: redis-server --appendonly yes
 
 networks:
   default:

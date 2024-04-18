@@ -1,4 +1,6 @@
-import Wappalyzer from '../wappalyzer/src/drivers/npm/driver.js';
+//import Wappalyzer from '../wappalyzer/src/drivers/npm/driver.js';
+let wappalyzerInstance: any;
+
 
 export interface Options {
   debug?: boolean;
@@ -51,38 +53,74 @@ export interface WappalizerData {
   urls: { [url: string]: UrlStatus };
   technologies: Technology[];
 }
+const headers = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Connection': 'keep-alive',
+  'Upgrade-Insecure-Requests': '1',
+  'DNT': '1', // Do Not Track Request
+};
+
+const storage = {
+  local: {
+    'userId': '12345',
+    'theme': 'light',
+    'sessionToken': 'abcde12345'
+  },
+  session: {
+    'sessionStartTime': new Date().toISOString(),
+    'viewedProducts': '[]'
+  }
+};
+
+ async function loadWappalyzer() {
+  const { default: Wappalyzer } = await import('wappalyzer/driver.js');
+ 
+  
+  
+  const options = {
+    debug: false,
+    delay: 0,
+    headers: headers,
+    maxDepth: 3,
+    maxUrls: 10,
+    maxWait: 10000,
+    recursive: false,
+    probe: true,
+    proxy: false,
+    userAgent: 'Wappalyzer',
+    htmlMaxCols: 3000,
+    htmlMaxRows: 3000,
+    noScripts: false,
+    noRedirect: false,
+    storage:storage
+  
+  };
+  
+  wappalyzerInstance = new Wappalyzer(options);
+  await wappalyzerInstance.init();
+}
 
 
+async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
 
-async function analyzeSiteTechnologies(url: string, options: Options): Promise<WappalizerData> {
-  const wappalyzer = new Wappalyzer(options);
   
   try {
-    await wappalyzer.init();
-
-    // Optionally set additional request headers
-    const headers = {};
-
-    // Optionally set local and/or session storage
-    const storage: Storage = {
-      local: {}
-    };
-
-    const site = await wappalyzer.open(url, headers, storage);
+  
+    const site = await wappalyzerInstance.open(url, headers, storage);
 
     // Optionally capture and output errors
     // site.on('error', (x) => console.error(x.message));
 
     const results = await site.analyze();
-
     return results;
 
-  } catch (error) {
+  }catch (error) {
     console.error('Error during site analysis:', error);
-    return null; // Return null or an appropriate error object/message
-  } finally {
-    await wappalyzer.destroy(); // Ensure resources are cleaned up
+    throw error;
   }
 }
 
-export { analyzeSiteTechnologies };
+export { analyzeSiteTechnologies,loadWappalyzer };

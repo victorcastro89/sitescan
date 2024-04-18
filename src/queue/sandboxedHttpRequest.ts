@@ -1,10 +1,9 @@
 import { Queue, SandboxedJob } from 'bullmq';
-import { checkDomainStatusWithRetry } from './requests.ts';
-import { dnsAndHttpToDbFormat } from './parse.ts';
-import { saveDataToDb } from './app.ts';
-import { connection } from './redis.ts';
+import { checkDomainStatusWithRetry } from '../requests.ts';
+import { dnsAndHttpToDbFormat } from '../parse.ts';
 
-const dbQueue = new Queue<saveDataToDb>('saveToDB', { connection });
+import { dbQueue } from './workers.ts';
+
 
  async function jobProcessor(job: SandboxedJob) {
     const httpStatus = await checkDomainStatusWithRetry(job.data.domain);

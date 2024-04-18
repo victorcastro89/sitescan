@@ -5,7 +5,7 @@
       "syntax": "typescript",
       "topLevelAwait": true
     },
-    "target": "esnext",
+    "target": "es2020",
     "baseUrl": ".",
     "experimental": {
       "plugins": [

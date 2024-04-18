@@ -1,4 +1,5 @@
-import {  maxRipeConnections } from './config.ts';
+const MAX_SOCKETS = process.env.MAX_SOCKETS ? parseInt(process.env.MAX_SOCKETS) :50;
+import {  maxRipeConnections} from './config.ts';
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {Semaphore} from './semaphore.ts'; 
@@ -9,20 +10,23 @@ import { incrementActive, decrementActive, incrementCompleted,incrementError,inc
 
 import http from 'http';
 import https from 'https';
-http.globalAgent.maxSockets = Infinity;
-https.globalAgent.maxSockets = Infinity;
-const httpAgent = new http.Agent({ keepAlive: true, maxSockets: Infinity });
-const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: Infinity });
+http.globalAgent.maxSockets = MAX_SOCKETS;
+https.globalAgent.maxSockets = MAX_SOCKETS;
+const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 25});
+const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 25 });
 import { ResponseTimeTracker } from './stats.ts';
 import { Log } from './logging.ts';
 
 const ripeStatSemaphore = new Semaphore("RIPEStat",maxRipeConnections );
 const tracker = ResponseTimeTracker.getInstance();
 
-const AxiosInstance = axios.create({
+const AxiosInstance = axios.create
+(
+{
   httpAgent,
   httpsAgent
-});
+}
+);
 
 
 // Function to determine if an error should trigger a retry
@@ -44,7 +48,7 @@ function shouldRetry(error: AxiosError): boolean {
 }
 
 // Function to perform HTTP request with retry logic// Function to perform HTTP request with retry logic
-async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: number = 2): Promise<{ response?: AxiosResponse|boolean; timeTakenMs?: number; }> {
+async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: number = 1): Promise<{ response?: AxiosResponse|boolean; timeTakenMs?: number; }> {
     incrementActive();
     const startTime = Date.now(); // Start timing
 
@@ -52,20 +56,21 @@ async function fetchWithRetry(url: string, config: AxiosRequestConfig, retries: 
         const res = await AxiosInstance.get(url, config);
         incrementSuccessful();  // Mark as successful
         const timeTakenMs = Date.now() - startTime; // Calculate duration
-
+            
         if(config.responseType === 'stream') {
             return { response: true, timeTakenMs }; // Treat streams differently if needed
         }
         return { response: res, timeTakenMs };
     } catch (error) {
+        
         const timeTakenMs = Date.now() - startTime;
         if (retries > 0 && shouldRetry(error as AxiosError)) {
-            console.log(`Retrying ${url}... Remaining retries: ${retries}`);
+         
             var backoff = Math.pow(2, retries) * 500; 
             await new Promise(resolve => setTimeout(resolve, backoff));
             return fetchWithRetry(url, config, retries - 1);
         }
-
+       
         incrementError();
         return { response: false, timeTakenMs }; // Return false on error
     } finally {
@@ -82,7 +87,7 @@ interface CheckDomainConfig extends AxiosRequestConfig {
 // Optimized checkDomain function with retry logic
   async function checkDomainStatusWithRetry(domain: string): Promise<{ domain: string; online: boolean; hasSSL: boolean }> {
     const axiosConfig: CheckDomainConfig = {
-        timeout: 30000, // milliseconds
+        timeout: 10000, // milliseconds
         responseType: 'stream',
         maxBodyLength:100,
         maxContentLength:100,
@@ -130,8 +135,9 @@ async function fetchRipeStatsData(ip:string): Promise<RipeData> {
     try {
         const url = `https://stat.ripe.net/data/whois/data.json?resource=${ip}`;
         const {response, timeTakenMs} = await fetchWithRetry(url,axiosConfig);
-        tracker.addResponseTime('RipeStats', timeTakenMs);
-        if(typeof response !== 'boolean') {
+        if(timeTakenMs)     tracker.addResponseTime('RipeStats', timeTakenMs);
+    
+        if(typeof response !== 'boolean' && response !==undefined) {
 
    
         const data = response.data;
@@ -172,4 +178,4 @@ async function fetchRipeStatsData(ip:string): Promise<RipeData> {
     }
 }
 
-export  { checkDomainStatusWithRetry ,fetchRipeStatsData};
+export  { checkDomainStatusWithRetry ,fetchRipeStatsData,fetchWithRetry};

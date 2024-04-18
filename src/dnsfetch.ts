@@ -16,7 +16,8 @@ async function fetchDNSRecords(domain: string) {
         return { nsRecords, mxRecords, aRecords };
     } catch (error) {
         console.error(`Error fetching DNS records for ${domain}: ${error}`);
-        return undefined;
+        throw error;
+        
     }
 }
 

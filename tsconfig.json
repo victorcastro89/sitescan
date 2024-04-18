@@ -1,21 +1,34 @@
 {
   "compilerOptions": {
-    "skipLibCheck": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "target": "ESNext",
-    "isolatedModules": true,
+    "target": "es2020",
+    "module": "ES2020",
+    "outDir": "./dist",
     "esModuleInterop": true,
-    "noEmit": true,
-    "allowImportingTsExtensions": true,
-    "outDir": "dist",
-    "lib": [ "esnext" ],
+    "moduleResolution": "node",
     "baseUrl": "./",
-    "sourceMap": true
+    "paths": {
+      "*": ["src/*"]
+    },
+    "rootDir": ".",
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "allowImportingTsExtensions":true,
+    "noEmit": true,
+    "typeRoots" : ["./node_modules/@types"],
+    
+  
   },
-  "exclude": [ "node_modules" ],
   "include": [
-    "src/**/*.ts",
-    "bin/*.ts"
+    "src/**/*",
+    "wappalyzer/src/drivers/npm/**/*"
+ ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
   ]
 }

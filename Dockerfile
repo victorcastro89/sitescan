@@ -2,14 +2,36 @@
 # Use the official Node.js LTS image
 FROM node:20-alpine3.18 as builder
 
+# Install necessary system dependencies for Puppeteer
+RUN apk --no-cache add \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    nodejs \
+    yarn
+
+# Set environment variables for Puppeteer
+# To use installed chromium package
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+
+
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy necessary files for installing dependencies
 COPY package.json yarn.lock ./
 
+
+COPY ./wappalyzer /app/wappalyzer 
+
+RUN yarn add wappalyzer@file:./wappalyzer/src/drivers/npm
 # Install dependencies including devDependencies needed for the build
-RUN yarn install --frozen-lockfile
+RUN yarn install 
 
 # Copy the rest of your application code
 COPY . .
@@ -23,6 +45,19 @@ RUN rm -rf src node_modules/dev
 # Stage 2: Runtime
 # Use the official Node.js LTS image for the runtime stage
 FROM node:20-alpine3.18
+
+# Install necessary system dependencies for Puppeteer
+RUN apk --no-cache add \
+    chromium \
+    nss \
+    freetype \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont
+
+# Set environment variables for Puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
 
 # Set the working directory inside the container
 WORKDIR /app

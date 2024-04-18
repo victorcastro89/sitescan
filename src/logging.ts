@@ -1,5 +1,6 @@
 import chalk from 'chalk';
- class Log {
+
+class Log {
   public static info = (args: any): void => {
     // eslint-disable-next-line no-console
     console.log(
@@ -14,7 +15,7 @@ import chalk from 'chalk';
     console.log(
       chalk.yellow(`
 [${new Date().toLocaleString()}]
-[Info]:`),
+[Warn]:`),
       typeof args === 'string' ? chalk.yellowBright(args) : args,
     );
   };
@@ -24,7 +25,7 @@ import chalk from 'chalk';
     console.log(
       chalk.red(`
 [${new Date().toLocaleString()}]
-[Warn]:`),
+[Error]:`),
       typeof args === 'string' ? chalk.redBright(args) : args,
     );
   };
@@ -34,7 +35,7 @@ import chalk from 'chalk';
     console.log(
       chalk.green(`
 [${new Date().toLocaleString()}]
-[Error]:`),
+[Log]:`),
       typeof args === 'string' ? chalk.greenBright(args) : args,
     );
   };
