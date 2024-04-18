@@ -3,7 +3,7 @@ PG_HOST=db
 PG_DATABASE=postgres
 PG_USER=docker
 PG_PASSWORD=docker
-
+REDIS_HOST=redis
 
 ## Install Puppeteer for Wappalyzer
 
@@ -19,7 +19,8 @@ yarn add puppeteer
 ## Docker Commands
 
 docker compose -f ./docker-compose-dev.yml up
-
+docker build -t victorfaria/sitescan:2.0 .
+docker push victorfaria/sitescan:2.0
 
 ## Knex Commands
 
