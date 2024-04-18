@@ -29,13 +29,16 @@ COPY package.json yarn.lock ./
 
 COPY ./wappalyzer /app/wappalyzer 
 
-RUN yarn add wappalyzer@file:./wappalyzer/src/drivers/npm
+# RUN yarn add wappalyzer@file:./wappalyzer/src/drivers/npm
 # Install dependencies including devDependencies needed for the build
-RUN yarn install 
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of your application code
-COPY . .
-
+COPY src/ src/
+COPY .swcrc .
+COPY tsconfig.json .
+COPY names.json .
+COPY ./entrypoint.sh .
 # Build the application
 RUN yarn build
 

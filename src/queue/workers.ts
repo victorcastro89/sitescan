@@ -24,7 +24,7 @@ const __dirname = path.dirname(__filename);
 export const dnsQueue = new Queue<DomainPayload>('dnsLookup', { connection });
 export const httpQueue = new Queue<HTTPPayload>('httpCheck', { connection });
 export const ripeStatsApiQueue = new Queue<RipeQueuePayload>('RipeStatsCall', { connection });
-export const wappalizerQueue = new Queue<DomainPayload>('WappalizerCall', { connection });
+export const wappalizerQueue = new Queue<DomainPayload>('WappalizerCall', { connection ,});
 export const dbQueue = new Queue<SaveDataToDb>('saveToDB', { connection });
 
 
@@ -162,7 +162,86 @@ async function startWorkers() {
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 }
 
-// Graceful shutdown for workers
+
+async function startWappalyzerOnly(sandboxed:boolean) {
+Log.info("STARTING Only WAPPALIZER WORKER...")
+const processorFile = path.join(__dirname, 'sandboxedWappalyzer.js');
+let wappWorker
+  if(sandboxed) {
+    Log.info("MODE: Sandboxed")
+    wappWorker = new Worker('WappalizerCall', processorFile,{ ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY, useWorkerThreads: true });
+  }
+  else{
+    Log.info("MODE: Not sandboxed")
+   wappWorker = new Worker<SaveDataToDb>('WappalizerCall', async job => {
+    try {
+      const wap = await analyzeSiteTechnologies(`http://${job.data.domain}`);
+      await dbQueue.add('saveWappalizerToDb', { domain: job.data.domain, data: wap });
+      return `Found: ${wap.technologies.length} technologies`
+    } catch (error) {
+      Log.error(`WAPP Worker error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+      throw error;
+    }
+
+  },  { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY });
+  }
 
 
-export { startWorkers };
+  // Worker for DNS lookups
+  const dnsWorker = new Worker<DomainPayload>('dnsLookup', async (job) => {
+    try {
+      
+      const records = await fetchDNSRecords(job.data.domain);
+      if (records.aRecords.length > 0) {
+        await wappalizerQueue.add('GetWappalizerData', { domain: job.data.domain });
+        return "A found" 
+      }
+      return "A NOT found" 
+    
+      
+    } catch (error) {
+      Log.error(`DNS Worker error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+      throw error;
+    }
+  }, { ...workerOptions, concurrency: NSLOOKUP_CONCURRENCY });
+
+  // Database worker
+  const dbWorker = new Worker<SaveDataToDb>('saveToDB', async (job) => {
+    try {
+      if (isWappalizerData(job.data.data)) {
+        await saveDomainTechnologies(job.data.domain, job.data.data);
+      } else if (isSaveDomainStatus(job.data.data)) {
+        await saveOrUpdateDomainStatus(job.data.domain, job.data.data);
+      } else {
+        throw new Error("Unexpected data type in saveToDB Worker");
+      }
+    } catch (error) {
+      Log.error(`DB Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+      throw error;
+    }
+  }, { ...workerOptions, concurrency: DB_CONCURRENCY });
+
+ 
+  console.info("All workers started.");
+
+  const workers = [dbWorker, dnsWorker,wappWorker];
+
+  const gracefulShutdown = async (signal: string) => {
+    try {
+      console.log(`Received ${signal}, closing workers...`); // Using console.log for testing
+      await Promise.all(queues.map(queue => queue.close()));
+      await Promise.all( workers.map(w => w.close()));
+      process.exit(0);
+    } catch (error) {
+      Log.error(`Error during shutdown: ${error}`);
+      process.exit(1); // Exit with error code
+    }
+  };
+  
+  
+  process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+}
+
+
+export { startWorkers,startWappalyzerOnly };

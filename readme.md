@@ -20,7 +20,7 @@ yarn add puppeteer
 
 docker compose -f ./docker-compose-dev.yml up
 docker build -t victorfaria/sitescan:2.0 .
-docker push victorfaria/sitescan:2.0
+docker push victorfaria/sitescan:3.0
 
 ## Knex Commands
 
@@ -40,3 +40,6 @@ knex seed:run --knexfile knexfile.cjs --esm
 FLush Redis
 docker exec -it sitescan-redis-1 redis-cli
 flushall
+
+## Deploy
+scp -i ~/.ssh/id_rsa DominiosONline202404180143.csv root@96.125.168.116:/root/sitescan/domains.csv

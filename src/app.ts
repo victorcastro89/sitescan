@@ -5,9 +5,9 @@ dotenv.config();
 import { Log } from './logging.ts';
 import { getTotalRuntimeFormatted, getCounts, getAverageSuccessfuldPerMinute, ResponseTimeTracker } from './stats.ts';
 
-import { dbQueue } from './queue/sandboxedHttpRequest.ts';
 
-import { dnsQueue, httpQueue, ripeStatsApiQueue, startWorkers, wappalizerQueue } from './queue/workers.ts';
+
+import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue, startWappalyzerOnly, startWorkers, wappalizerQueue } from './queue/workers.ts';
 import { addJobs } from './queue/producer.ts';
 
 import process from 'process';
@@ -16,9 +16,10 @@ import { flushAllRedis } from './db/redis.ts';
 import { clearDatabase } from './db/db.ts';
 import { loadWappalyzer } from './wapp.ts';
 EventEmitter.defaultMaxListeners = 500;
-
+const SANDBOXED = process.env.SANDBOXED ? (process.env.SANDBOXED|| '').toLowerCase() === 'true' : false;
+const ONLYWAPPALYZERWORK= process.env.ONLYWAPPALYZERWORK ? (process.env.ONLYWAPPALYZERWORK || '').toLowerCase() === 'true' : false;
 const tracker = ResponseTimeTracker.getInstance();
-
+let AppStarted = false;
 
 // Retrieve all event names from the process
 const eventNames = process.eventNames();
@@ -38,11 +39,15 @@ const listenersPerEvent = eventNames.map(eventName => {
 });
 
 (async () =>{
-  await clearDatabase();
+//  await clearDatabase();
   await flushAllRedis();
   await loadWappalyzer();
+
   await addJobs();
-  await startWorkers();
+
+   if(ONLYWAPPALYZERWORK) await startWappalyzerOnly(SANDBOXED);
+   else await startWorkers();
+   AppStarted = true;
 }
 
 )();
@@ -67,7 +72,7 @@ async function checkIfAnyQueueHasJobs() {
 
 // Periodic system status checks
 setInterval(() => {
-  checkIfAnyQueueHasJobs();
+  if( AppStarted) checkIfAnyQueueHasJobs();
   logCurrentRequestCounts();
 }, 2000);
 
@@ -83,7 +88,7 @@ function logCurrentRequestCounts() {
 
    const { activeRequests, completedRequests, successfulRequests, errorRequests } = getCounts();
    
-   console.log(`Average HTTP: ${tracker.getAverageResponseTime('Http')/1000} s`);
+  if(!ONLYWAPPALYZERWORK) console.log(`Average HTTP: ${tracker.getAverageResponseTime('Http')/1000} s`);
   //  console.log(`Average Completed Requests/Minute: ${getAverageSuccessfuldPerMinute().toFixed(2)}`);
  //  console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);
   // console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);

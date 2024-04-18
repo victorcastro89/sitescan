@@ -4,7 +4,7 @@ import csv from 'csv-parser';
 import { dnsQueue } from './workers.ts';
 import { Log } from '../logging.ts';
 let i=0;
-const max = 1000000;
+const max = 50;
 
 // Stream processing for domain data
 async function addJobs() {
