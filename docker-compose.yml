@@ -2,7 +2,7 @@ version: '3.2'  # Use a version appropriate for your Docker Compose features
 
 services:
   scanner:
-    image:  victorfaria/sitescan:3.0 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.1 # Use the same image as your Docker run command
     container_name: scanner
     depends_on: 
       - redis
@@ -14,7 +14,9 @@ services:
       NSLOOKUP_CONCURRENCY: 50
       DB_CONCURRENCY: 1
       MAX_SOCKETS: 500
-
+      SANDBOXED: 'false'
+      ONLYWAPPALYZERWORK: 'true'
+      LINESTOLOAD: 1000000
     env_file:  # Include additional environment variables from a file
       - .env
     network_mode: host
@@ -23,7 +25,7 @@ services:
       - ./domains.csv:/app/domains.csv  # Mounts domains.csv from the current directory to /app/domains.csv in the container
   
   redis:
-    image: redis:7.2-alpine
+    image: redis:6.2.12-alpine
     ports:
       - "6379:6379"
     network_mode: host

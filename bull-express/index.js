@@ -10,8 +10,10 @@ const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t * 1000));
 
 const redisOptions = {
   port: 6379,
-  host: 'localhost' |'96.125.168.116',
-  password: '',
+ // host: 'localhost',
+  host: '96.125.168.116',
+  
+ password: '',
   tls: false,
 };
 

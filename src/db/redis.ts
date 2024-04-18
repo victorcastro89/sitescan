@@ -48,10 +48,11 @@ async function flushAllRedis() {
                     console.error('Redis is still loading data, retrying in 5 seconds...');
                     await delay(5000); // Wait for 5 seconds before retrying
                     attempts--; // Decrement the attempts counter
-               } } 
-               else {
-                    throw error; // Rethrow error if it's not a loading error
-                }
+               } else {
+                throw error; // Rethrow error if it's not a loading error
+            }
+             } 
+              
             }
         }
 
