@@ -100,7 +100,7 @@ const storage = {
   };
   
   wappalyzerInstance = new Wappalyzer(options);
-  await wappalyzerInstance.init();
+
 }
 //138 15 25
 // 66 15 15
@@ -109,7 +109,7 @@ const storage = {
 //40 14
 async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
 
-  
+  await wappalyzerInstance.init();
   try {
   
     const site = await wappalyzerInstance.open(url, headers, storage);
