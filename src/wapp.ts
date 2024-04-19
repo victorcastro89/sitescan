@@ -102,8 +102,11 @@ const storage = {
   wappalyzerInstance = new Wappalyzer(options);
   await wappalyzerInstance.init();
 }
-
-
+//138 15 25
+// 66 15 15
+// 49 15 05
+//50 10 
+//40 14
 async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
 
   
@@ -120,7 +123,10 @@ async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
   }catch (error) {
     console.error('Error during site analysis:', error);
     throw error;
+  }finally {
+    await wappalyzerInstance.destroy(); // Ensure resources are cleaned up
   }
+  
 }
 
 export { analyzeSiteTechnologies,loadWappalyzer };

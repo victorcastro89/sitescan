@@ -5,8 +5,9 @@ import { Log } from '../logging.ts';
 import { analyzeSiteTechnologies } from '../wapp.ts';
 import { loadWappalyzer } from '../wapp.ts';
 import {dbQueue} from './workers.ts'
+import { EventEmitter } from 'events';
  async function jobProcessor(job) {
-
+  EventEmitter.defaultMaxListeners = 500;
   try {
     await loadWappalyzer();
     const wap = await analyzeSiteTechnologies(`http://${job.data.domain}`);
