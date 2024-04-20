@@ -36,7 +36,7 @@ services:
 
     volumes:
       - /redis-data:/data
-    command: redis-server --appendonly yes
+    command: redis-server --save "" --appendonly no
 
   db:
     image: postgres:14
