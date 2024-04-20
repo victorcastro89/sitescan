@@ -29,8 +29,7 @@ services:
     ports:
       - "6379:6379"
     network_mode: host
-    sysctls:
-      net.core.somaxconn: "511" 
+
     volumes:
       - /redis-data:/data
     command: redis-server --save "" --appendonly no
