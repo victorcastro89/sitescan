@@ -1,7 +1,9 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 // Importing Redis to perform operations on the Redis store
 import { createClient } from 'redis';
 import { RedisOptions } from 'bullmq';
-
 // Redis connection settings
 const connection: RedisOptions = {
     host: process.env.REDIS_HOST,
@@ -10,17 +12,19 @@ const connection: RedisOptions = {
 };
 
 // Creating a Redis client
-const client = createClient({
-    socket: {
-        host: connection.host,
-        port: connection.port,
-       
-    }
-});
+
 
 // Function to flush all data from Redis
 async function flushAllRedis() {
-    const client = createClient();
+  
+    const client = createClient({
+        socket: {
+            host: process.env.REDIS_HOST,
+            port:6379,
+           
+        }
+    });
+    
 
     // Function to delay execution
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -63,8 +67,8 @@ async function flushAllRedis() {
     } catch (error) {
         console.error('Failed to flush Redis:', error);
     } finally {
-        // Closing Redis connection
-        // await client.disconnect();
+     //   Closing Redis connection
+        await client.disconnect();
     }
 }
 

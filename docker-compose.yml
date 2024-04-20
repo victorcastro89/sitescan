@@ -34,4 +34,13 @@ services:
       - /redis-data:/data
     command: redis-server --appendonly yes
 
-
+  board:
+    image:  victorfaria/bullboard:1:0 
+    container_name: board
+    depends_on: 
+      - scanner
+    environment:  # Define environment variables from the command
+      HOST: redis
+    env_file:  # Include additional environment variables from a file
+      - .env
+    network_mode: host

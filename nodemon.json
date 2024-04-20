@@ -5,6 +5,6 @@
   "execMap": {
     "ts": "node --loader ts-node/esm"
   },
-  "exec": "node --inspect --loader ts-node/esm src/app.ts",
+  "exec": "node --loader ts-node/esm src/app.ts",
   "signal": "SIGINT"
 }

@@ -99,8 +99,9 @@ const storage = {
   
   };
   
-  wappalyzerInstance = new Wappalyzer(options);
 
+  wappalyzerInstance = new Wappalyzer(options);
+  await wappalyzerInstance.init();
 }
 //138 15 25
 // 66 15 15
@@ -109,7 +110,7 @@ const storage = {
 //40 14
 async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
 
-  await wappalyzerInstance.init();
+
   try {
   
     const site = await wappalyzerInstance.open(url, headers, storage);
@@ -124,7 +125,8 @@ async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
     console.error('Error during site analysis:', error);
     throw error;
   }finally {
-    await wappalyzerInstance.destroy(); // Ensure resources are cleaned up
+
+    //await wappalyzerInstance.destroy(); // Ensure resources are cleaned up
   }
   
 }

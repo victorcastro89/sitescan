@@ -60,7 +60,14 @@ async function saveDomainTechnologies(domain: string, data: WappalizerData): Pro
             }
         });
     } catch (error) {
-        Log.error(`Error processing technologies for domain ${domain}: ${error}`);
+        if (error instanceof AggregateError) {
+            (error as AggregateError).errors.forEach((err, index) => {
+              Log.error(`Error ${index + 1} processing technologies for domain ${domain}: ${err}`);
+            });
+          } else {
+            Log.error(`Error processing technologies for domain ${domain}: ${error as Error}`);
+          }
+        throw error; 
     }
 }
 function isWappalizerData(data: any): data is WappalizerData {

@@ -7,7 +7,7 @@ import { getTotalRuntimeFormatted, getCounts, getAverageSuccessfuldPerMinute, Re
 
 
 
-import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue, startWappalyzerOnly, startWorkers, wappalizerQueue } from './queue/workers.ts';
+import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue,  startWorkers, wappalizerQueue } from './queue/workers.ts';
 import { addJobs } from './queue/producer.ts';
 
 import process from 'process';
@@ -45,8 +45,8 @@ const listenersPerEvent = eventNames.map(eventName => {
 
   await addJobs();
 
-   if(ONLYWAPPALYZERWORK) await startWappalyzerOnly(SANDBOXED);
-   else await startWorkers();
+   //if(ONLYWAPPALYZERWORK) await startWappalyzerOnly(SANDBOXED);
+   await startWorkers(SANDBOXED,ONLYWAPPALYZERWORK);
    AppStarted = true;
 }
 

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2020",
+    "target": "es2021",
     "module": "ES2020",
     "outDir": "./dist",
     "esModuleInterop": true,
@@ -9,6 +9,7 @@
     "paths": {
       "*": ["src/*"]
     },
+    "lib": ["ES2021"],
     "rootDir": ".",
     "strict": true,
     "allowJs": true,
