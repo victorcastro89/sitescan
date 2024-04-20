@@ -1,28 +1,28 @@
 version: '3.2'  
 services:
   scanner:
-    image:  victorfaria/sitescan:3.0 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.2 # Use the same image as your Docker run command
     container_name: scanner
     depends_on:
       - redis
       - db
-    environment:  # Define environment variables from the command
-      RL: 6
-      RIPE_CONCURRENCY: 6
-      WAPPALIZER_CONCURRENCY: 16
-      HTTP_CONCURRENCY: 16
-      NSLOOKUP_CONCURRENCY: 50
-      DB_CONCURRENCY: 1
-      MAX_SOCKETS: 50
-      SANDBOXED: 'false'
-      ONLYWAPPALYZERWORK: 'true'
-      PG_HOST: 'db'
-      PG_DATABASE: 'localhost'
-      PG_USER: 'docker'
-      PG_PASSWORD: 'docker'
-      REDIS_HOST: 'localhost'
-    # env_file:  # Include additional environment variables from a file
-    #   - .env
+    # environment:  # Define environment variables from the command
+    #   RL: 6
+    #   RIPE_CONCURRENCY: 6
+    #   WAPPALIZER_CONCURRENCY: 16
+    #   HTTP_CONCURRENCY: 16
+    #   NSLOOKUP_CONCURRENCY: 50
+    #   DB_CONCURRENCY: 1
+    #   MAX_SOCKETS: 50
+    #   SANDBOXED: 'false'
+    #   ONLYWAPPALYZERWORK: 'true'
+    #   PG_HOST: 'localhost'
+    #   PG_DATABASE: 'localhost'
+    #   PG_USER: 'docker'
+    #   PG_PASSWORD: 'docker'
+    #   REDIS_HOST: 'localhost'
+    env_file:  # Include additional environment variables from a file
+      - .env
     network_mode: host
 
     volumes:
@@ -45,8 +45,11 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
     volumes:
-      - /postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     network_mode: host
 
+
+volumes:
+  postgres-data:

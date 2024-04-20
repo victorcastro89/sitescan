@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const queueOptions: QueueOptions = {
   defaultJobOptions: {
-    attempts: 0,
+    attempts: 3,
     backoff: {
       type: 'exponential',
       delay: 1000,

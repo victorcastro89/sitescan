@@ -56,7 +56,7 @@ const run = async () => {
 
  
 
-  await app.listen({ port: 3000 });
+  await app.listen({ host:'0.0.0.0', port: 3000 });
   // eslint-disable-next-line no-console
   console.log('Running on 3000...');
   console.log('For the UI with cookie auth, open http://localhost:3000/');

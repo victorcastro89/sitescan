@@ -7,16 +7,16 @@ services:
     depends_on: 
       - redis
     environment:  # Define environment variables from the command
-      RL: 6
-      RIPE_CONCURRENCY: 6
-      WAPPALIZER_CONCURRENCY: 16
-      HTTP_CONCURRENCY: 16
-      NSLOOKUP_CONCURRENCY: 50
-      DB_CONCURRENCY: 1
-      MAX_SOCKETS: 500
-      SANDBOXED: 'false'
-      ONLYWAPPALYZERWORK: 'true'
-      LINESTOLOAD: 1000000
+    RL: 6
+    RIPE_CONCURRENCY: 6
+    WAPPALIZER_CONCURRENCY: 12
+    HTTP_CONCURRENCY: 16
+    NSLOOKUP_CONCURRENCY: 50
+    DB_CONCURRENCY: 5
+    MAX_SOCKETS: 50
+    SANDBOXED: true
+    ONLYWAPPALYZERWORK: true
+    LINESTOLOAD: 1000000
     env_file:  # Include additional environment variables from a file
       - .env
     network_mode: host
@@ -35,7 +35,7 @@ services:
     command: redis-server --appendonly yes
 
   board:
-    image:  victorfaria/bullboard:1:0 
+    image: victorfaria/bullboard:1.0 
     container_name: board
     depends_on: 
       - scanner
