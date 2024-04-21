@@ -11,10 +11,10 @@ services:
       RIPE_CONCURRENCY: 6
       WAPPALIZER_CONCURRENCY: 12
       HTTP_CONCURRENCY: 16
-      NSLOOKUP_CONCURRENCY: 50
-      DB_CONCURRENCY: 5
+      NSLOOKUP_CONCURRENCY: 10
+      DB_CONCURRENCY: 1
       MAX_SOCKETS: 50
-      SANDBOXED: 'true'
+      SANDBOXED: 'false'
       ONLYWAPPALYZERWORK: 'true'
       LINESTOLOAD: 1000000
     env_file:  # Include additional environment variables from a file

@@ -22,7 +22,7 @@ const stream = fs.createReadStream('domains.csv')
     }
 })
 .on('end', () => {
-  Log.log('Processed 200 rows or reached end of file.');
+  Log.log(`Processed ${i} rows or reached end of file.`);
 });
 }
 export {addJobs}

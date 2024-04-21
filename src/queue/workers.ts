@@ -14,14 +14,14 @@ import { isWappalizerData, saveDomainTechnologies, isSaveDomainStatus, saveOrUpd
 import { fetchDNSRecords } from '../dnsfetch.ts';
 import { dnsAndHttpToDbFormat } from '../parse.ts';
 import { checkDomainStatusWithRetry, fetchRipeStatsData } from '../requests.ts';
-import { analyzeSiteTechnologies } from '../wapp.ts';
+import { analyzeSiteTechnologies ,openSite} from '../wapp.ts';
 import { Log } from '../logging.ts';
-
+let aFoundCount = 0;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const queueOptions: QueueOptions = {
   defaultJobOptions: {
-    attempts: 3,
+    attempts: 0,
     backoff: {
       type: 'exponential',
       delay: 1000,
@@ -42,10 +42,10 @@ export const dbQueue = new Queue<SaveDataToDb>('saveToDB', queueOptions);
 const workerOptions: WorkerOptions = {
   connection,
   concurrency: 10,
-  limiter: {
-    max: 10000,
-    duration: 5000,
-  },
+  // limiter: {
+  //   max: 10000,
+  //   duration: 5000,
+  // },
 
 };
 
@@ -54,6 +54,7 @@ const queues = [dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue, dbQueue
 
 
 async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
+  Log.info(`Is Wappalyzer Only: ${onlyWappalyzer}`)
   let wappWorker: Worker | undefined, dnsWorker: Worker | undefined, httpWorker: Worker | undefined, RipeStatsWorker: Worker | undefined, dbWorker: Worker | undefined
   const processorFile = path.join(__dirname, 'sandboxedWappalyzer.js');
   if (sandboxed) {
@@ -66,8 +67,11 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
 
     wappWorker = new Worker<SaveDataToDb>('WappalizerCall', async job => {
       try {
-        const wap = await analyzeSiteTechnologies(`http://${job.data.domain}`);
+        const wap = await openSite(`http://${job.data.domain}`);
+        
         await dbQueue.add('saveWappalizerToDb', { domain: job.data.domain, data: wap });
+       // console.log(`Found: ${wap.technologies.length} technologies for ${job.data.domain} `);
+        return `Found: ${wap.technologies.length} technologies for ${job.data.domain} `
       } catch (error) {
         throw error;
       }
@@ -81,9 +85,13 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
     try {
 
       const records = await fetchDNSRecords(job.data.domain);
+      //if(aFoundCount>250) console.log(aFoundCount);
       if (records.aRecords.length > 0) {
+        aFoundCount++
         if (onlyWappalyzer) {
+         // Log.info(`Adding ${job.data.domain} to Queue`)
           await wappalizerQueue.add('GetWappalizerData', { domain: job.data.domain });
+          //Log.info(`${job.data.domain} added`)
         }
         else {
           await ripeStatsApiQueue.add('callRipeStats', { domain: job.data.domain, dns: records });
@@ -91,17 +99,20 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
         }
 
       }
+      //if(records.aRecords.length<= 0 )      Log.info(`Domain ${job.data.domain}, got ${records.aRecords.length}` );
       const dataToSave = dnsAndHttpToDbFormat(job.data.domain, { dnsRecords: records });
       await dbQueue.add('saveNsRecords', {
         domain: job.data.domain,
         data: dataToSave.SaveDomainStatus
       });
+      return `Sucessfully Fetched  ${dataToSave.domain} DNS : ${dataToSave.SaveDomainStatus.ns1} `
 
 
     } catch (error) {
       Log.error(`DNS Worker error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
       throw error;
     }
+  
   }, { ...workerOptions, concurrency: NSLOOKUP_CONCURRENCY });
 
   if (!onlyWappalyzer) {
@@ -119,10 +130,13 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
           hasSSL: httpStatus.hasSSL,
           dnsRecords: job.data.dns
         });
+
+
         await dbQueue.add('saveData', {
           domain: job.data.domain,
           data: dataToSave.SaveDomainStatus
         });
+        return `Sucessfully Fetched  ${dataToSave.domain} HTTP Status With  only: ${dataToSave.SaveDomainStatus.online} , SSL: ${dataToSave.SaveDomainStatus.hasSSL} `
       } catch (error) {
         Log.error(`HTTP Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
         throw error;
@@ -140,6 +154,8 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
         const apiResult = await fetchRipeStatsData(job.data.dns.aRecords[0]);
         const dataToSave = dnsAndHttpToDbFormat(job.data.domain, { ripeStatsData: { orgAbuseEmail: apiResult.orgAbuseEmail, organization: apiResult.organization }, dnsRecords: job.data.dns });
         await dbQueue.add('saveResult', { domain: job.data.domain, data: dataToSave.SaveDomainStatus });
+        return `Sucessfully Fetched RipestatsData for ${dataToSave.domain} With ${dataToSave.SaveDomainStatus.ripeOrganization} `
+
       }
 
       catch (error) {
@@ -151,14 +167,19 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
   }
   // Database worker
   dbWorker = new Worker<SaveDataToDb>('saveToDB', async (job) => {
+    let res;
+
     try {
       if (isWappalizerData(job.data.data)) {
-        await saveDomainTechnologies(job.data.domain, job.data.data);
+
+       res = await saveDomainTechnologies(job.data.domain, job.data.data);
+      // console.log(res);
       } else if (isSaveDomainStatus(job.data.data)) {
-        await saveOrUpdateDomainStatus(job.data.domain, job.data.data);
+        res = await saveOrUpdateDomainStatus(job.data.domain, job.data.data);
       } else {
         throw new Error("Unexpected data type in saveToDB Worker");
       }
+      return res;
     } catch (error) {
       Log.error(`DB Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
       throw error;

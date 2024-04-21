@@ -21,55 +21,74 @@ function isDomainPresent(domain: string, text: string): boolean {
     const regex = new RegExp(`(?:https?://)?(?:www\\.)?${domain.replace(/\./g, "\\.")}`, "i");
     return regex.test(text);
 }
-//TODO Remove tech that is not in the domain from db
-async function saveDomainTechnologies(domain: string, data: WappalizerData): Promise<void> {
+
+async function saveDomainTechnologies(domain: string, data: WappalizerData): Promise<string> {
     if (!isWappalizerData(data)) {
         Log.error(`Invalid Wappalizer data format`);
-        return;
+        return "Failed: Invalid data format.";
     }
+    // const startTime = process.hrtime.bigint(); // Start timing
 
     try {
-        await db.transaction(async trx => {
-            for (const [url, urlStatus] of Object.entries(data.urls)) {
-                if (url.includes(domain) && urlStatus.status === 200) {
-                    for (const tech of data.technologies) {
-                        let [techExists] = await trx('technologies').where({ name: tech.name }).select('id');
+        const result = await db.transaction(async trx => {
+            // Fetch current technologies for domain
+            const existingLinks = await trx('domain_technologies')
+                .join('technologies', 'technologies.id', 'domain_technologies.technology_id')
+                .where({ domain })
+                .select('technologies.name');
 
-                        // if (!techExists) {
-                        //     [techExists] = await trx('technologies').insert({
-                        //         name: tech.name,
-                        //         description: tech.description,
-                        //         price: tech.price || null, // assuming price is optional
-                        //         saas: tech.saas || null  // assuming saas is optional
-                        //     }, ['id']);
-                        // }
+            const existingTechNames = new Set(existingLinks.map(link => link.name));
 
-                        const linkExists = await trx('domain_technologies').where({
-                            domain: domain,
-                            technology_id: techExists.id
-                        }).first();
+            // Find technologies to delete
+            const technologiesToDelete = Array.from(existingTechNames).filter(name => 
+                !data.technologies.some(tech => tech.name === name)
+            );
 
-                        if (!linkExists) {
-                            await trx('domain_technologies').insert({
-                                domain: domain,
-                                technology_id: techExists.id
-                            });
-                        }
-                    }
+            // Find technologies to add
+            const technologiesToAdd = data.technologies.filter(tech => 
+                !existingTechNames.has(tech.name)
+            );
+
+            // Delete outdated links
+            if (technologiesToDelete.length > 0) {
+                const idsToDelete = await trx('technologies')
+                    .whereIn('name', technologiesToDelete)
+                    .select('id');
+
+                await trx('domain_technologies')
+                    .whereIn('technology_id', idsToDelete.map(t => t.id))
+                    .andWhere({ domain })
+                    .del();
+            }
+
+            // Insert new links
+            for (const tech of technologiesToAdd) {
+                let techExists = await trx('technologies').where({ name: tech.name }).select('id').first();
+
+                if (techExists && !(await trx('domain_technologies').where({
+                    domain: domain,
+                    technology_id: techExists.id
+                }).first())) {
+                    await trx('domain_technologies').insert({
+                        domain: domain,
+                        technology_id: techExists.id
+                    });
                 }
             }
+
+            return `Update successful: Added ${technologiesToAdd.length} and removed ${technologiesToDelete.length} technologies for domain ${domain}.`;
         });
+        // const endTime = process.hrtime.bigint(); // End timing
+        // const executionTime = (endTime - startTime) / BigInt(1e6); // Convert nanoseconds to milliseconds
+        // Log.info(`Execution time: ${executionTime.toString()} ms`);
+
+        return result;
     } catch (error) {
-        if (error instanceof AggregateError) {
-            (error as AggregateError).errors.forEach((err, index) => {
-              Log.error(`Error ${index + 1} processing technologies for domain ${domain}: ${err}`);
-            });
-          } else {
-            Log.error(`Error processing technologies for domain ${domain}: ${error as Error}`);
-          }
-        throw error; 
+        Log.error(`Error updating technologies for domain ${domain}: ${error}`);
+        throw error;
     }
 }
+
 function isWappalizerData(data: any): data is WappalizerData {
     return (
         typeof data === "object" &&
@@ -96,10 +115,10 @@ function isSaveDomainStatus(data: any): data is SaveDomainStatus {
     );
 }
 
-async function saveOrUpdateDomainStatus(domain: string, status: SaveDomainStatus) {
+async function saveOrUpdateDomainStatus(domain: string, status: SaveDomainStatus): Promise<string> {
     if (!isSaveDomainStatus(status)) {
         Log.error(`Invalid SaveDomainStatus data format for domain: ${domain}`);
-        return;
+        return "Failed: Invalid SaveDomainStatus data format.";
     }
     const now = new Date().toISOString();
     const data: { [key: string]: any } = {
@@ -107,7 +126,6 @@ async function saveOrUpdateDomainStatus(domain: string, status: SaveDomainStatus
         updated_at: now
     };
 
-    
     // Dynamically add properties that are not undefined
     if (status.ns1 !== undefined) data['ns1_record'] = status.ns1;
     if (status.ns2 !== undefined) data['ns2_record'] = status.ns2;
@@ -121,13 +139,18 @@ async function saveOrUpdateDomainStatus(domain: string, status: SaveDomainStatus
     if (status.hostingName !== undefined) data['parsed_hosting_name'] = status.hostingName;
 
     try {
-        await db('domain_status')
+        // Attempt to insert or update the domain status
+        const result = await db('domain_status')
             .insert(data)
             .onConflict('domain')
-            .merge(data);  // Ensure that only fields in 'data' are updated
+            .merge()
+            .returning('*');  // Adjust returning columns as needed
+
+            return `Success: Domain status for '${domain}' ${result[0] ? 'updated' : 'inserted'} successfully.`;
 
     } catch (error) {
         Log.error(`Error saving results for domain: ${domain}, Error: ${error}`);
+        return `Failed: Error saving results for domain: ${domain}, Error: ${error}`;
     }
 }
 

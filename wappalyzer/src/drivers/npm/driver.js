@@ -421,38 +421,84 @@ class Driver {
     }
   }
 
+  // async open(url, headers = {}, storage = {}) {
+  //   const site = new Site(url.split('#')[0], headers, this)
+
+  //   if (storage.local || storage.session) {
+  //     this.log('Setting storage...')
+
+  //     const page = await site.newPage(site.originalUrl)
+
+  //     await page.setRequestInterception(true)
+
+  //     page.on('request', (request) =>
+  //       request.respond({
+  //         status: 200,
+  //         contentType: 'text/plain',
+  //         body: 'ok',
+  //       })
+  //     )
+
+  //     await page.goto(url)
+
+  //     await page.evaluate((storage) => {
+  //       ;['local', 'session'].forEach((type) => {
+  //         Object.keys(storage[type] || {}).forEach((key) => {
+  //           window[`${type}Storage`].setItem(key, storage[type][key])
+  //         })
+  //       })
+  //     }, storage)
+
+  //     try {
+  //       await page.close()
+  //     } catch {
+  //       // Continue
+  //     }
+  //   }
+
+  //   return site
+  // }
   async open(url, headers = {}, storage = {}) {
     const site = new Site(url.split('#')[0], headers, this)
 
     if (storage.local || storage.session) {
       this.log('Setting storage...')
-
-      const page = await site.newPage(site.originalUrl)
-
-      await page.setRequestInterception(true)
-
-      page.on('request', (request) =>
-        request.respond({
-          status: 200,
-          contentType: 'text/plain',
-          body: 'ok',
-        })
-      )
-
-      await page.goto(url)
-
-      await page.evaluate((storage) => {
-        ;['local', 'session'].forEach((type) => {
-          Object.keys(storage[type] || {}).forEach((key) => {
-            window[`${type}Storage`].setItem(key, storage[type][key])
-          })
-        })
-      }, storage)
+      let page
 
       try {
-        await page.close()
-      } catch {
-        // Continue
+        page = await site.newPage(site.originalUrl)
+        await page.setRequestInterception(true)
+
+        page.on('request', (request) => {
+          request.respond({
+            status: 200,
+            contentType: 'text/plain',
+            body: 'ok',
+          })
+        })
+
+        await page.goto(url)
+
+        await page.evaluate((storage) => {
+          ;['local', 'session'].forEach((type) => {
+            Object.keys(storage[type] || {}).forEach((key) => {
+              window[`${type}Storage`].setItem(key, storage[type][key])
+            })
+          })
+        }, storage)
+      } catch (error) {
+        this.log(`Failed to handle page operations: ${error.message}`)
+        throw new Error(`Failed to complete open operation: ${error.message}`) // Rethrow or throw a new error for the caller to handle
+
+        // Handle error appropriately or continue depending on your error policy
+      } finally {
+        if (page) {
+          try {
+            await page.close()
+          } catch (error) {
+            this.log(`Failed to close the page: ${error.message}`)
+          }
+        }
       }
     }
 

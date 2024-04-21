@@ -1,4 +1,4 @@
-//import Wappalyzer from '../wappalyzer/src/drivers/npm/driver.js';
+import Wappalyzer from 'wappalyzer/driver.js';
 let wappalyzerInstance: any;
 
 
@@ -75,10 +75,7 @@ const storage = {
   }
 };
 
- async function loadWappalyzer() {
-  const { default: Wappalyzer } = await import('wappalyzer/driver.js');
- 
-  
+
   
   const options = {
     debug: false,
@@ -100,16 +97,34 @@ const storage = {
   };
   
 
+ 
+  let browserInstance: Wappalyzer | null = null;
+  async function getBrowserInstance(options):Promise<any> {
+      if (!browserInstance) {
+          const driver = new Wappalyzer(options);
+          await driver.init();
+          browserInstance = driver;
+      }
+      return browserInstance;
+  }
+  
+  async function openSite(url) {
+    const driver = await getBrowserInstance(options);
+
+    try {
+        const site = await driver.open(url,headers,storage);
+        const results = await site.analyze();
+        return results;
+    } catch (error) {
+        console.error('Error opening site:', error);
+        throw error;
+    }
+    // Note: No destroy here, manage browser lifecycle outside this function or on process exit
+}
+
+async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
   wappalyzerInstance = new Wappalyzer(options);
   await wappalyzerInstance.init();
-}
-//138 15 25
-// 66 15 15
-// 49 15 05
-//50 10 
-//40 14
-async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
-
 
   try {
   
@@ -130,5 +145,12 @@ async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
   }
   
 }
+process.on('exit', () => {
+  if (browserInstance) {
+    if (browserInstance !== null) {
 
-export { analyzeSiteTechnologies,loadWappalyzer };
+      browserInstance.destroy().catch(console.error);
+    }
+  }
+});
+export {openSite, analyzeSiteTechnologies };

@@ -14,8 +14,8 @@ import process from 'process';
 import { EventEmitter } from 'events';
 import { flushAllRedis } from './db/redis.ts';
 import { clearDatabase } from './db/db.ts';
-import { loadWappalyzer } from './wapp.ts';
-EventEmitter.defaultMaxListeners = 500;
+
+EventEmitter.defaultMaxListeners = 5000;
 const SANDBOXED = process.env.SANDBOXED ? (process.env.SANDBOXED|| '').toLowerCase() === 'true' : false;
 const ONLYWAPPALYZERWORK= process.env.ONLYWAPPALYZERWORK ? (process.env.ONLYWAPPALYZERWORK || '').toLowerCase() === 'true' : false;
 const tracker = ResponseTimeTracker.getInstance();
@@ -41,12 +41,10 @@ const listenersPerEvent = eventNames.map(eventName => {
 (async () =>{
 //  await clearDatabase();
   await flushAllRedis();
-  await loadWappalyzer();
+//  await loadWappalyzer();
 
   await addJobs();
-
-   //if(ONLYWAPPALYZERWORK) await startWappalyzerOnly(SANDBOXED);
-   await startWorkers(SANDBOXED,ONLYWAPPALYZERWORK);
+  await startWorkers(SANDBOXED,ONLYWAPPALYZERWORK);
    AppStarted = true;
 }
 
