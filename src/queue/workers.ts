@@ -78,6 +78,8 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
       //  console.log(`Found: ${wap.technologies.length} technologies for ${job.data.domain} `);
         return `Found: ${wap.technologies.length} technologies for ${job.data.domain} `
       } catch (error) {
+              Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+
         throw error;
       }
 
@@ -114,7 +116,7 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
 
 
     } catch (error) {
-      Log.error(`DNS Worker error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+      //Log.error(`DNS Worker error, JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
       throw error;
     }
   
@@ -143,7 +145,7 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
         });
         return `Sucessfully Fetched  ${dataToSave.domain} HTTP Status With  only: ${dataToSave.SaveDomainStatus.online} , SSL: ${dataToSave.SaveDomainStatus.hasSSL} `
       } catch (error) {
-        Log.error(`HTTP Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+       // Log.error(`HTTP Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
         throw error;
       }
     }, { ...workerOptions, concurrency: HTTP_CONCURRENCY });
@@ -186,7 +188,7 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
       }
       return res;
     } catch (error) {
-      Log.error(`DB Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
+     // Log.error(`DB Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
       throw error;
     }
   }, { ...workerOptions, concurrency: DB_CONCURRENCY });

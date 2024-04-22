@@ -2,7 +2,7 @@ version: '3.2'  # Use a version appropriate for your Docker Compose features
 
 services:
   scanner:
-    image:  victorfaria/sitescan:3.2 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.3 # Use the same image as your Docker run command
     container_name: scanner
     depends_on: 
       - redis

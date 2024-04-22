@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const fs = require('fs')
 const dns = require('dns').promises
 const path = require('path')
@@ -366,6 +367,31 @@ class Driver {
     }
 
     this.destroyed = false
+    this.setupErrorHandling()
+  }
+
+  async closeBrowser() {
+    if (this.browser) {
+      await this.browser.close()
+    }
+  }
+
+  setupErrorHandling() {
+    process.on('SIGINT', async () => {
+      console.log('Process interrupted, closing browser...')
+      await this.closeBrowser()
+      process.exit(0)
+    })
+
+    process.on('uncaughtException', async (error) => {
+      console.error('Unhandled exception:', error)
+      await this.closeBrowser()
+    })
+
+    process.on('unhandledRejection', async (reason, p) => {
+      console.error('Unhandled Rejection at:', p, 'reason:', reason)
+      await this.closeBrowser()
+    })
   }
 
   async init() {
@@ -548,6 +574,27 @@ class Site {
     this.probed = false
 
     this.destroyed = false
+    this.setupErrorHandling()
+  }
+
+  async closeBrowser() {
+    if (this.browser) {
+      await this.browser.close()
+    }
+  }
+
+  setupErrorHandling() {
+    process.on('uncaughtException', async (error) => {
+      console.error('Unhandled exception:', error)
+      await this.closeBrowser()
+      process.exit(1)
+    })
+
+    process.on('unhandledRejection', async (reason, p) => {
+      console.error('Unhandled Rejection at:', p, 'reason:', reason)
+      await this.closeBrowser()
+      process.exit(1)
+    })
   }
 
   log(message, source = 'driver', type = 'log') {
@@ -640,6 +687,7 @@ class Site {
     let responseReceived = false
 
     page.on('request', async (request) => {
+      if (this.destroyed || !page || page.isClosed()) return
       try {
         if (request.resourceType() === 'xhr') {
           let hostname
@@ -1093,6 +1141,16 @@ class Site {
       error.message += ` (${url})`
 
       throw error
+    } finally {
+      if (!page.isClosed()) {
+        await page
+          .close()
+          .catch((err) =>
+            this.error(
+              new Error(`Failed to close page: ${err.message} (${url.href})`)
+            )
+          )
+      }
     }
   }
 

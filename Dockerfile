@@ -1,23 +1,29 @@
 # Stage 1: Build
-# Use the official Node.js LTS image
-FROM node:20-alpine3.18 as builder
+# Use the official Node.js LTS image based on slim version for better compatibility
+FROM node:20-slim as builder
 
-# Install necessary system dependencies for Puppeteer
-RUN apk --no-cache add \
-    chromium \
-    nss \
-    freetype \
-    freetype-dev \
-    harfbuzz \
+# Update and install necessary system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
     ca-certificates \
-    ttf-freefont \
-    nodejs \
-    yarn
+    fonts-freefont-ttf \
+    --no-install-recommends
+
+# Configure Google Chrome repository
+RUN curl --silent --location https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable --no-install-recommends
+
+    # Verify installation and check the path
+RUN which google-chrome \
+&& google-chrome --version
+
 
 # Set environment variables for Puppeteer
-# To use installed chromium package
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
 
 
 # Set the working directory inside the container
@@ -29,7 +35,6 @@ COPY package.json yarn.lock ./
 
 COPY ./wappalyzer /app/wappalyzer 
 
-# RUN yarn add wappalyzer@file:./wappalyzer/src/drivers/npm
 # Install dependencies including devDependencies needed for the build
 RUN yarn install --frozen-lockfile
 
@@ -46,21 +51,32 @@ RUN yarn build
 RUN rm -rf src node_modules/dev
 
 # Stage 2: Runtime
-# Use the official Node.js LTS image for the runtime stage
-FROM node:20-alpine3.18
+# Use the same Node.js LTS image for the runtime stage
+FROM node:20-slim
 
-# Install necessary system dependencies for Puppeteer
-RUN apk --no-cache add \
-    chromium \
-    nss \
-    freetype \
-    harfbuzz \
+# Install Google Chrome in the runtime stage as well
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
     ca-certificates \
-    ttf-freefont
+    --no-install-recommends \
+    && curl --silent --location https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
+    && sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' \
+    && apt-get update \
+    && apt-get install -y google-chrome-stable --no-install-recommends
+
+# Verify Chrome installation in runtime stage
+RUN which google-chrome \
+    && google-chrome --version
+
+
+
+# Copy necessary system dependencies from the builder stage
+COPY --from=builder /usr/bin/google-chrome /usr/bin/google-chrome
 
 # Set environment variables for Puppeteer
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
-ENV PUPPETEER_EXECUTABLE_PATH /usr/bin/chromium-browser
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -68,14 +84,13 @@ WORKDIR /app
 # Copy necessary files from the builder stage
 COPY --from=builder /app /app
 
-# Copy the entry point script specifically to the desired location
-COPY --from=builder /app/entrypoint.sh /usr/local/bin/
-
-# Make sure the production dependencies are ready (if any were removed during build)
+# Install production dependencies
 RUN yarn install --production --frozen-lockfile && \
     yarn cache clean
 
+
 # Set the entry point script
+COPY --from=builder /app/entrypoint.sh /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["entrypoint.sh"]
 
 # Command to run your app
