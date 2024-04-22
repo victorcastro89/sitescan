@@ -21,7 +21,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const queueOptions: QueueOptions = {
   defaultJobOptions: {
-    attempts: 0,
+    attempts: 1,
     backoff: {
       type: 'exponential',
       delay: 1000,
@@ -42,10 +42,10 @@ export const dbQueue = new Queue<SaveDataToDb>('saveToDB', queueOptions);
 const workerOptions: WorkerOptions = {
   connection,
   concurrency: 10,
-  // limiter: {
-  //   max: 10000,
-  //   duration: 5000,
-  // },
+  limiter: {
+    max: 10000,
+    duration: 5000,
+  },
 
 };
 
@@ -53,12 +53,17 @@ const workerOptions: WorkerOptions = {
 const queues = [dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue, dbQueue];
 
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
   Log.info(`Is Wappalyzer Only: ${onlyWappalyzer}`)
   let wappWorker: Worker | undefined, dnsWorker: Worker | undefined, httpWorker: Worker | undefined, RipeStatsWorker: Worker | undefined, dbWorker: Worker | undefined
-  const processorFile = path.join(__dirname, 'sandboxedWappalyzer.js');
+
   if (sandboxed) {
     Log.info("MODE: Sandboxed")
+    const processorFile = path.join(__dirname, 'sandboxedWappalyzer.js');
     wappWorker = new Worker('WappalizerCall', processorFile, { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY, useWorkerThreads: true });
   }
   else {
@@ -67,10 +72,10 @@ async function startWorkers(sandboxed: boolean, onlyWappalyzer: boolean) {
 
     wappWorker = new Worker<SaveDataToDb>('WappalizerCall', async job => {
       try {
-        const wap = await openSite(`http://${job.data.domain}`);
-        
-        await dbQueue.add('saveWappalizerToDb', { domain: job.data.domain, data: wap });
-       // console.log(`Found: ${wap.technologies.length} technologies for ${job.data.domain} `);
+        const wap = await analyzeSiteTechnologies(`http://${job.data.domain}`);
+       // await sleep(3000);
+       await dbQueue.add('saveWappalizerToDb', { domain: job.data.domain, data: wap });
+      //  console.log(`Found: ${wap.technologies.length} technologies for ${job.data.domain} `);
         return `Found: ${wap.technologies.length} technologies for ${job.data.domain} `
       } catch (error) {
         throw error;

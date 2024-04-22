@@ -1,3 +1,4 @@
+import { Log } from './logging.ts';
 import Wappalyzer from 'wappalyzer/driver.js';
 let wappalyzerInstance: any;
 
@@ -101,6 +102,7 @@ const storage = {
   let browserInstance: Wappalyzer | null = null;
   async function getBrowserInstance(options):Promise<any> {
       if (!browserInstance) {
+        Log.info("Creating WAPPALIZER INSTANCE");
           const driver = new Wappalyzer(options);
           await driver.init();
           browserInstance = driver;
@@ -112,23 +114,30 @@ const storage = {
     const driver = await getBrowserInstance(options);
 
     try {
-        const site = await driver.open(url,headers,storage);
+      console.log(`Opening ${url}`)
+        const site = await driver.open(url);
+        console.log(`Analyze ${url}`)
+
         const results = await site.analyze();
+        console.log(`Finished ${url}`)
+
         return results;
     } catch (error) {
         console.error('Error opening site:', error);
         throw error;
+    }finally{
+      driver.destroy().catch(console.error);
     }
     // Note: No destroy here, manage browser lifecycle outside this function or on process exit
 }
 
 async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
-  wappalyzerInstance = new Wappalyzer(options);
-  await wappalyzerInstance.init();
+  const wap = new Wappalyzer(options);
+  await  wap.init();
 
   try {
   
-    const site = await wappalyzerInstance.open(url, headers, storage);
+    const site = await  wap.open(url, headers, storage);
 
     // Optionally capture and output errors
     // site.on('error', (x) => console.error(x.message));
@@ -141,7 +150,7 @@ async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
     throw error;
   }finally {
 
-    //await wappalyzerInstance.destroy(); // Ensure resources are cleaned up
+    await  wap.destroy(); // Ensure resources are cleaned up
   }
   
 }
