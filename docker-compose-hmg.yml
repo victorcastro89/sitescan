@@ -1,7 +1,7 @@
 version: '3.2'  
 services:
   scanner:
-    image:  victorfaria/sitescan:3.3 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.4 # Use the same image as your Docker run command
     container_name: scanner
     depends_on:
       - redis

@@ -436,7 +436,7 @@ class Driver {
 
     if (this.browser) {
       try {
-        await sleep(1)
+        await sleep(100)
 
         await this.browser.close()
 

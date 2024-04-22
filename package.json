@@ -44,6 +44,6 @@
     "wappalyzer": "file:./wappalyzer/src/drivers/npm"
   },
   "engines": {
-    "node": ">=20.6"
+    "node": ">=18"
   }
 }
