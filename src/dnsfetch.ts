@@ -1,3 +1,4 @@
+import { a } from '@mswjs/interceptors/lib/node/BatchInterceptor-cb145daa';
 import { promises as dns, MxRecord } from 'dns';
 
 const resolver = new dns.Resolver();
@@ -6,53 +7,45 @@ export interface ResolverResult {
     mxRecords: any[] | MxRecord[];
     aRecords: any[] | string[];
 }
-
+type sucessLookUp = {
+  success: boolean;
+  error:null,
+  records: string[]| MxRecord[]; // Adjusted type
+}
+type failedLookUp = {
+  success: boolean;
+  records:null;
+  error: any;
+}
+type dnsResults = sucessLookUp |failedLookUp ;
 async function fetchDNSRecords(domain: string): Promise<ResolverResult> {
     let nsRecords: string[] = [];
     let mxRecords: MxRecord[] = [];
     let aRecords: string[] = [];
 
-    // Handling individual DNS resolutions
-    const resolveNsPromise = resolver.resolveNs(domain)
-        .then(records => nsRecords = records)
-        .catch((error: NodeJS.ErrnoException) => {
-            if (error.code === 'ENOTFOUND' || error.code == 'ENODATA') {
-              //  console.log(`NS records not found for ${domain}.`);
-            } else {
-                console.error(`NS record resolution failed for ${domain}: ${error}`);
-                throw error;  // Propagate other errors
-            }
-        });
+    const safeResolveNs:Promise<dnsResults> = resolver.resolveNs(domain)
+    .then(records => ({ success: true, records ,error:null}))
+    .catch(error => ({ success: false, records:null ,error }));
 
-    const resolveMxPromise = resolver.resolveMx(domain)
-        .then(records => mxRecords = records)
-        .catch((error: NodeJS.ErrnoException) => {
-            if (error.code === 'ENOTFOUND' || error.code == 'ENODATA') {
-             //   console.log(`MX records not found for ${domain}.`);
-            } else {
-                console.error(`MX record resolution failed for ${domain}: ${error}`);
-                throw error;  // Propagate other errors
-            }
-        });
+const safeResolveMx = resolver.resolveMx(domain)
+.then(records => ({ success: true, records ,error:null}))
+.catch(error => ({ success: false, records:null ,error }));
 
-    const resolveAPromise = resolver.resolve4(domain)
-        .then(records => aRecords = records)
-        .catch((error: NodeJS.ErrnoException) => {
-            if (error.code === 'ENOTFOUND' || error.code == 'ENODATA') {
-              //  console.log(`A records not found for ${domain}.`);
-            } else {
-                console.error(`A record resolution failed for ${domain}: ${error}`);
-                throw error;  // Propagate other errors
-            }
-        });
+const safeResolveA = resolver.resolve4(domain)
+.then(records => ({ success: true, records ,error:null}))
+.catch(error => ({ success: false, records:null ,error }));
 
-    try {
-        await Promise.all([resolveNsPromise, resolveMxPromise, resolveAPromise]);
-        return { nsRecords, mxRecords, aRecords };
-    } catch (error) {
-        // Rethrow the first caught error
-        throw new Error(`DNS resolution failed for ${domain}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+try {
+  const [nsResult, mxResult, aResult] = await Promise.all([safeResolveNs, safeResolveMx, safeResolveA]);
+
+    const nsRecords = nsResult.success ? nsResult.records as string[] : [];
+    const mxRecords = mxResult.success ? mxResult.records as MxRecord[] : [];
+    const aRecords = aResult.success ? aResult.records as string[] : [];
+
+    return { nsRecords, mxRecords, aRecords };
+} catch (error) {
+    throw new Error(`DNS resolution failed for ${domain}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+}
 }
 
 export { fetchDNSRecords };
