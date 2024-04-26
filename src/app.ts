@@ -8,7 +8,7 @@ import { getTotalRuntimeFormatted, getCounts, getAverageSuccessfuldPerMinute, Re
 
 
 import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue,  startWorkers, wappalizerQueue } from './queue/workers.ts';
-import { addJobs } from './queue/producer.ts';
+import {  addJobs } from './queue/producer.ts';
 
 import process from 'process';
 import { EventEmitter } from 'events';
@@ -16,8 +16,12 @@ import { flushAllRedis } from './db/redis.ts';
 import { clearDatabase } from './db/db.ts';
 
 EventEmitter.defaultMaxListeners = 5000;
-const SANDBOXED = process.env.SANDBOXED ? (process.env.SANDBOXED|| '').toLowerCase() === 'true' : false;
-const ONLYWAPPALYZERWORK= process.env.ONLYWAPPALYZERWORK ? (process.env.ONLYWAPPALYZERWORK || '').toLowerCase() === 'true' : false;
+const HTTPWORKER = process.env.HTTPWORKER? (process.env.HTTPWORKER|| '').toLowerCase() === 'true' : false;
+const DNSWORKER = process.env.DNSWORKER ? (process.env.DNSWORKER|| '').toLowerCase() === 'true' : false;
+const RIPEWORKER = process.env.RIPEWORKER ? (process.env.RIPEWORKER|| '').toLowerCase() === 'true' : false;
+const WAPPALYZERWORKER= process.env.WAPPALYZERWORKER ? (process.env.WAPPALYZERWORKER || '').toLowerCase() === 'true' : false;
+const DBWORKER= process.env.DBWORKER ? (process.env.DBWORKER|| '').toLowerCase() === 'true' : false;
+const PRODUCERWORKER = process.env.PRODUCERWORKER ? (process.env.PRODUCERWORKER|| '').toLowerCase() === 'true' : false;
 const tracker = ResponseTimeTracker.getInstance();
 let AppStarted = false;
 
@@ -40,11 +44,14 @@ const listenersPerEvent = eventNames.map(eventName => {
 
 (async () =>{
 //  await clearDatabase();
-  await flushAllRedis();
-//  await loadWappalyzer();
+ if(PRODUCERWORKER) {
+  Log.info(`ACting as Producer - Load Data do DNS QUEUE will start`) 
 
+  await flushAllRedis();
   await addJobs();
-  await startWorkers(SANDBOXED,ONLYWAPPALYZERWORK);
+ }
+ Log.info(`Starting workers...`) 
+  await startWorkers(WAPPALYZERWORKER,DNSWORKER,HTTPWORKER,RIPEWORKER,DBWORKER);
    AppStarted = true;
 }
 
@@ -86,7 +93,7 @@ function logCurrentRequestCounts() {
 
    const { activeRequests, completedRequests, successfulRequests, errorRequests } = getCounts();
    
-  if(!ONLYWAPPALYZERWORK) console.log(`Average HTTP: ${tracker.getAverageResponseTime('Http')/1000} s`);
+ console.log(`Average HTTP: ${tracker.getAverageResponseTime('AnyHTTP')/1000} s`);
   //  console.log(`Average Completed Requests/Minute: ${getAverageSuccessfuldPerMinute().toFixed(2)}`);
  //  console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);
   // console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);

@@ -8,6 +8,9 @@ const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) 
 
 // Stream processing for domain data
 async function addJobs() {
+
+
+  Log.info(`Loading CSV data into QUeue`) 
 const stream = fs.createReadStream('domains.csv')
   .pipe(csv({ headers: false }))
   .on('data', (data) => {
@@ -24,5 +27,6 @@ const stream = fs.createReadStream('domains.csv')
 .on('end', () => {
   Log.log(`Processed ${i} rows or reached end of file.`);
 });
+
 }
 export {addJobs}

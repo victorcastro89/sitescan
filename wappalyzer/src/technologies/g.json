@@ -377,7 +377,7 @@
   "GenerateBlocks": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "GenerateBlocks is a WordPress plugin that has the trappings of a page builder.",
     "dom": "link#generateblocks-css",
@@ -1308,7 +1308,7 @@
   "GoDaddy CoBlocks": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "GoDaddy CoBlocks is a suite of professional page building content blocks for the WordPress Gutenberg block editor.",
     "dom": "link[href*='/wp-content/plugins/coblocks/']",

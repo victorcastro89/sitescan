@@ -1,3 +1,6 @@
+import { ClientRequestInterceptor } from '@mswjs/interceptors/ClientRequest'
+
+
 // Maintaining state for request counters
 let activeRequests = 0;
 let completedRequests = 0;
@@ -46,35 +49,54 @@ const getTotalRuntimeFormatted = () => {
 class ResponseTimeTracker {
     private static instance: ResponseTimeTracker;
     private timeData: Map<string, { totalTimeMs: number; count: number; minTimeMs: number; maxTimeMs: number }> = new Map();
+    private requestTimes: Map<string, number> = new Map(); // To store start time per requestId
     private maxEntries: number = 2000; 
     private constructor() {}
-
+    
     public static getInstance(): ResponseTimeTracker {
         if (!ResponseTimeTracker.instance) {
             ResponseTimeTracker.instance = new ResponseTimeTracker();
         }
         return ResponseTimeTracker.instance;
     }
+    public startTiming(requestId: string): void {
+        this.requestTimes.set(requestId, performance.now());
+    }
 
+    public addResponseTime(label: string, timeTakenMs?: number, requestId?: string): void {
+        let actualTimeTaken = timeTakenMs;
 
-    public addResponseTime(label: string, timeTakenMs: number): void {
+        if (requestId) {
+            const startTime = this.requestTimes.get(requestId);
+            if (startTime) {
+                actualTimeTaken = performance.now() - startTime;
+                this.requestTimes.delete(requestId); // Clean up after calculating time
+            } else {
+                console.warn("Start time not found for requestId:", requestId);
+                return; // Exit if we cannot calculate the duration
+            }
+        }
+        if (!actualTimeTaken) {
+            console.error("Time taken is undefined and no valid requestId provided.");
+            return;
+        }
         if (!this.timeData.has(label)) {
             this.timeData.set(label, { totalTimeMs: 0, count: 0, minTimeMs: Infinity, maxTimeMs: -Infinity });
         }
 
         const data = this.timeData.get(label);
         if (data) {
-            data.totalTimeMs += timeTakenMs;
+            data.totalTimeMs += actualTimeTaken;
             data.count++;
-            data.minTimeMs = Math.min(data.minTimeMs, timeTakenMs);
-            data.maxTimeMs = Math.max(data.maxTimeMs, timeTakenMs);
+            data.minTimeMs = Math.min(data.minTimeMs, actualTimeTaken);
+            data.maxTimeMs = Math.max(data.maxTimeMs, actualTimeTaken);
 
             // Implement rolling window by resetting after maxEntries
             if (data.count >= this.maxEntries) {
-                data.totalTimeMs = timeTakenMs;  // Reset total to last time
-                data.count = 1;                 // Reset count
-                data.minTimeMs = timeTakenMs;   // Reset min to last time
-                data.maxTimeMs = timeTakenMs;   // Reset max to last time
+                data.totalTimeMs = actualTimeTaken;  // Reset total to last time
+                data.count = 1;                     // Reset count
+                data.minTimeMs = actualTimeTaken;   // Reset min to last time
+                data.maxTimeMs = actualTimeTaken;   // Reset max to last time
             }
         } else {
             console.error("Data retrieval failed for label:", label);
@@ -106,5 +128,33 @@ class ResponseTimeTracker {
 
 
 
+const interceptor = new ClientRequestInterceptor()
+
+// Enable the interception of requests.
+interceptor.apply()
+const tracker = ResponseTimeTracker.getInstance();
+
+// Listen to any "http.ClientRequest" being dispatched,
+// and log its method and full URL.
+interceptor.on('request', ({ request, requestId }) => {
+    
+    if (request.method === 'GET') {
+
+        tracker.startTiming(requestId);
+    }
+})
+
+// Listen to any responses sent to "http.ClientRequest".
+// Note that this listener is read-only and cannot affect responses.
+interceptor.on(
+  'response',
+  ({ response, isMockedResponse, request, requestId }) => {
+    if (request.method === 'GET' ) {
+       
+        tracker.addResponseTime("AnyHTTP",undefined,requestId)
+
+    }
+  }
+)
 
 export { incrementActive, decrementActive, incrementCompleted, getCounts,incrementError,incrementSuccessful , getAverageSuccessfuldPerSecond,getAverageSuccessfuldPerMinute,getTotalRuntimeFormatted,ResponseTimeTracker};	

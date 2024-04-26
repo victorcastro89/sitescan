@@ -1,3 +1,4 @@
+import { SaveDataToDb } from 'queue/types.ts';
 import { Log } from './logging.ts';
 import Wappalyzer from 'wappalyzer/driver.js';
 let wappalyzerInstance: any;
@@ -25,9 +26,18 @@ export interface Storage {
   session?: Record<string, any>;
 }
 
+// Define the UrlStatus type, making sure to properly handle the error field
 export interface UrlStatus {
   status: number;
+  error?: string | ErrorDetails;  // Can be a string or a structured ErrorDetails type
 }
+
+// Optional: Define a more detailed ErrorDetails type if errors need structure
+export interface ErrorDetails {
+  message: string;
+  code?: string;  // Optional error code
+}
+
 
 export interface Category {
   id: number;
@@ -50,9 +60,10 @@ export interface Technology {
   saas?:boolean;
 }
 
+// Define the WappalizerData type based on the above structures
 export interface WappalizerData {
-  urls: { [url: string]: UrlStatus };
-  technologies: Technology[];
+  urls: { [url: string]: UrlStatus };  // Dictionary of UrlStatus
+  technologies: Technology[];  // Array of Technology
 }
 const headers = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
@@ -84,7 +95,7 @@ const storage = {
     headers: headers,
     maxDepth: 3,
     maxUrls: 10,
-    maxWait: 10000,
+    maxWait: 20000,
     recursive: false,
     probe: true,
     proxy: false,
@@ -98,68 +109,109 @@ const storage = {
   };
   
 
- 
-  let browserInstance: Wappalyzer | null = null;
-  async function getBrowserInstance(options):Promise<any> {
-      if (!browserInstance) {
-        Log.info("Creating WAPPALIZER INSTANCE");
-          const driver = new Wappalyzer(options);
-          await driver.init();
-          browserInstance = driver;
-      }
-      return browserInstance;
-  }
-  
-  async function openSite(url) {
-    const driver = await getBrowserInstance(options);
 
-    try {
-      console.log(`Opening ${url}`)
-        const site = await driver.open(url);
-        console.log(`Analyze ${url}`)
-
-        const results = await site.analyze();
-        console.log(`Finished ${url}`)
-
-        return results;
-    } catch (error) {
-        console.error('Error opening site:', error);
-        throw error;
-    }finally{
-      driver.destroy().catch(console.error);
-    }
-    // Note: No destroy here, manage browser lifecycle outside this function or on process exit
-}
 
 async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
   const wap = new Wappalyzer(options);
+
   await  wap.init();
+
+
 
   try {
   
     const site = await  wap.open(url, headers, storage);
-
+   
     // Optionally capture and output errors
     // site.on('error', (x) => console.error(x.message));
 
     const results = await site.analyze();
-    return results;
 
+
+    return results;
+    
   }catch (error) {
     console.error('Error during site analysis:', error);
     throw error;
   }finally {
+  
+   // await  wap.destroy(); // Ensure resources are cleaned up
 
-    await  wap.destroy(); // Ensure resources are cleaned up
   }
   
 }
-process.on('exit', () => {
-  if (browserInstance) {
-    if (browserInstance !== null) {
 
-      browserInstance.destroy().catch(console.error);
+async function analyzeSiteTechnologiesParallel(urls: string[]): Promise<SaveDataToDb[]> {
+  const wappalyzer = new Wappalyzer(options);
+
+  try {
+      await wappalyzer.init();
+
+      const results = await Promise.all(
+          urls.map(async (url) => {
+              const site = await wappalyzer.open(`http://${url}`);
+              const results = await site.analyze();
+              return {domain:url,data:results};
+          })
+      );
+
+      return results;
+  } catch (error) {
+      console.error('Error analyzing technologies:', error);
+      throw error; // Propagate the error back to the caller
+  } finally {
+      // Ensure resources are cleaned up regardless of success or failure
+      //await wappalyzer.destroy();
+  }
+}
+// process.on('exit', () => {
+//   if (browserInstance) {
+//     if (browserInstance !== null) {
+
+//       browserInstance.destroy().catch(console.error);
+//     }
+//   }
+// });
+
+function extractDomainAndTechnologies(data: WappalizerData): { domain: string, technologies: Technology[] } {
+  let chosenDomain: string | null = null;
+  let isHttpsPreferred = false;
+
+  // Iterate over the URLs to determine the preferred domain (HTTPS and status 200)
+  for (const [url, status] of Object.entries(data.urls)) {
+    if (status.status === 200) {
+      const urlObj = new URL(url);
+      // Prioritize HTTPS
+      if (urlObj.protocol === 'https:') {
+        chosenDomain = urlObj.hostname;
+        isHttpsPreferred = true;
+        break; // Break as we prefer the first HTTPS we find with status 200
+      } else if (!isHttpsPreferred) {
+        // Fallback to HTTP if no HTTPS has been chosen yet
+        chosenDomain = urlObj.hostname;
+      }
     }
   }
-});
-export {openSite, analyzeSiteTechnologies };
+
+  // Ensure domain fallback if no status 200 URL was found
+  if (!chosenDomain) {
+    const [firstUrl] = Object.keys(data.urls);
+    chosenDomain = new URL(firstUrl).hostname;
+  }
+
+  return {
+    domain: chosenDomain,
+    technologies: data.technologies
+  };
+}
+
+
+
+
+
+
+
+
+
+export { analyzeSiteTechnologies,extractDomainAndTechnologies,analyzeSiteTechnologiesParallel };
+

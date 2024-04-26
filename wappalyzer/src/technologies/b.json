@@ -1415,7 +1415,7 @@
   "Bold Page Builder": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "Bold Page Builder is a plugin or a theme component that allows users to structure and design responsive pages.",
     "icon": "Bold Page Builder.png",
@@ -2152,7 +2152,7 @@
   },
   "Bricks": {
     "cats": [
-      51,
+      114,
       80
     ],
     "description": "Bricks is a premium WordPress theme that lets you visually build performant WordPress sites.",

@@ -17,11 +17,10 @@ yarn add puppeteer
 
 
 ## Docker Commands
-
+docker run --privileged --rm tonistiigi/binfmt --install all
+docker buildx inspect newbuilder
+docker buildx build --builder newbuilder --platform linux/amd64,linux/arm64 -t victorfaria/sitescan:3.7 --push .
 docker compose -f ./docker-compose-dev.yml up
-docker build -t victorfaria/sitescan:2.0 .
-docker push victorfaria/sitescan:3.0
-
 ## Knex Commands
 
 npm install knex -g

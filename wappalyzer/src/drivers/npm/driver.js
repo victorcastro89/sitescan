@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const fs = require('fs')
 const dns = require('dns').promises
 const path = require('path')
@@ -367,31 +366,6 @@ class Driver {
     }
 
     this.destroyed = false
-    this.setupErrorHandling()
-  }
-
-  async closeBrowser() {
-    if (this.browser) {
-      await this.browser.close()
-    }
-  }
-
-  setupErrorHandling() {
-    process.on('SIGINT', async () => {
-      console.log('Process interrupted, closing browser...')
-      await this.closeBrowser()
-      process.exit(0)
-    })
-
-    process.on('uncaughtException', async (error) => {
-      console.error('Unhandled exception:', error)
-      await this.closeBrowser()
-    })
-
-    process.on('unhandledRejection', async (reason, p) => {
-      console.error('Unhandled Rejection at:', p, 'reason:', reason)
-      await this.closeBrowser()
-    })
   }
 
   async init() {
@@ -436,7 +410,7 @@ class Driver {
 
     if (this.browser) {
       try {
-        await sleep(100)
+        await sleep(1)
 
         await this.browser.close()
 
@@ -447,84 +421,38 @@ class Driver {
     }
   }
 
-  // async open(url, headers = {}, storage = {}) {
-  //   const site = new Site(url.split('#')[0], headers, this)
-
-  //   if (storage.local || storage.session) {
-  //     this.log('Setting storage...')
-
-  //     const page = await site.newPage(site.originalUrl)
-
-  //     await page.setRequestInterception(true)
-
-  //     page.on('request', (request) =>
-  //       request.respond({
-  //         status: 200,
-  //         contentType: 'text/plain',
-  //         body: 'ok',
-  //       })
-  //     )
-
-  //     await page.goto(url)
-
-  //     await page.evaluate((storage) => {
-  //       ;['local', 'session'].forEach((type) => {
-  //         Object.keys(storage[type] || {}).forEach((key) => {
-  //           window[`${type}Storage`].setItem(key, storage[type][key])
-  //         })
-  //       })
-  //     }, storage)
-
-  //     try {
-  //       await page.close()
-  //     } catch {
-  //       // Continue
-  //     }
-  //   }
-
-  //   return site
-  // }
   async open(url, headers = {}, storage = {}) {
     const site = new Site(url.split('#')[0], headers, this)
 
     if (storage.local || storage.session) {
       this.log('Setting storage...')
-      let page
 
-      try {
-        page = await site.newPage(site.originalUrl)
-        await page.setRequestInterception(true)
+      const page = await site.newPage(site.originalUrl)
 
-        page.on('request', (request) => {
-          request.respond({
-            status: 200,
-            contentType: 'text/plain',
-            body: 'ok',
+      await page.setRequestInterception(true)
+
+      page.on('request', (request) =>
+        request.respond({
+          status: 200,
+          contentType: 'text/plain',
+          body: 'ok',
+        })
+      )
+
+      await page.goto(url)
+
+      await page.evaluate((storage) => {
+        ;['local', 'session'].forEach((type) => {
+          Object.keys(storage[type] || {}).forEach((key) => {
+            window[`${type}Storage`].setItem(key, storage[type][key])
           })
         })
+      }, storage)
 
-        await page.goto(url)
-
-        await page.evaluate((storage) => {
-          ;['local', 'session'].forEach((type) => {
-            Object.keys(storage[type] || {}).forEach((key) => {
-              window[`${type}Storage`].setItem(key, storage[type][key])
-            })
-          })
-        }, storage)
-      } catch (error) {
-        this.log(`Failed to handle page operations: ${error.message}`)
-        throw new Error(`Failed to complete open operation: ${error.message}`) // Rethrow or throw a new error for the caller to handle
-
-        // Handle error appropriately or continue depending on your error policy
-      } finally {
-        if (page) {
-          try {
-            await page.close()
-          } catch (error) {
-            this.log(`Failed to close the page: ${error.message}`)
-          }
-        }
+      try {
+        await page.close()
+      } catch {
+        // Continue
       }
     }
 
@@ -574,27 +502,6 @@ class Site {
     this.probed = false
 
     this.destroyed = false
-    this.setupErrorHandling()
-  }
-
-  async closeBrowser() {
-    if (this.browser) {
-      await this.browser.close()
-    }
-  }
-
-  setupErrorHandling() {
-    process.on('uncaughtException', async (error) => {
-      console.error('Unhandled exception:', error)
-      await this.closeBrowser()
-      process.exit(1)
-    })
-
-    process.on('unhandledRejection', async (reason, p) => {
-      console.error('Unhandled Rejection at:', p, 'reason:', reason)
-      await this.closeBrowser()
-      process.exit(1)
-    })
   }
 
   log(message, source = 'driver', type = 'log') {
@@ -687,7 +594,6 @@ class Site {
     let responseReceived = false
 
     page.on('request', async (request) => {
-      if (this.destroyed || !page || page.isClosed()) return
       try {
         if (request.resourceType() === 'xhr') {
           let hostname
@@ -1141,16 +1047,6 @@ class Site {
       error.message += ` (${url})`
 
       throw error
-    } finally {
-      if (!page.isClosed()) {
-        await page
-          .close()
-          .catch((err) =>
-            this.error(
-              new Error(`Failed to close page: ${err.message} (${url.href})`)
-            )
-          )
-      }
     }
   }
 

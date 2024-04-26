@@ -1,8 +1,9 @@
 version: '3.2'  
 services:
   scanner:
-    image:  victorfaria/sitescan:3.4 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.6 # Use the same image as your Docker run command
     container_name: scanner
+    init: true
     depends_on:
       - redis
       - db
@@ -27,7 +28,8 @@ services:
 
     volumes:
       - ./domains.csv:/app/domains.csv  # Mounts domains.csv from the current directory to /app/domains.csv in the container
-
+    command: ["node","./dist/src/app.js", 'tagprocess']
+      
   redis:
     image: redis:7.2-alpine
     ports:

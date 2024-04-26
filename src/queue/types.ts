@@ -6,7 +6,9 @@ export interface DomainPayload {
     domain: string;
   }
   
- 
+ export interface Domains {
+  domains:string[];
+ }
 export interface HTTPPayload {
     domain: string;
     dns: ResolverResult;

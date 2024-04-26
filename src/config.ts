@@ -32,7 +32,7 @@ function parseCommandLineArguments() {
 
 // Run the argument parsing function
 parseCommandLineArguments();
-console.log("Running with", numCPUs, "CPUs and", concurrency, "concurrency");
+//console.log("Running with", numCPUs, "CPUs and", concurrency, "concurrency");
 // Export the calculated values
 export { numCPUs, concurrency };
 

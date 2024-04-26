@@ -784,5 +784,12 @@
     ],
     "name": "Wordpress Default Title",
     "priority": 1
+  },
+  "114": {
+    "groups": [
+      15
+    ],
+    "name": "Wordpress Page Builder",
+    "priority": 1
   }
 }

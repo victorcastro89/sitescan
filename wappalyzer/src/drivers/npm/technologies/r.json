@@ -1467,10 +1467,12 @@
           "class": "content-box col-xs-12 col-md-6"
         },
         "exists": "",
-        "text": "/Domínio Reservado!/i"
+        "text": "/(Domínio|Dominio) Reservado/i"
+      },
+      "title": {
+        "text": "/(Domínio|Dominio) Reservado - HostGator/i"
       }
     },
-    "html": "<title>Domínio Reservado - HostGator<\\/title>",
     "icon": "Hostgator.svg",
     "implies": [
       "Hostgator"

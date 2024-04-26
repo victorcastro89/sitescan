@@ -2,14 +2,14 @@ version: '3.2'  # Use a version appropriate for your Docker Compose features
 
 services:
   scanner:
-    image:  victorfaria/sitescan:3.4 # Use the same image as your Docker run command
+    image:  victorfaria/sitescan:3.7 # Use the same image as your Docker run command
     container_name: scanner
-    depends_on: 
-      - redis
+    # depends_on: 
+    #   - redis
     environment:  # Define environment variables from the command
       RL: 6
       RIPE_CONCURRENCY: 6
-      WAPPALIZER_CONCURRENCY: 12
+      WAPPALIZER_CONCURRENCY: 1
       HTTP_CONCURRENCY: 16
       NSLOOKUP_CONCURRENCY: 10
       DB_CONCURRENCY: 1
@@ -17,6 +17,8 @@ services:
       SANDBOXED: 'false'
       ONLYWAPPALYZERWORK: 'true'
       LINESTOLOAD: 1000000
+      BATCH_SIZE: 5
+      IS_WORKER_ONLY: 'true'
     env_file:  # Include additional environment variables from a file
       - .env
     network_mode: host

@@ -1868,7 +1868,7 @@
   "Thrive Architect": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "Thrive Architect is the visual page builder for WordPress.",
     "dom": "link[href*='/wp-content/plugins/thrive-visual-editor/']",

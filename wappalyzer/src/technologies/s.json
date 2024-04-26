@@ -1336,7 +1336,7 @@
   "SeedProd Coming Soon": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "SeedProd Coming Soon is a page builder allows you to add a new website under construction page to your WordPress site without hiring a developer.",
     "dom": "link[href*='/wp-content/plugins/coming-soon/']",
@@ -1648,7 +1648,7 @@
   "Semplice": {
     "cats": [
       80,
-      51
+      114
     ],
     "description": "Semplice is a Wordpress-based website builder made by designers for designers.",
     "icon": "Semplice.svg",
@@ -3444,7 +3444,7 @@
   "SiteOrigin Page Builder": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "Page Builder by SiteOrigin makes it easy to build responsive grid-based page content that adapts to mobile devices with pixel perfect accuracy.",
     "dom": "link[href*='/wp-content/plugins/siteorigin-panels/']",
@@ -5772,7 +5772,7 @@
   "Stackable": {
     "cats": [
       87,
-      51
+      114
     ],
     "description": "Stackable is a plugin for WordPress that offers a collection of blocks, templates, and other design tools to help users create custom, professional-looking websites.",
     "dom": {

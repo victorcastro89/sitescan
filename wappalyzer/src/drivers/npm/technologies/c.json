@@ -2532,7 +2532,7 @@
   "Colibri WP": {
     "cats": [
       80,
-      51
+      114
     ],
     "description": "Colibri WP is a drag-and-drop WordPress website builder.",
     "dom": "link[href*='/wp-content/plugins/colibri-page-builder']",
