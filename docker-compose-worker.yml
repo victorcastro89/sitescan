@@ -1,0 +1,29 @@
+version: '3.2'  # Use a version appropriate for your Docker Compose features
+
+services:
+  scanner:
+    image:  victorfaria/sitescan:4.2 # Use the same image as your Docker run command
+    container_name: scanner
+    restart: on-failure
+    environment:  # Define environment variables from the command
+      RL: 6
+      RIPE_CONCURRENCY: 1
+      WAPPALIZER_CONCURRENCY: 2
+      HTTP_CONCURRENCY: 3
+      NSLOOKUP_CONCURRENCY: 2
+      DB_CONCURRENCY: 1
+      MAX_SOCKETS: 50
+      LINESTOLOAD: 1000000
+      DNSWORKER: 'true'
+      HTTPWORKER: 'true'
+      RIPEWORKER: 'true'
+      WAPPALYZERWORKER: 'true'
+      DBWORKER: 'false'
+      PRODUCERWORKER: 'false'
+      BATCH_SIZE: 3
+    env_file:  
+      - .env
+    network_mode: host
+
+  
+

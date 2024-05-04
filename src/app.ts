@@ -78,7 +78,7 @@ async function checkIfAnyQueueHasJobs() {
 // Periodic system status checks
 setInterval(() => {
   if( AppStarted) checkIfAnyQueueHasJobs();
-  logCurrentRequestCounts();
+  //logCurrentRequestCounts();
 }, 2000);
 
 function logCurrentRequestCounts() {

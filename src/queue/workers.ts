@@ -81,10 +81,10 @@ if(ActivateWappalyzerWorker){
           for (const url in wap.data.urls) {
             const urlStatus = wap.data.urls[url];
             if (urlStatus.error) {
-              if(typeof urlStatus.error === 'string')
-                Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
+            //  if(typeof urlStatus.error === 'string')
+             //   Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
               //throw new Error(urlStatus.error)
-              else  Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
+             // else  Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
             }
           }
         

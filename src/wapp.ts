@@ -1,5 +1,8 @@
+
+
+// DO NOT USE console.log use console.error, console.log will break the code
 import { SaveDataToDb } from 'queue/types.ts';
-import { Log } from './logging.ts';
+
 import Wappalyzer from 'wappalyzer/driver.js';
 let wappalyzerInstance: any;
 
@@ -95,7 +98,7 @@ const storage = {
     headers: headers,
     maxDepth: 3,
     maxUrls: 10,
-    maxWait: 20000,
+    maxWait: 45000,
     recursive: false,
     probe: true,
     proxy: false,
@@ -147,31 +150,72 @@ async function analyzeSiteTechnologiesParallel(urls: string[]): Promise<SaveData
   try {
       await wappalyzer.init();
 
-      const results = await Promise.all(
-          urls.map(async (url) => {
-              const site = await wappalyzer.open(`http://${url}`);
-              const results = await site.analyze();
-              return {domain:url,data:results};
-          })
-      );
-
-      return results;
+      const results = await Promise.allSettled(
+        urls.map(async (url) => {
+            try {
+                const site = await wappalyzer.open(`http://${url}`);
+                const results = await site.analyze();
+                return { domain: url, data: results };
+            } catch (error) {
+                // Log the error and return an error structure within the data
+              // console.error(`Error processing ${url}: ${error instanceof Error ? error.message : String(error)}`);
+                return { domain: url, data: { error: error instanceof Error ? error.message : "Unknown error" } };
+            }
+        })
+    );
+    
+    return results.map(result => {
+        if (result.status === 'fulfilled') {
+            return result.value;
+        } else {
+            // Use the domain from the result if available, or mark as unknown
+           // console.error("WAPPPP ERROR",result)
+            const domain = result.reason?.domain || 'unknown';
+            return { 
+                domain: domain, 
+                data: { error: result.reason instanceof Error ? result.reason.message : 'Failed to process domain' }
+            };
+        }
+    });
+    
   } catch (error) {
-      console.error('Error analyzing technologies:', error);
-      throw error; // Propagate the error back to the caller
+    console.error(`Error initializing Wappalyzer: ${error}` );
+      throw error; // Propagate initialization errors
   } finally {
-      // Ensure resources are cleaned up regardless of success or failure
-      //await wappalyzer.destroy();
+      await wappalyzer.destroy();
   }
 }
-// process.on('exit', () => {
-//   if (browserInstance) {
-//     if (browserInstance !== null) {
+// async function analyzeSiteTechnologiesParallel(urls: string[]): Promise<SaveDataToDb[]> {
+//   const wappalyzer = new Wappalyzer(options);
 
-//       browserInstance.destroy().catch(console.error);
-//     }
+//   try {
+//       await wappalyzer.init();
+
+//       const results = await Promise.all(
+//           urls.map(async (url) => {
+//               const site = await wappalyzer.open(`http://${url}`);
+//               const results = await site.analyze();
+//               return {domain:url,data:results};
+//           })
+//       );
+
+//       return results;
+//   } catch (error) {
+//       console.error('Error analyzing technologies:', error);
+//       throw error; // Propagate the error back to the caller
+//   } finally {
+//       // Ensure resources are cleaned up regardless of success or failure
+//       //await wappalyzer.destroy();
 //   }
-// });
+// }
+// // process.on('exit', () => {
+// //   if (browserInstance) {
+// //     if (browserInstance !== null) {
+
+// //       browserInstance.destroy().catch(console.error);
+// //     }
+// //   }
+// // });
 
 function extractDomainAndTechnologies(data: WappalizerData): { domain: string, technologies: Technology[] } {
   let chosenDomain: string | null = null;

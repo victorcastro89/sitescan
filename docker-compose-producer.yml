@@ -1,0 +1,52 @@
+version: '3.2'  # Use a version appropriate for your Docker Compose features
+
+services:
+  scanner:
+    image:  victorfaria/sitescan:4.2 # Use the same image as your Docker run command
+    container_name: scanner
+    restart: on-failure
+    environment:  # Define environment variables from the command
+      RL: 6
+      NODE_OPTIONS: "--max-old-space-size=4096"  # Set to 4 GB
+      RIPE_CONCURRENCY: 2
+      WAPPALIZER_CONCURRENCY: 1
+      HTTP_CONCURRENCY: 5
+      NSLOOKUP_CONCURRENCY: 5
+      DB_CONCURRENCY: 1
+      MAX_SOCKETS: 50
+      LINESTOLOAD: 5000000
+      DNSWORKER: 'true'
+      HTTPWORKER: 'true'
+      RIPEWORKER: 'true'
+      WAPPALYZERWORKER: 'true'
+      DBWORKER: 'true'
+      PRODUCERWORKER: 'true'
+      BATCH_SIZE: 3
+    env_file:  
+      - .env
+    network_mode: host
+
+    volumes:
+      - ./domains.csv:/app/domains.csv  
+  
+  redis:
+    image: redis:6.2.12-alpine
+    ports:
+      - "6379:6379"
+    network_mode: host
+    env_file:  
+      - .env
+    volumes:
+      - /redis-data:/data
+    command: redis-server --save "" --appendonly no --requirepass ${REDIS_PWD}
+
+  board:
+    image: victorfaria/bullboard:1.1
+    container_name: board
+    depends_on: 
+      - scanner
+    environment:  # Define environment variables from the command
+      HOST: redis
+    env_file: 
+      - .env
+    network_mode: host

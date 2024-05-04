@@ -12,7 +12,7 @@ const redisOptions = {
   port: 6379,
  // host: '96.125.168.116',
  host: process.env.HOST | 'localhost', 
- //password: '',
+ password: process.env.REDIS_PWD,
   tls: false,
 };
 

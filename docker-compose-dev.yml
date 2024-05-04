@@ -20,16 +20,16 @@ services:
     ports:
       - "6379:6379"
     network_mode: host
-
+    env_file:  
+      - .env
     volumes:
       - redis-data:/data
-    command: redis-server --appendonly yes --maxclients 20000
+    command: redis-server --appendonly yes --requirepass ${REDIS_PWD}
 
   board:
-    image: victorfaria/bullboard:1.0 
+    image: victorfaria/bullboard:1.1
     container_name: board
-    environment:  # Define environment variables from the command
-      HOST: redis
+    depends_on: [redis]
     env_file:  # Include additional environment variables from a file
       - .env
     network_mode: host

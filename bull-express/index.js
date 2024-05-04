@@ -11,9 +11,9 @@ const sleep = (t) => new Promise((resolve) => setTimeout(resolve, t * 1000));
 const redisOptions = {
   port: 6379,
   host: 'localhost',
- // host: '96.125.168.116',
+   password:process.env.REDIS_PWD,
   
- password: '',
+
   tls: false,
 };
 

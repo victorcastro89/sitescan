@@ -5,9 +5,12 @@ dotenv.config();
 import { createClient } from 'redis';
 import { RedisOptions } from 'bullmq';
 // Redis connection settings
+if(!process.env.REDIS_PWD) throw new Error("REDIS_PWD env variable is required!");
+
 const connection: RedisOptions = {
     host: process.env.REDIS_HOST,
     port: 6379,
+    password:process.env.REDIS_PWD,
     retryStrategy: (times: number) => Math.min(Math.pow(2, times) * 1000, 20000)
 };
 
@@ -20,9 +23,11 @@ async function flushAllRedis() {
     const client = createClient({
         socket: {
             host: process.env.REDIS_HOST,
+        
             port:6379,
            
-        }
+        },
+        password:process.env.REDIS_PWD,
     });
     
 
@@ -30,12 +35,7 @@ async function flushAllRedis() {
     const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
     try {
-        // if (process.env.NODE_ENV === 'production') {
-        //     console.error('This script cannot be run in the production environment.');
-        //     return; // Exit function if in production
-        // }
-
-        // Connect to Redis
+      
         await client.connect();
 
         // Attempt to flush Redis with retries

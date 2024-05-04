@@ -16,7 +16,7 @@ export interface HTTPPayload {
   
   export interface SaveDataToDb {
     domain: string;
-    data: SaveDomainStatus | WappalizerData;
+    data: SaveDomainStatus | WappalizerData| { error?: string };
   }
   
  
