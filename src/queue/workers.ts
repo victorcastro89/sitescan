@@ -260,7 +260,7 @@ async function addToWappalyzerBatchQueue(domain:string) {
 
 
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
- // process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 }
   // Function to add jobs to the queue
   async function addLastWappalyzerBatchQueue() {
