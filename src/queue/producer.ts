@@ -6,7 +6,7 @@ import { Log } from '../logging.ts';
 let i = 0;
 let allDataLoaded = false; // Track if all data has been successfully loaded
 const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 100;
-const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 };
+const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 ,timeout:10000};
 async function addJobs() {
   Log.info(`Loading CSV data into Queue`);
   const stream = fs.createReadStream('domains.csv').pipe(csv({ headers: false }));

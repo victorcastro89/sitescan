@@ -88,7 +88,7 @@ setInterval(async () => {
    
   } 
   logCurrentRequestCounts();
-}, 2000);
+}, 20000);
 
 function logCurrentRequestCounts() {
 // //   // Display the listener count per event

@@ -28,6 +28,8 @@ services:
 
   board:
     image: victorfaria/bullboard:1.1
+    ports:
+      - "3000:3000"
     container_name: board
     depends_on: [redis]
     env_file:  # Include additional environment variables from a file
