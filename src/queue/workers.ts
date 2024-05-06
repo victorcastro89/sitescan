@@ -32,7 +32,7 @@ const queueOptions: QueueOptions = {
   },
   connection
 };
-const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 };
+const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 ,timeout:60000};
 // Queue initializations
 export const dnsQueue = new Queue<DomainPayload>('dnsLookup', queueOptions);
 export const httpQueue = new Queue<HTTPPayload>('httpCheck', queueOptions);
@@ -83,7 +83,7 @@ if(ActivateWappalyzerWorker){
             const urlStatus = wap.data.urls[url];
             if (urlStatus.error) {
             //  if(typeof urlStatus.error === 'string')
-             //   Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
+               Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
               //throw new Error(urlStatus.error)
              // else  Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
             }
@@ -91,14 +91,15 @@ if(ActivateWappalyzerWorker){
         
             totalItemsWithTech++;
             totalTechnologies += wap.data.technologies.length
-            await dbQueue.add('saveWappalizerToDb', wap,  {...RemoveJobs, ...{timeout:10000}});
+            await dbQueue.add('saveWappalizerToDb', wap, RemoveJobs);
           
         }
     
          return `Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`;
       } catch (error) {
          Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
-         throw error;
+         await job.moveToFailed({ message: error }, true); // Mark the job as failed
+
       }
     }, opt);
     
@@ -121,8 +122,8 @@ if(ActivateWappalyzerWorker){
           //addToWappalyzerBatchQueue(job.data.domain);
      
   
-          await ripeStatsApiQueue.add('callRipeStats', { domain: job.data.domain, dns: records },  {...RemoveJobs, ...{timeout:60000}});
-          await httpQueue.add('httpCheck', { domain: job.data.domain, dns: records },  {...RemoveJobs, ...{timeout:60000}});
+          await ripeStatsApiQueue.add('callRipeStats', { domain: job.data.domain, dns: records }, RemoveJobs);
+          await httpQueue.add('httpCheck', { domain: job.data.domain, dns: records }, RemoveJobs);
         
 
       }
@@ -167,7 +168,7 @@ if(ActivateWappalyzerWorker){
         await dbQueue.add('saveData', {
           domain: job.data.domain,
           data: dataToSave.SaveDomainStatus
-        },  {...RemoveJobs, ...{timeout:10000}});
+        }, RemoveJobs);
         return `Sucessfully Fetched  ${dataToSave.domain} HTTP Status With  only: ${dataToSave.SaveDomainStatus.online} , SSL: ${dataToSave.SaveDomainStatus.hasSSL} `
       } catch (error) {
        // Log.error(`HTTP Worker error JOB: ${job.name} Domain: ${job.data.domain} ERROR : ${error}`);
@@ -187,7 +188,7 @@ if(ActivateWappalyzerWorker){
 
         const apiResult = await fetchRipeStatsData(job.data.dns.aRecords[0]);
         const dataToSave = dnsAndHttpToDbFormat(job.data.domain, { ripeStatsData: { orgAbuseEmail: apiResult.orgAbuseEmail, organization: apiResult.organization }, dnsRecords: job.data.dns });
-        await dbQueue.add('saveResult', { domain: job.data.domain, data: dataToSave.SaveDomainStatus },  {...RemoveJobs, ...{timeout:10000}});
+        await dbQueue.add('saveResult', { domain: job.data.domain, data: dataToSave.SaveDomainStatus }, RemoveJobs);
         return `Sucessfully Fetched RipestatsData for ${dataToSave.domain} With ${dataToSave.SaveDomainStatus.ripeOrganization} `
 
       }
@@ -253,22 +254,20 @@ async function addToWappalyzerBatchQueue(domain:string) {
     const currentBatch = batch; 
     batch = [];
     queueCount = 0; // Reset the counter after running the worker
-    await wappalizerQueue.add('GetWappalizerData', { domains:currentBatch }, {...RemoveJobs, ...{timeout:60000}});
+    await wappalizerQueue.add('GetWappalizerData', { domains:currentBatch }, RemoveJobs);
  
   }
 }
 
 
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+ // process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 }
   // Function to add jobs to the queue
   async function addLastWappalyzerBatchQueue() {
-
+    
     if(batch.length>0)  {
-      const currentBatch = batch; 
-      batch = [];
-      await wappalizerQueue.add('GetWappalizerData', { domains:currentBatch }, {...RemoveJobs, ...{timeout:60000}});
+      await wappalizerQueue.add('GetWappalizerData', { domains:batch }, RemoveJobs);
       return true
   }
   else return false
