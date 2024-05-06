@@ -7,8 +7,8 @@ import { getTotalRuntimeFormatted, getCounts, getAverageSuccessfuldPerMinute, Re
 
 
 
-import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue,  startWorkers, wappalizerQueue } from './queue/workers.ts';
-import {  addJobs } from './queue/producer.ts';
+import { addLastWappalyzerBatchQueue, dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue,  startWorkers, wappalizerQueue } from './queue/workers.ts';
+import {  addJobs, checkIfAnyQueueHasJobs, isAllDataLoaded } from './queue/producer.ts';
 
 import process from 'process';
 import { EventEmitter } from 'events';
@@ -60,25 +60,34 @@ const listenersPerEvent = eventNames.map(eventName => {
 
 
 
-async function checkIfAnyQueueHasJobs() {
-  const queues = [dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue, dbQueue];
-  for (const queue of queues) {
-    const jobCounts = await queue.getJobCounts('waiting', 'active', 'delayed');
-    if (jobCounts.waiting > 0 || jobCounts.active > 0 || jobCounts.delayed > 0) {
-      return true; // There are still jobs pending or active
-    }
-  }
+
+
+async function kill() {
   console.log("No queues have any jobs pending or active.");
   console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);
   console.log("Exiting gracefully.");
   process.exit(0); // Exit gracefully with status code 0 (success)
 }
 
-
 // Periodic system status checks
-setInterval(() => {
-  if( AppStarted) checkIfAnyQueueHasJobs();
-  //logCurrentRequestCounts();
+setInterval(async () => {
+  let allDataLoaded= false
+  let pedingJobs =false 
+  let hasPendingBatch =false
+  if( AppStarted) {
+    allDataLoaded =  isAllDataLoaded();
+   if(allDataLoaded) {
+    pedingJobs =  await checkIfAnyQueueHasJobs();
+    if(!pedingJobs) 
+      {
+        hasPendingBatch = await addLastWappalyzerBatchQueue()
+        if(!hasPendingBatch)  kill() 
+      }
+    
+   }
+   
+  } 
+  logCurrentRequestCounts();
 }, 2000);
 
 function logCurrentRequestCounts() {
@@ -93,7 +102,7 @@ function logCurrentRequestCounts() {
 
    const { activeRequests, completedRequests, successfulRequests, errorRequests } = getCounts();
    
- console.log(`Average HTTP: ${tracker.getAverageResponseTime('AnyHTTP')/1000} s`);
+ console.log(`Average HTTP: ${tracker.getAverageResponseTime('AnyHTTP')/1000} s , Total errors : ${errorRequests}`);
   //  console.log(`Average Completed Requests/Minute: ${getAverageSuccessfuldPerMinute().toFixed(2)}`);
  //  console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);
   // console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);

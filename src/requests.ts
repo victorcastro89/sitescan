@@ -12,8 +12,8 @@ import http from 'http';
 import https from 'https';
 http.globalAgent.maxSockets = MAX_SOCKETS;
 https.globalAgent.maxSockets = MAX_SOCKETS;
-const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 25});
-const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 25 });
+const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 256, timeout: 90000, maxFreeSockets: 90000});
+const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 256, timeout: 90000, maxFreeSockets: 90000 });
 import { ResponseTimeTracker } from './stats.ts';
 import { Log } from './logging.ts';
 
@@ -87,7 +87,7 @@ interface CheckDomainConfig extends AxiosRequestConfig {
 // Optimized checkDomain function with retry logic
   async function checkDomainStatusWithRetry(domain: string): Promise<{ domain: string; online: boolean; hasSSL: boolean }> {
     const axiosConfig: CheckDomainConfig = {
-        timeout: 10000, // milliseconds
+        timeout: 25000, // milliseconds
         responseType: 'stream',
         maxBodyLength:100,
         maxContentLength:100,
@@ -127,7 +127,7 @@ export interface RipeData {
 async function fetchRipeStatsData(ip:string): Promise<RipeData> {
     const lock = await ripeStatSemaphore.acquire(); // Acquire a lock from the semaphore
     const axiosConfig: AxiosRequestConfig = {
-        timeout: 10000, // milliseconds
+        timeout: 15000, // milliseconds
         responseType: 'json',
         maxRedirects: 3,
     };
