@@ -32,7 +32,7 @@ const queueOptions: QueueOptions = {
   },
   connection
 };
-const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 ,timeout:60000};
+const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 ,timeout:6000};
 // Queue initializations
 export const dnsQueue = new Queue<DomainPayload>('dnsLookup', queueOptions);
 export const httpQueue = new Queue<HTTPPayload>('httpCheck', queueOptions);
