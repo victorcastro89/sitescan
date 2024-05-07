@@ -6,7 +6,7 @@ import { Log } from '../logging.ts';
 let i = 0;
 let allDataLoaded = false;
 const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 100;
-const BATCH_SIZE = 10;
+const BATCH_SIZE = 1000000;
 const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000, timeout: 10000 };
 
 async function addJobs() {
