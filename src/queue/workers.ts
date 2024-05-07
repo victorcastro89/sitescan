@@ -76,9 +76,9 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
       try {
         const JobWithTimeout = new Promise(async (resolve, _) => {
           console.log("Wapp Started", job.data.domains);
-  
-          if(FORK) const waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
-          else  const waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
+          let waps 
+          if(FORK) waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
+          else   waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
   
           let totalItemsWithTech = 0;
           let totalTechnologies = 0;
