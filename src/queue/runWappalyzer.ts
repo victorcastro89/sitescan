@@ -24,6 +24,7 @@ async function runWappalizer(data) {
 
     // Handle child exit
     child.on('close', (code) => {
+      console.error("Closed")
       if (code === 0) {
         try {
           const result = JSON.parse(output);
@@ -38,6 +39,7 @@ async function runWappalizer(data) {
 
     // Handle errors
     child.on('error', (err) => {
+      console.error("err",err)
       reject(err);
     });
   });

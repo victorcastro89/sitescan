@@ -73,6 +73,7 @@ if(ActivateWappalyzerWorker){
   console.info("Wappalizer Worker started.");
     wappWorker = new Worker<Domains>('WappalizerCall', async job => {
       try {
+        console.log("Wapp Started", job.data.domains);
         const waps = await runWappalizer(job.data.domains) as any as {domain:string,data:WappalizerData}[]
       
         let totalItemsWithTech = 0;
@@ -98,7 +99,7 @@ if(ActivateWappalyzerWorker){
          return `Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`;
       } catch (error) {
          Log.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
-         await job.moveToFailed({ message: error }, true); // Mark the job as failed
+         throw error
 
       }
     }, opt);
