@@ -15,7 +15,7 @@ const { CHROMIUM_BIN, CHROMIUM_DATA_DIR, CHROMIUM_WEBSOCKET, CHROMIUM_ARGS } =
 const chromiumArgs = CHROMIUM_ARGS
   ? CHROMIUM_ARGS.split(' ')
   : [
-      '--headless',
+      '--chrome-headless-shell',
       '--single-process',
       '--no-sandbox',
       '--no-zygote',
@@ -408,16 +408,36 @@ class Driver {
   async destroy() {
     this.destroyed = true
 
-    if (this.browser) {
+    if (this.browser && !this.browser._isClosed) {
+      this.log('this.browser exists', this.browser)
       try {
-        await sleep(1)
+        let pages
+        try {
+          pages = await this.browser.pages()
+        } catch (pageError) {
+          this.log('Error retrieving pages:', pageError)
+          // Optionally, attempt to close the browser directly if pages retrieval fails
+          await this.browser.close()
+          return
+        }
 
+        this.log(`Closing ${pages.length} open pages`)
+        for (const page of pages) {
+          await page.close()
+          this.log('Page closed')
+        }
+
+        this.log('before browser close')
         await this.browser.close()
-
-        this.log('Browser closed')
+        this.log('Browser closed successfully')
       } catch (error) {
-        throw new Error(error.toString())
+        this.log('Failed to close pages or browser:', error)
+        throw new Error(
+          'Error when trying to close pages or browser: ' + error.toString()
+        )
       }
+    } else {
+      this.log('No browser instance found or browser already closed')
     }
   }
 
@@ -439,7 +459,7 @@ class Driver {
         })
       )
 
-      await page.goto(url)
+      await page.goto(url, { timeout: 60000 })
 
       await page.evaluate((storage) => {
         ;['local', 'session'].forEach((type) => {
@@ -727,7 +747,7 @@ class Site {
     })
 
     try {
-      await page.goto(url.href)
+      await page.goto(url.href, { timeout: 60000 })
 
       if (page.url() === 'about:blank') {
         const error = new Error(`The page failed to load (${url})`)
@@ -1103,11 +1123,12 @@ class Site {
 
     await Promise.allSettled([
       (async () => {
+        this.log('Analyse start')
         try {
-          const links = ((await this.goto(url)) || []).filter(
-            ({ href }) => !this.analyzedUrls[href]
-          )
-
+          const links = (
+            (await this.goto(url, { timeout: 60000 })) || []
+          ).filter(({ href }) => !this.analyzedUrls[href])
+          this.log('Goto end')
           if (
             links.length &&
             this.options.recursive &&
@@ -1122,7 +1143,9 @@ class Site {
               depth + 1
             )
           }
+          this.log('Goto end2')
         } catch (error) {
+          this.log('Analyze err', error)
           this.analyzedUrls[url.href] = {
             status: this.analyzedUrls[url.href]?.status || 0,
             error: error.message || error.toString(),
@@ -1134,6 +1157,7 @@ class Site {
         }
       })(),
       (async () => {
+        this.log('probe')
         if (this.options.probe && !this.probed) {
           this.probed = true
 
@@ -1203,9 +1227,9 @@ class Site {
       ),
       patterns,
     }
-
+    this.log('emit')
     await this.emit('analyze', results)
-
+    this.log('emit end')
     return results
   }
 
