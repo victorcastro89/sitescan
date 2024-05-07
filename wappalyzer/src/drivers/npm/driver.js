@@ -3,6 +3,7 @@ const dns = require('dns').promises
 const path = require('path')
 const http = require('http')
 const https = require('https')
+const crypto = require('crypto')
 const puppeteer = require('puppeteer')
 const Wappalyzer = require('./wappalyzer')
 
@@ -23,9 +24,6 @@ const chromiumArgs = CHROMIUM_ARGS
       '--ignore-certificate-errors',
       '--allow-running-insecure-content',
       '--disable-web-security',
-      `--user-data-dir=${
-        CHROMIUM_DATA_DIR || '/tmp/chromium_' + `${Math.random()}`
-      }`,
     ]
 
 const extensions = /^([^.]+$|\.(asp|aspx|cgi|htm|html|jsp|php)$)/
@@ -56,6 +54,23 @@ const xhrDebounce = []
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms))
+}
+function updateUserDataDir(args, newUserDir) {
+  const userDirPrefix = '--user-data-dir='
+
+  // Find the index of the existing --user-data-dir argument, if it exists
+  const userDirIndex = args.findIndex((arg) => arg.startsWith(userDirPrefix))
+
+  // Check if the --user-data-dir argument was found
+  if (userDirIndex >= 0) {
+    // Replace the existing argument
+    args[userDirIndex] = userDirPrefix + newUserDir
+  } else {
+    // Push a new argument if it doesn't exist
+    args.push(userDirPrefix + newUserDir)
+  }
+
+  return args // Optional, if you want to use the function in a functional style
 }
 
 function getJs(page, technologies = Wappalyzer.technologies) {
@@ -384,7 +399,12 @@ class Driver {
         this.browser = await puppeteer.launch({
           ignoreHTTPSErrors: true,
           acceptInsecureCerts: true,
-          args: chromiumArgs,
+          args: updateUserDataDir(
+            chromiumArgs,
+            `--user-data-dir=${
+              CHROMIUM_DATA_DIR || '/tmp/chromium_' + crypto.randomUUID()
+            }`
+          ),
           executablePath: CHROMIUM_BIN,
         })
       }

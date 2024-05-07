@@ -4,7 +4,7 @@ FROM --platform=${TARGETPLATFORM} node:20-bullseye as builder
 RUN apt-get update \
     && apt-get install -y wget gnupg \
     && wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg \
-    && apt-get install -y chromium fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 dbus dbus-x11 dumb-init \
+    && apt-get install -y chromium  libgbm-dev fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 dbus dbus-x11 dumb-init \
     --no-install-recommends \
     && service dbus start \
     && rm -rf /var/lib/apt/lists/*

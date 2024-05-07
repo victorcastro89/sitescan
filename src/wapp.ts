@@ -113,35 +113,40 @@ const storage = {
   
 
 
-
-async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
-  const wap = new Wappalyzer(options);
-
-  await  wap.init();
-
-
-
-  try {
-  
-    const site = await  wap.open(url, headers, storage);
-   
-    // Optionally capture and output errors
-    // site.on('error', (x) => console.error(x.message));
-
-    const results = await site.analyze();
-
-
-    return results;
+  async function analyzeSiteTechnologies(url: string): Promise<WappalizerData> {
+    const wap = new Wappalyzer(options);
     
-  }catch (error) {
-    console.error('Error during site analysis:', error);
-    throw error;
-  }finally {
-  
-   // await  wap.destroy(); // Ensure resources are cleaned up
+    try {
+        // Initialize Wappalyzer
+        await wap.init();
+    } catch (error) {
+        console.error('Error initializing Wappalyzer:', error);
+        throw new Error('Initialization failed');
+    }
 
-  }
-  
+    try {
+        // Open the website with Wappalyzer
+        const site = await wap.open(`http://${url}`, headers, storage);
+        
+        try {
+            // Analyze the site
+            const results = await site.analyze();
+            return results;
+        } catch (error) {
+            console.error('Error analyzing site:', error);
+            throw new Error('Analysis failed');
+        }
+    } catch (error) {
+        console.error('Error opening site:', error);
+        throw new Error('Opening site failed');
+    } finally {
+        // Clean up resources in any case
+        try {
+            await wap.destroy();
+        } catch (error) {
+            console.error('Error destroying Wappalyzer instance:', error);
+        }
+    }
 }
 
 async function analyzeSiteTechnologiesParallel(urls: string[]): Promise<SaveDataToDb[]> {

@@ -4,7 +4,7 @@ const HTTP_CONCURRENCY = process.env.HTTP_CONCURRENCY ? parseInt(process.env.HTT
 const WAPPALIZER_CONCURRENCY = process.env.WAPPALIZER_CONCURRENCY ? parseInt(process.env.WAPPALIZER_CONCURRENCY) : 1;
 const NSLOOKUP_CONCURRENCY = process.env.NSLOOKUP_CONCURRENCY ? parseInt(process.env.NSLOOKUP_CONCURRENCY) : 20;
 const BATCH_SIZE = process.env.BATCH_SIZE  ? parseInt(process.env.BATCH_SIZE ) : 2;
-const FORK = process.env.FORK  ? true : false;
+const FORK =  process.env.FORK == 'true' ? true : false;
 let queueCount = 0; // Initialize a counter to track the number of jobs
 let batch:string[] = [];
 import path, { resolve } from 'path';
@@ -16,7 +16,7 @@ import { isWappalizerData, saveDomainTechnologies, isSaveDomainStatus, saveOrUpd
 import { fetchDNSRecords } from '../dnsfetch.ts';
 import { dnsAndHttpToDbFormat } from '../parse.ts';
 import { checkDomainStatusWithRetry, fetchRipeStatsData } from '../requests.ts';
-import { WappalizerData, analyzeSiteTechnologiesParallel } from '../wapp.ts';
+import { WappalizerData, analyzeSiteTechnologies, analyzeSiteTechnologiesParallel } from '../wapp.ts';
 import { Log } from '../logging.ts';
 import { runWappalizer } from './runWappalyzer.ts';
 let aFoundCount = 0;
@@ -69,53 +69,69 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
 
 
   if (ActivateWappalyzerWorker) {
-    const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
-    console.info("Wappalizer Worker started.");
-  
-    wappWorker = new Worker<Domains>('WappalizerCall', async job => {
-      try {
-        const JobWithTimeout = new Promise(async (resolve, _) => {
-          console.log("Wapp Started", job.data.domains);
-          let waps 
-          if(FORK) waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
-          else   waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
-  
-          let totalItemsWithTech = 0;
-          let totalTechnologies = 0;
-  
-          for (const wap of waps) {
-            for (const url in wap.data.urls) {
-              const urlStatus = wap.data.urls[url];
-              if (urlStatus.error) {
-                if (typeof urlStatus.error === 'string') {
-                  console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
-                } else {
-                  console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
+    if(FORK){
+      const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
+      console.info("Wappalizer Worker started.");
+    
+      wappWorker = new Worker<Domains>('WappalizerCall', async job => {
+        try {
+        
+            console.log("Wapp Started", job.data.domains);
+            const waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
+         
+            let totalItemsWithTech = 0;
+            let totalTechnologies = 0;
+    
+            for (const wap of waps) {
+              for (const url in wap.data.urls) {
+                const urlStatus = wap.data.urls[url];
+                if (urlStatus.error) {
+                  if (typeof urlStatus.error === 'string') {
+                    console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
+                  } else {
+                    console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
+                  }
                 }
               }
+    
+              totalItemsWithTech++;
+              totalTechnologies += wap.data.technologies.length;
+    
+              await dbQueue.add('saveWappalizerToDb', wap);
             }
+    
+           return console.error(`Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`);
+     
+    
   
-            totalItemsWithTech++;
-            totalTechnologies += wap.data.technologies.length;
-  
-            await dbQueue.add('saveWappalizerToDb', wap);
-          }
-  
-          resolve(`Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`);
-        });
-  
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Job timed out'));
-          }, 60000);
-        });
-  
-        return Promise.race([JobWithTimeout, timeoutPromise]);
-      } catch (error) {
-        console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
+        } catch (error) {
+          console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
+          throw error;
+        }
+      }, opt);
+
+    }else{
+      const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
+      console.info("Wappalizer Worker started.");
+    
+      wappWorker = new Worker<Domains>('WappalizerCall', async job => {
+        try {
+       const wap = await analyzeSiteTechnologies(job.data.domains[0]);
+       
+
+         await dbQueue.add('saveWappalizerToDb', {domain:job.data.domains[0],data:wap});
+         return `Found technologies.`;
+       }
+
+      
+       catch (error) {
+        console.error(`WAPPALIZER NOT FORKED error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
         throw error;
       }
     }, opt);
+
+    }
+    
   }
   
   if(ActivateDnsWorker){
@@ -258,7 +274,10 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
 
   // Function to add jobs to the queue
 async function addToWappalyzerBatchQueue(domain:string) {
-
+if(!FORK){
+  await wappalizerQueue.add('GetWappalizerData', { domains:[domain] }, RemoveJobs);
+  return
+}
   batch.push(domain);
   queueCount++;  // Increment the counter each time a job is added
 

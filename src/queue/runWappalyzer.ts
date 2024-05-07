@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function runWappalizer(data, timeoutMilliseconds = 10000) {  // Default timeout set to 10 seconds
+async function runWappalizer(data, timeoutMilliseconds = 90000) {  // Default timeout set to 10 seconds
   return new Promise((resolve, reject) => {
     const child = spawn('node', [
       path.resolve(__dirname, 'wappalyzerWorker.js')], {
@@ -35,23 +35,23 @@ async function runWappalizer(data, timeoutMilliseconds = 10000) {  // Default ti
     child.on('close', (code) => {
       clearTimeout(timeout);  // Clear the timeout on close
       if (isTimeout) {
-        reject(new Error('Child process timed out'));
+        reject('Child process timed out');  // Change to a simple message or custom error object
       } else if (code === 0) {
         try {
           const result = JSON.parse(output);
           resolve(result);
         } catch (parseError) {
-          reject(new Error('Failed to parse output: ' + parseError));
+          reject('Failed to parse output: ' + parseError.message);
         }
       } else {
-        reject(new Error(`Child process exited with code ${code}`));
+        reject(`Child process exited with code ${code}`);
       }
     });
 
     // Handle errors
     child.on('error', (err) => {
       clearTimeout(timeout);  // Clear the timeout on error
-      reject(new Error('Child process failed: ' + err.message));
+      reject('Child process failed: ' + err.message);
     });
   });
 }
