@@ -401,9 +401,7 @@ class Driver {
           acceptInsecureCerts: true,
           args: updateUserDataDir(
             chromiumArgs,
-            `--user-data-dir=${
-              CHROMIUM_DATA_DIR || '/tmp/chromium_' + crypto.randomUUID()
-            }`
+            `${CHROMIUM_DATA_DIR || '/tmp/chromium_' + crypto.randomUUID()}`
           ),
           executablePath: CHROMIUM_BIN,
         })
