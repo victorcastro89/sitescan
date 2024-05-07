@@ -8,7 +8,7 @@ import { getTotalRuntimeFormatted, getCounts, getAverageSuccessfuldPerMinute, Re
 
 
 import { addLastWappalyzerBatchQueue, dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue,  startWorkers, wappalizerQueue } from './queue/workers.ts';
-import {  addJobs, checkIfAnyQueueHasJobs, isAllDataLoaded } from './queue/producer.ts';
+import {  addJobs, allQueueClear, isAllDataLoaded } from './queue/producer.ts';
 
 import process from 'process';
 import { EventEmitter } from 'events';
@@ -72,15 +72,17 @@ async function kill() {
 // Periodic system status checks
 setInterval(async () => {
   let allDataLoaded= false
-  let pedingJobs =false 
+  let queueClear =false 
   let hasPendingBatch =false
   if( AppStarted) {
     allDataLoaded =  isAllDataLoaded();
    if(allDataLoaded) {
-    pedingJobs =  await checkIfAnyQueueHasJobs();
-    if(!pedingJobs) 
+    queueClear =  await allQueueClear();
+    console.log(queueClear)
+    if(queueClear) 
       {
         hasPendingBatch = await addLastWappalyzerBatchQueue()
+        console.log(hasPendingBatch)
         if(!hasPendingBatch)  kill() 
       }
     
@@ -88,7 +90,7 @@ setInterval(async () => {
    
   } 
   logCurrentRequestCounts();
-}, 20000);
+}, 2000);
 
 function logCurrentRequestCounts() {
 // //   // Display the listener count per event

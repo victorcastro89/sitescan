@@ -261,13 +261,15 @@ async function addToWappalyzerBatchQueue(domain:string) {
 
 
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
- // process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+  process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 }
   // Function to add jobs to the queue
   async function addLastWappalyzerBatchQueue() {
     
     if(batch.length>0)  {
-      await wappalizerQueue.add('GetWappalizerData', { domains:batch }, RemoveJobs);
+      const currentBatch = batch; 
+      batch = [];
+      await wappalizerQueue.add('GetWappalizerData', { domains:currentBatch }, RemoveJobs);
       return true
   }
   else return false

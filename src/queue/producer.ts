@@ -4,34 +4,50 @@ import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue } from
 import { Log } from '../logging.ts';
 
 let i = 0;
-let allDataLoaded = false; // Track if all data has been successfully loaded
+let allDataLoaded = false;
 const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 100;
-const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000 ,timeout:10000};
+const BATCH_SIZE = 10;
+const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000, timeout: 10000 };
+
 async function addJobs() {
   Log.info(`Loading CSV data into Queue`);
   const stream = fs.createReadStream('domains.csv').pipe(csv({ headers: false }));
 
-  stream.on('data', async (data) => {
-    stream.pause(); // Pause the stream to manage flow control
+  let batch:string[] = [];
+  stream.on('data', (data) => {
     const domain = data[Object.keys(data)[0]];
     if (typeof domain === 'string') {
-      await dnsQueue.add('lookup', { domain },RemoveJobs);
-      i++;
-      if (i >= LINESTOLOAD) {
-        Log.info(`Processing limit reached. Total of ${i} domains processed.`);
-        allDataLoaded = true; // Set the completion flag before destroying the stream
-        stream.destroy(); // Use destroy to ensure no more data events are fired
-      } else {
-        stream.resume(); // Resume the stream if the line limit hasn't been reached
+      batch.push(domain);
+      if (batch.length >= BATCH_SIZE || i + batch.length >= LINESTOLOAD) {
+        stream.pause();
+        batch.forEach(async (domain) => {
+          await dnsQueue.add('lookup', { domain }, RemoveJobs);
+        });
+        i += batch.length;
+        allQueueClear().then(allJobsDone => {
+          if (allJobsDone) {
+            batch = [];
+            if (i >= LINESTOLOAD) {
+              Log.info(`Processing limit reached. Total of ${i} domains processed.`);
+              allDataLoaded = true;
+              stream.destroy();
+            } else {
+              stream.resume();
+            }
+          }
+        });
       }
     }
-  }).on('close', () => { // Listen for the 'close' event instead of 'end' when using destroy()
-    if (!allDataLoaded) { // This checks if the close was due to normal end or destroy
-      Log.info(`Stream was closed before processing all data. Total of ${i} domains processed.`);
-      allDataLoaded = true;
-    }
-  }).on('error', (err) => {
+  });
+
+  stream.on('close', () => {
+    Log.info(`Stream has been closed. Total of ${i} domains processed.`);
+    allDataLoaded = true; // Correctly update state when the stream is closed
+  });
+
+  stream.on('error', (err) => {
     Log.error(`An error occurred: ${err}`);
+    stream.destroy(); // Ensure the stream is closed on error
   });
 }
 
@@ -39,19 +55,22 @@ function isAllDataLoaded() {
   return allDataLoaded;
 }
 
-
-async function checkIfAnyQueueHasJobs() {
-  const queues = [dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue, dbQueue];
-  for (const queue of queues) {
-    const jobCounts = await queue.getJobCounts('waiting', 'active', 'delayed');
-    if (jobCounts.waiting > 0 || jobCounts.active > 0 || jobCounts.delayed > 0) {
-      return true; // There are still jobs pending or active
+async function allQueueClear() {
+  while (true) {
+    let allClear = true;
+    const queues = [dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue, dbQueue];
+    for (const queue of queues) {
+      const jobCounts = await queue.getJobCounts('waiting', 'active', 'delayed');
+      if (jobCounts.waiting > 0 || jobCounts.active > 0 || jobCounts.delayed > 0) {
+        allClear = false;
+        break;
+      }
     }
+    if (allClear) {
+      return true;
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Periodically check the job status
   }
-  return false
 }
 
-export { addJobs , checkIfAnyQueueHasJobs, isAllDataLoaded}
-
-
-
+export { addJobs, allQueueClear, isAllDataLoaded }

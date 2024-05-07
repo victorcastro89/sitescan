@@ -32,13 +32,13 @@ async function runWappalizer(data) {
           reject(new Error('Failed to parse output: ' + parseError));
         }
       } else {
-        throw new Error(`Child process exited with code ${code}`);
+        reject(new Error(`Child process exited with code ${code}`));
       }
     });
 
     // Handle errors
     child.on('error', (err) => {
-      throw err;
+      reject(err);
     });
   });
 }
