@@ -69,16 +69,16 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
 
 
   if (ActivateWappalyzerWorker) {
-    if(FORK){
+   
       const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
       console.info("Wappalizer Worker started.");
     
       wappWorker = new Worker<Domains>('WappalizerCall', async job => {
         try {
         
-            console.log("Wapp Started", job.data.domains);
-            const waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
-         
+          	let waps
+            if(FORK) waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
+            else waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
             let totalItemsWithTech = 0;
             let totalTechnologies = 0;
     
@@ -110,27 +110,7 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
         }
       }, opt);
 
-    }else{
-      const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
-      console.info("Wappalizer Worker started.");
-    
-      wappWorker = new Worker<Domains>('WappalizerCall', async job => {
-        try {
-       const wap = await analyzeSiteTechnologies(job.data.domains[0]);
-       
-
-         await dbQueue.add('saveWappalizerToDb', {domain:job.data.domains[0],data:wap});
-         return `Found technologies.`;
-       }
-
-      
-       catch (error) {
-        console.error(`WAPPALIZER NOT FORKED error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
-        throw error;
-      }
-    }, opt);
-
-    }
+  
     
   }
   
@@ -274,10 +254,7 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
 
   // Function to add jobs to the queue
 async function addToWappalyzerBatchQueue(domain:string) {
-if(!FORK){
-  await wappalizerQueue.add('GetWappalizerData', { domains:[domain] }, RemoveJobs);
-  return
-}
+
   batch.push(domain);
   queueCount++;  // Increment the counter each time a job is added
 
