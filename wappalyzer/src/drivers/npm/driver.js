@@ -23,7 +23,9 @@ const chromiumArgs = CHROMIUM_ARGS
       '--ignore-certificate-errors',
       '--allow-running-insecure-content',
       '--disable-web-security',
-      `--user-data-dir=${CHROMIUM_DATA_DIR || '/tmp/chromium'}`,
+      `--user-data-dir=${
+        CHROMIUM_DATA_DIR || '/tmp/chromium_' + `${Math.random()}`
+      }`,
     ]
 
 const extensions = /^([^.]+$|\.(asp|aspx|cgi|htm|html|jsp|php)$)/
@@ -459,7 +461,7 @@ class Driver {
         })
       )
 
-      await page.goto(url, { timeout: 60000 })
+      await page.goto(url)
 
       await page.evaluate((storage) => {
         ;['local', 'session'].forEach((type) => {
@@ -747,7 +749,7 @@ class Site {
     })
 
     try {
-      await page.goto(url.href, { timeout: 60000 })
+      await page.goto(url.href)
 
       if (page.url() === 'about:blank') {
         const error = new Error(`The page failed to load (${url})`)
@@ -1125,9 +1127,9 @@ class Site {
       (async () => {
         this.log('Analyse start')
         try {
-          const links = (
-            (await this.goto(url, { timeout: 60000 })) || []
-          ).filter(({ href }) => !this.analyzedUrls[href])
+          const links = ((await this.goto(url)) || []).filter(
+            ({ href }) => !this.analyzedUrls[href]
+          )
           this.log('Goto end')
           if (
             links.length &&
