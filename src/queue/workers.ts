@@ -4,7 +4,7 @@ const HTTP_CONCURRENCY = process.env.HTTP_CONCURRENCY ? parseInt(process.env.HTT
 const WAPPALIZER_CONCURRENCY = process.env.WAPPALIZER_CONCURRENCY ? parseInt(process.env.WAPPALIZER_CONCURRENCY) : 1;
 const NSLOOKUP_CONCURRENCY = process.env.NSLOOKUP_CONCURRENCY ? parseInt(process.env.NSLOOKUP_CONCURRENCY) : 20;
 const BATCH_SIZE = process.env.BATCH_SIZE  ? parseInt(process.env.BATCH_SIZE ) : 2;
-
+const FORK = process.env.FORK  ? true : false;
 let queueCount = 0; // Initialize a counter to track the number of jobs
 let batch:string[] = [];
 import path, { resolve } from 'path';
@@ -16,7 +16,7 @@ import { isWappalizerData, saveDomainTechnologies, isSaveDomainStatus, saveOrUpd
 import { fetchDNSRecords } from '../dnsfetch.ts';
 import { dnsAndHttpToDbFormat } from '../parse.ts';
 import { checkDomainStatusWithRetry, fetchRipeStatsData } from '../requests.ts';
-import { WappalizerData } from '../wapp.ts';
+import { WappalizerData, analyzeSiteTechnologiesParallel } from '../wapp.ts';
 import { Log } from '../logging.ts';
 import { runWappalizer } from './runWappalyzer.ts';
 let aFoundCount = 0;
@@ -77,7 +77,8 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
         const JobWithTimeout = new Promise(async (resolve, _) => {
           console.log("Wapp Started", job.data.domains);
   
-          const waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
+          if(FORK) const waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
+          else  const waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
   
           let totalItemsWithTech = 0;
           let totalTechnologies = 0;
