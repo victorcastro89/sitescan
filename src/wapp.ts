@@ -98,7 +98,7 @@ const storage = {
     headers: headers,
     maxDepth: 3,
     maxUrls: 10,
-    maxWait: 45000,
+    maxWait: 30000,
     recursive: false,
     probe: true,
     proxy: false,

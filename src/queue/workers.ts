@@ -75,7 +75,7 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
     wappWorker = new Worker<Domains>('WappalizerCall', async job => {
       try {
         // Timeout duration in milliseconds
-        const TIMEOUT = 60000; // 10 seconds
+        const TIMEOUT = 60000; // 60 seconds
   
         // Promise with timeout function
         const promiseWithTimeout = (promise, ms) => {

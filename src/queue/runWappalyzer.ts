@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-async function runWappalizer(data, timeoutMilliseconds = 90000) {  // Default timeout set to 10 seconds
+async function runWappalizer(data, timeoutMilliseconds = 60000) {  
   return new Promise((resolve, reject) => {
     const child = spawn('node', [
       path.resolve(__dirname, 'wappalyzerWorker.js')], {
@@ -41,7 +41,7 @@ async function runWappalizer(data, timeoutMilliseconds = 90000) {  // Default ti
           const result = JSON.parse(output);
           resolve(result);
         } catch (parseError) {
-          reject('Failed to parse output: ' + parseError.message);
+          reject('Failed to parse output: ' + parseError);
         }
       } else {
         reject(`Child process exited with code ${code}`);
