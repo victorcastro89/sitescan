@@ -111,7 +111,7 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
           await dbQueue.add('saveWappalizerToDb', wap);
         }
   
-        return console.error(`Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`);
+        return `Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`;
       } catch (error) {
         console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR: ${error}`);
         throw error;
