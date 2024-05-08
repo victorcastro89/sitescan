@@ -12,8 +12,8 @@ import http from 'http';
 import https from 'https';
 http.globalAgent.maxSockets = MAX_SOCKETS;
 https.globalAgent.maxSockets = MAX_SOCKETS;
-const httpAgent = new http.Agent({ keepAlive: true, maxSockets: 256, timeout: 90000, maxFreeSockets: 90000});
-const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 256, timeout: 90000, maxFreeSockets: 90000 });
+const httpAgent = new http.Agent({ keepAlive: true, maxSockets: MAX_SOCKETS, timeout: 90000, maxFreeSockets: 90000});
+const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: MAX_SOCKETS, timeout: 90000, maxFreeSockets: 90000 });
 import { ResponseTimeTracker } from './stats.ts';
 import { Log } from './logging.ts';
 
