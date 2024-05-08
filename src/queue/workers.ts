@@ -69,50 +69,56 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
 
 
   if (ActivateWappalyzerWorker) {
-   
-      const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
-      console.info("Wappalizer Worker started.");
-    
-      wappWorker = new Worker<Domains>('WappalizerCall', async job => {
-        try {
-        
-          	let waps
-            if(FORK) waps = await runWappalizer(job.data.domains) as { domain: string, data: WappalizerData }[];
-            else waps = await analyzeSiteTechnologiesParallel(job.data.domains) as { domain: string, data: WappalizerData }[];
-            let totalItemsWithTech = 0;
-            let totalTechnologies = 0;
-    
-            for (const wap of waps) {
-              for (const url in wap.data.urls) {
-                const urlStatus = wap.data.urls[url];
-                if (urlStatus.error) {
-                  if (typeof urlStatus.error === 'string') {
-                    console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error}`);
-                  } else {
-                    console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${urlStatus.error.message}`);
-                  }
-                }
-              }
-    
-              totalItemsWithTech++;
-              totalTechnologies += wap.data.technologies.length;
-    
-              await dbQueue.add('saveWappalizerToDb', wap);
-            }
-    
-           return console.error(`Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`);
-     
-    
+    const opt = { ...workerOptions, concurrency: WAPPALIZER_CONCURRENCY };
+    console.info("Wappalizer Worker started.");
   
-        } catch (error) {
-          console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR : ${error}`);
-          throw error;
+    wappWorker = new Worker<Domains>('WappalizerCall', async job => {
+      try {
+        // Timeout duration in milliseconds
+        const TIMEOUT = 60000; // 10 seconds
+  
+        // Promise with timeout function
+        const promiseWithTimeout = (promise, ms) => {
+          const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout reached")), ms));
+          return Promise.race([promise, timeout]);
+        };
+  
+        let waps;
+        if (FORK) {
+          waps = await promiseWithTimeout(runWappalizer(job.data.domains), TIMEOUT) as { domain: string, data: WappalizerData }[];
+        } else {
+          waps = await promiseWithTimeout(analyzeSiteTechnologiesParallel(job.data.domains), TIMEOUT) as { domain: string, data: WappalizerData }[];
         }
-      }, opt);
-
   
-    
+        let totalItemsWithTech = 0;
+        let totalTechnologies = 0;
+  
+        for (const wap of waps) {
+          for (const url in wap.data.urls) {
+            const urlStatus = wap.data.urls[url];
+            if (urlStatus.error) {
+              if (typeof urlStatus.error === 'string') {
+                console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR: ${urlStatus.error}`);
+              } else {
+                console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR: ${urlStatus.error.message}`);
+              }
+            }
+          }
+  
+          totalItemsWithTech++;
+          totalTechnologies += wap.data.technologies.length;
+  
+          await dbQueue.add('saveWappalizerToDb', wap);
+        }
+  
+        return console.error(`Found: ${totalItemsWithTech} domains with a total of ${totalTechnologies} technologies.`);
+      } catch (error) {
+        console.error(`WAPPALIZER error, JOB: ${job.name} Domain: ${job.data.domains} ERROR: ${error}`);
+        throw error;
+      }
+    }, opt);
   }
+  
   
   if(ActivateDnsWorker){
   // Worker for DNS lookups
