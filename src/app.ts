@@ -89,8 +89,11 @@ setInterval(async () => {
    }
    
   } 
-  logCurrentRequestCounts();
+
 }, 2000);
+
+setInterval(logCurrentRequestCounts, 3600000); // 3600000 milliseconds = 1 hour
+
 
 function logCurrentRequestCounts() {
 // //   // Display the listener count per event

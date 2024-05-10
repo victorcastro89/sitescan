@@ -383,11 +383,14 @@ class Driver {
     }
 
     this.destroyed = false
+    this.user_dir = undefined
   }
 
   async init() {
     this.log('Launching browser...')
-
+    this.user_dir = `${
+      CHROMIUM_DATA_DIR || '/tmp/chromium_' + crypto.randomUUID()
+    }`
     try {
       if (CHROMIUM_WEBSOCKET) {
         this.browser = await puppeteer.connect({
@@ -399,10 +402,7 @@ class Driver {
         this.browser = await puppeteer.launch({
           ignoreHTTPSErrors: true,
           acceptInsecureCerts: true,
-          args: updateUserDataDir(
-            chromiumArgs,
-            `${CHROMIUM_DATA_DIR || '/tmp/chromium_' + crypto.randomUUID()}`
-          ),
+          args: updateUserDataDir(chromiumArgs, this.user_dir),
           executablePath: CHROMIUM_BIN,
         })
       }
@@ -425,6 +425,20 @@ class Driver {
     }
   }
 
+  cleanUserDir() {
+    if (this.user_dir !== undefined) {
+      this.log(this.user_dir)
+      try {
+        // First check if the directory exists
+        fs.rmSync(this.user_dir, { recursive: true, force: true })
+        this.log('Removed User Directory folder')
+      } catch (err) {
+        this.log('Failed to remove User Directory folder:', err)
+        throw err // Rethrow to handle upstream
+      }
+    }
+  }
+
   async destroy() {
     this.destroyed = true
 
@@ -434,17 +448,15 @@ class Driver {
         let pages
         try {
           pages = await this.browser.pages()
+          this.log(`Closing ${pages.length} open pages`)
+          for (const page of pages) {
+            await page.close()
+            this.log('Page closed')
+          }
         } catch (pageError) {
           this.log('Error retrieving pages:', pageError)
-          // Optionally, attempt to close the browser directly if pages retrieval fails
           await this.browser.close()
-          return
-        }
-
-        this.log(`Closing ${pages.length} open pages`)
-        for (const page of pages) {
-          await page.close()
-          this.log('Page closed')
+          this.log('Browser closed with error in page retrieval')
         }
 
         this.log('before browser close')
@@ -452,11 +464,11 @@ class Driver {
         this.log('Browser closed successfully')
       } catch (error) {
         this.log('Failed to close pages or browser:', error)
-        throw new Error(
-          'Error when trying to close pages or browser: ' + error.toString()
-        )
+      } finally {
+        this.cleanUserDir() // Ensure user directory is cleaned up regardless of earlier errors
       }
     } else {
+      await this.cleanUserDir()
       this.log('No browser instance found or browser already closed')
     }
   }

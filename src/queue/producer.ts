@@ -26,6 +26,7 @@ async function addJobs() {
         i += batch.length;
         allQueueClear().then(allJobsDone => {
           if (allJobsDone) {
+            Log.info(`All Jobs of this batch done `);
             batch = [];
             if (i >= LINESTOLOAD) {
               Log.info(`Processing limit reached. Total of ${i} domains processed.`);
