@@ -40,7 +40,11 @@
     "fast-csv": "^5.0.1",
     "knex": "^3.1.0",
     "pg": "^8.11.5",
+<<<<<<< HEAD
     "puppeteer": "^22.8.1",
+=======
+    "puppeteer": "^22.6.5",
+>>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
     "redis": "^4.6.13",
     "wappalyzer": "file:./wappalyzer/src/drivers/npm"
   },

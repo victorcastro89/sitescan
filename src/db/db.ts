@@ -12,8 +12,12 @@ const db = knex({
     password: process.env.PG_PASSWORD,
     database: process.env.PG_DATABASE,
     port: 5432
+<<<<<<< HEAD
   },
   pool: { min: 0, max: 7 },
+=======
+  }
+>>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 });
 
 // Function to delete data from the specified tables
