@@ -1,0 +1,58 @@
+# Define the base Node.js image with version 20
+FROM --platform=linux/amd64 node:20 AS base-amd64
+# Define the base Node.js image for ARM64
+FROM --platform=linux/arm64 node:20 AS base-arm64
+
+# Create a unified base stage from which specific builds will derive
+ARG TARGETARCH
+FROM base-${TARGETARCH} as base
+
+# Set the working directory
+WORKDIR /app
+
+# Copy necessary files for installing dependencies
+COPY package.json yarn.lock ./
+
+COPY ./wappalyzer /app/wappalyzer 
+
+# Copy the rest of your application code
+COPY src/ src/
+COPY .swcrc .
+COPY tsconfig.json .
+COPY names.json .
+COPY ./entrypoint.sh .
+
+# Install production dependencies
+RUN yarn install --frozen-lockfile && \
+    yarn cache clean
+
+# Build the application
+RUN yarn build
+
+# Cleanup unnecessary files to prepare for the next stage
+RUN rm -rf src node_modules/dev
+
+# Install necessary system dependencies
+RUN apt-get update && apt-get install -y wget gnupg2 dumb-init libnss3 libxss1 libasound2 libatk-bridge2.0-0 libcups2 libdbus-1-3 libxrandr2 libgbm1 && \
+    if [ "${TARGETARCH}" = "amd64" ]; then \
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+        echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list && \
+        apt-get update && apt-get install -y google-chrome-stable; \
+        echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable" >> /etc/environment; \
+    elif [ "${TARGETARCH}" = "arm64" ]; then \
+        apt-get install -y chromium-browser; \
+        echo "PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser" >> /etc/environment; \
+    fi
+
+# Set Puppeteer to skip downloading Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Cleanup
+RUN rm -rf /var/lib/apt/lists/*
+
+# Set the entry point script
+COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+
+# Command to run your app
+CMD ["yarn", "start"]

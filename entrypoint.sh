@@ -1,6 +1,6 @@
 #!/bin/sh
 # entrypoint.sh
-
+service cron start
 # Initialize the command variable with the base command
 cmd="yarn start"
 

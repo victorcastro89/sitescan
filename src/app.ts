@@ -13,7 +13,7 @@ import {  addJobs, allQueueClear, isAllDataLoaded } from './queue/producer.ts';
 import process from 'process';
 import { EventEmitter } from 'events';
 import { flushAllRedis } from './db/redis.ts';
-import { clearDatabase } from './db/db.ts';
+import { clearDatabase, db } from './db/db.ts';
 
 EventEmitter.defaultMaxListeners = 5000;
 const HTTPWORKER = process.env.HTTPWORKER? (process.env.HTTPWORKER|| '').toLowerCase() === 'true' : false;
@@ -66,6 +66,7 @@ async function kill() {
   console.log("No queues have any jobs pending or active.");
   console.log(`Total Runtime: ${getTotalRuntimeFormatted()}`);
   console.log("Exiting gracefully.");
+  db.destroy();
   process.exit(0); // Exit gracefully with status code 0 (success)
 }
 
@@ -75,7 +76,7 @@ setInterval(async () => {
   let queueClear =false 
   let hasPendingBatch =false
   if( AppStarted) {
-    allDataLoaded =  isAllDataLoaded();
+    allDataLoaded =  isAllDataLoaded;
    if(allDataLoaded) {
     queueClear =  await allQueueClear();
     console.log(queueClear)

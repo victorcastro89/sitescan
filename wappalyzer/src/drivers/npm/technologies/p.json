@@ -340,6 +340,17 @@
     },
     "website": "https://www.pagevamp.com"
   },
+  "PaginaFacil": {
+    "cats": [
+      1
+    ],
+    "description": "Hostgator Página Fácil",
+    "icon": "default.svg",
+    "meta": {
+      "description": "^Pagina Facil$"
+    },
+    "website": "https://Hostgator.com.br"
+  },
   "Paidy": {
     "cats": [
       41,

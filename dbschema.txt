@@ -1,0 +1,38 @@
+
+This is my database schema:
+schema_name|table_name           |column_name        |data_type               |is_nullable|constraint_type|constraint_name                            |foreign_table|foreign_column|
+-----------+---------------------+-------------------+------------------------+-----------+---------------+-------------------------------------------+-------------+--------------+
+public     |categories           |id                 |character varying(255)  |false      |PRIMARY KEY    |categories_pkey                            |             |              |
+public     |categories           |name               |character varying(255)  |false      |               |                                           |             |              |
+public     |domain_status        |created_at         |timestamp with time zone|true       |               |                                           |             |              |
+public     |domain_status        |dns_a_record       |text                    |true       |               |                                           |             |              |
+public     |domain_status        |domain             |text                    |false      |PRIMARY KEY    |domain_status_pkey                         |             |              |
+public     |domain_status        |has_ssl            |boolean                 |true       |               |                                           |             |              |
+public     |domain_status        |is_online          |boolean                 |true       |               |                                           |             |              |
+public     |domain_status        |mx1_record         |text                    |true       |               |                                           |             |              |
+public     |domain_status        |mx2_record         |text                    |true       |               |                                           |             |              |
+public     |domain_status        |ns1_record         |text                    |true       |               |                                           |             |              |
+public     |domain_status        |ns2_record         |text                    |true       |               |                                           |             |              |
+public     |domain_status        |parsed_hosting_name|text                    |true       |               |                                           |             |              |
+public     |domain_status        |ripe_abuse         |text[]                  |true       |               |                                           |             |              |
+public     |domain_status        |ripe_org           |text[]                  |true       |               |                                           |             |              |
+public     |domain_status        |updated_at         |timestamp with time zone|true       |               |                                           |             |              |
+public     |domain_technologies  |domain             |text                    |false      |FOREIGN KEY    |domain_technologies_domain_foreign         |domain_status|domain        |
+public     |domain_technologies  |domain             |text                    |false      |PRIMARY KEY    |domain_technologies_pkey                   |             |              |
+public     |domain_technologies  |technology_id      |integer                 |false      |FOREIGN KEY    |domain_technologies_technology_id_foreign  |technologies |id            |
+public     |domain_technologies  |technology_id      |integer                 |false      |PRIMARY KEY    |domain_technologies_pkey                   |             |              |
+public     |group_categories     |category_id        |character varying(255)  |false      |PRIMARY KEY    |group_categories_pkey                      |             |              |
+public     |group_categories     |category_id        |character varying(255)  |false      |FOREIGN KEY    |group_categories_category_id_foreign       |categories   |id            |
+public     |group_categories     |group_id           |character varying(255)  |false      |FOREIGN KEY    |group_categories_group_id_foreign          |groups       |id            |
+public     |group_categories     |group_id           |character varying(255)  |false      |PRIMARY KEY    |group_categories_pkey                      |             |              |
+public     |groups               |id                 |character varying(255)  |false      |PRIMARY KEY    |groups_pkey                                |             |              |
+public     |groups               |name               |character varying(255)  |false      |               |                                           |             |              |
+public     |technologies         |description        |text                    |true       |               |                                           |             |              |
+public     |technologies         |id                 |integer                 |false      |PRIMARY KEY    |technologies_pkey                          |             |              |
+public     |technologies         |name               |character varying(255)  |false      |               |                                           |             |              |
+public     |technologies         |price              |character varying(255)  |true       |               |                                           |             |              |
+public     |technologies         |saas               |boolean                 |true       |               |                                           |             |              |
+public     |technology_categories|category_id        |character varying(255)  |false      |PRIMARY KEY    |technology_categories_pkey                 |             |              |
+public     |technology_categories|category_id        |character varying(255)  |false      |FOREIGN KEY    |technology_categories_category_id_foreign  |categories   |id            |
+public     |technology_categories|technology_id      |integer                 |false      |PRIMARY KEY    |technology_categories_pkey                 |             |              |
+public     |technology_categories|technology_id      |integer                 |false      |FOREIGN KEY    |technology_categories_technology_id_foreign|technologies |id            |
