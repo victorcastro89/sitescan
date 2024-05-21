@@ -13,11 +13,7 @@
     "software"
   ],
   "homepage": "https://www.wappalyzer.com/",
-<<<<<<< HEAD
   "version": "6.12.9",
-=======
-  "version": "6.12.8",
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
   "author": "Wappalyzer",
   "license": "GPL-3.0",
   "repository": {

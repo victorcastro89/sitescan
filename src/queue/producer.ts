@@ -10,8 +10,9 @@ const __dirname = path.resolve();  // Ensure you have the correct directory path
 let i = 0;
 let isAllDataLoaded = false;
 const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 5000000;
-const BATCH_SIZE = 100000;
+const BATCH_SIZE = 10000;
 const RemoveJobs = { removeOnComplete: 1000, removeOnFail: 5000, timeout: 10000 };
+let isStreamPaused = false;
 
 async function addJobs() {
   Log.info(`Loading CSV data into Queue`);
@@ -24,11 +25,12 @@ async function addJobs() {
       batch.push(domain);
       if (batch.length >= BATCH_SIZE || i + batch.length >= LINESTOLOAD) {
         stream.pause(); // Pause the stream while processing the batch
+        isStreamPaused = true;
         processBatch(batch).then(() => {
           updateCSV(batch).then(() => {
-          
             i += batch.length;
             batch = [];
+            isStreamPaused = false;
             if (i >= LINESTOLOAD) {
               Log.info(`Processing limit reached. Total of ${i} domains processed.`);
               isAllDataLoaded = true;
@@ -49,8 +51,18 @@ async function addJobs() {
   });
 
   stream.on('close', () => {
-    Log.info(`Stream has been closed. Total of ${i} domains processed.`);
-    isAllDataLoaded = true;
+    if (!isStreamPaused) {
+      Log.info(`Stream has been closed. Total of ${i} domains processed.`);
+      isAllDataLoaded = true;
+    } else {
+      stream.on('resume', () => {
+        if (i >= LINESTOLOAD) {
+          Log.info(`Processing limit reached. Total of ${i} domains processed.`);
+          isAllDataLoaded = true;
+          stream.destroy();
+        }
+      });
+    }
   });
 
   stream.on('error', (err) => {
@@ -133,4 +145,5 @@ async function allQueueClear() {
     await new Promise(resolve => setTimeout(resolve, 1000)); // Periodically check the job status
   }
 }
-export { addJobs, isAllDataLoaded,allQueueClear };
+
+export { addJobs, isAllDataLoaded, allQueueClear };

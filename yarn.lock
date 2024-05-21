@@ -2407,7 +2407,6 @@ puppeteer-core@22.8.0:
     devtools-protocol "0.0.1273771"
     ws "8.17.0"
 
-<<<<<<< HEAD
 puppeteer-core@22.8.1:
   version "22.8.1"
   resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-22.8.1.tgz#757ec8983ca38486dad8e5464e744f4b8aff5a13"
@@ -2419,8 +2418,6 @@ puppeteer-core@22.8.1:
     devtools-protocol "0.0.1273771"
     ws "8.17.0"
 
-=======
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 puppeteer@^22.6.5:
   version "22.8.0"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-22.8.0.tgz#58556b4388a9047658f0704afa37b8eea71b84ba"
@@ -2431,7 +2428,6 @@ puppeteer@^22.6.5:
     devtools-protocol "0.0.1273771"
     puppeteer-core "22.8.0"
 
-<<<<<<< HEAD
 puppeteer@^22.8.1:
   version "22.8.1"
   resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-22.8.1.tgz#d0b96cd722f62a157804dcc3b0d4909e3620bf1d"
@@ -2442,8 +2438,6 @@ puppeteer@^22.8.1:
     devtools-protocol "0.0.1273771"
     puppeteer-core "22.8.1"
 
-=======
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -2959,7 +2953,7 @@ v8-compile-cache-lib@^3.0.1:
   integrity sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==
 
 "wappalyzer@file:./wappalyzer/src/drivers/npm":
-  version "6.12.8"
+  version "6.12.9"
   dependencies:
     puppeteer "^22.6.5"
 

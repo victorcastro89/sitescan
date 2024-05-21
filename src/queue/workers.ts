@@ -19,10 +19,7 @@ import { checkDomainStatusWithRetry, fetchRipeStatsData } from '../requests.ts';
 import { WappalizerData, analyzeSiteTechnologies, analyzeSiteTechnologiesParallel } from '../wapp.ts';
 import { Log } from '../logging.ts';
 import { runWappalizer } from './runWappalyzer.ts';
-<<<<<<< HEAD
 import { db } from '../db/db.ts';
-=======
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 let aFoundCount = 0;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -255,17 +252,11 @@ async function startWorkers(ActivateWappalyzerWorker: boolean,ActivateDnsWorker:
       console.log(`Received ${signal}, closing workers...`); // Using console.log for testing
       await Promise.all(queues.map(queue => queue.close()));
       await Promise.all(workers.map(w => w?.close()));
-<<<<<<< HEAD
       db.destroy();
       process.exit(0);
     } catch (error) {
       Log.error(`Error during shutdown: ${error}`);
       db.destroy();
-=======
-      process.exit(0);
-    } catch (error) {
-      Log.error(`Error during shutdown: ${error}`);
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
       process.exit(1); // Exit with error code
     }
   };
