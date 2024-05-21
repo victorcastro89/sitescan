@@ -1,14 +1,10 @@
 import fs from 'fs';
-<<<<<<< HEAD
 import readline from 'readline';
 import path from 'path';
-=======
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 import csv from 'csv-parser';
 import { dbQueue, dnsQueue, httpQueue, ripeStatsApiQueue, wappalizerQueue } from './workers.ts';
 import { Log } from '../logging.ts';
 
-<<<<<<< HEAD
 const __dirname = path.resolve();  // Ensure you have the correct directory path.
 
 let i = 0;
@@ -16,13 +12,6 @@ let isAllDataLoaded = false;
 const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 5000000;
 const BATCH_SIZE = 100000;
 const RemoveJobs = { removeOnComplete: 1000, removeOnFail: 5000, timeout: 10000 };
-=======
-let i = 0;
-let allDataLoaded = false;
-const LINESTOLOAD = process.env.LINESTOLOAD ? parseInt(process.env.LINESTOLOAD) : 100;
-const BATCH_SIZE = 1000000;
-const RemoveJobs =  { removeOnComplete: 1000, removeOnFail: 5000, timeout: 10000 };
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 
 async function addJobs() {
   Log.info(`Loading CSV data into Queue`);
@@ -34,7 +23,6 @@ async function addJobs() {
     if (typeof domain === 'string') {
       batch.push(domain);
       if (batch.length >= BATCH_SIZE || i + batch.length >= LINESTOLOAD) {
-<<<<<<< HEAD
         stream.pause(); // Pause the stream while processing the batch
         processBatch(batch).then(() => {
           updateCSV(batch).then(() => {
@@ -55,25 +43,6 @@ async function addJobs() {
         }).catch(err => {
           Log.error(`Failed processing batch: ${err}`);
           stream.destroy();
-=======
-        stream.pause();
-        batch.forEach(async (domain) => {
-          await dnsQueue.add('lookup', { domain }, RemoveJobs);
-        });
-        i += batch.length;
-        allQueueClear().then(allJobsDone => {
-          if (allJobsDone) {
-            Log.info(`All Jobs of this batch done `);
-            batch = [];
-            if (i >= LINESTOLOAD) {
-              Log.info(`Processing limit reached. Total of ${i} domains processed.`);
-              allDataLoaded = true;
-              stream.destroy();
-            } else {
-              stream.resume();
-            }
-          }
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
         });
       }
     }
@@ -81,16 +50,11 @@ async function addJobs() {
 
   stream.on('close', () => {
     Log.info(`Stream has been closed. Total of ${i} domains processed.`);
-<<<<<<< HEAD
     isAllDataLoaded = true;
-=======
-    allDataLoaded = true; // Correctly update state when the stream is closed
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
   });
 
   stream.on('error', (err) => {
     Log.error(`An error occurred: ${err}`);
-<<<<<<< HEAD
     stream.destroy();
   });
 }
@@ -150,14 +114,6 @@ async function updateCSV(domainsToRemove) {
       reject(err);
     });
   });
-=======
-    stream.destroy(); // Ensure the stream is closed on error
-  });
-}
-
-function isAllDataLoaded() {
-  return allDataLoaded;
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
 }
 
 async function allQueueClear() {
@@ -177,9 +133,4 @@ async function allQueueClear() {
     await new Promise(resolve => setTimeout(resolve, 1000)); // Periodically check the job status
   }
 }
-<<<<<<< HEAD
 export { addJobs, isAllDataLoaded,allQueueClear };
-=======
-
-export { addJobs, allQueueClear, isAllDataLoaded }
->>>>>>> 76b61bb4bc0a77ee534cb72cb5a1569e64e7e5d9
