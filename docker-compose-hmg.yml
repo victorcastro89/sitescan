@@ -30,7 +30,7 @@ services:
     #   PG_PASSWORD: 'docker'
     #   REDIS_HOST: 'localhost'
     env_file:  # Include additional environment variables from a file
-      - .env
+      - .dev.env
     network_mode: host
 
     volumes:

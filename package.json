@@ -13,8 +13,9 @@
     "start": "node dist/src/app.js --tagprocess",
     "format": "prettier --write .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "down": "knex migrate:down --knexfile knexfile.cjs --esm",
-    "up": "knex migrate:up --knexfile knexfile.cjs --esm"
+    "db:up": "knex migrate:down --knexfile knexfile.cjs --esm",
+    "db:down": "knex migrate:up --knexfile knexfile.cjs --esm",
+    "db:seed" : "knex seed:run --knexfile knexfile.cjs --esm"
   },
   "author": "",
   "license": "ISC",
